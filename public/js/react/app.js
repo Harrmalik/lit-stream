@@ -62,11 +62,15 @@
 
 	var _Results2 = _interopRequireDefault(_Results);
 
-	var _mediaPlayer = __webpack_require__(182);
+	var _MediaTray = __webpack_require__(183);
 
-	var _mediaPlayer2 = _interopRequireDefault(_mediaPlayer);
+	var _MediaTray2 = _interopRequireDefault(_MediaTray);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var containerStyle = {
+	    width: "80%"
+	};
 
 	var App = _react2.default.createClass({
 	    displayName: 'App',
@@ -78,17 +82,28 @@
 	    updateResults: function updateResults(data) {
 	        this.setState({ data: [data] });
 	    },
+	    addToQueue: function addToQueue(newTrack) {
+	        this._child.updateQueue(newTrack);
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'main' },
+	            { className: 'main', style: !this.state.data ? {} : containerStyle },
 	            _react2.default.createElement(
 	                'section',
-	                { className: 'ui container' },
+	                null,
 	                _react2.default.createElement(_SearchBox2.default, {
 	                    callback: this.updateResults }),
 	                _react2.default.createElement(_Results2.default, {
-	                    data: this.state.data ? this.state.data : null })
+	                    data: this.state.data ? this.state.data : null,
+	                    addToQueue: this.addToQueue }),
+	                _react2.default.createElement(_MediaTray2.default, {
+	                    ref: function ref(child) {
+	                        _this._child = child;
+	                    },
+	                    parent: this })
 	            ),
 	            _react2.default.createElement('footer', null)
 	        );
@@ -21583,10 +21598,13 @@
 	            crossDomain: true,
 	            dataType: 'json',
 	            success: function success(data) {
+	                console.log(data);
 	                tracks = _lodash2.default.map(data, function (result) {
 	                    return {
 	                        id: result.id.videoId,
-	                        title: result.snippet.title
+	                        title: result.snippet.title,
+	                        thumpnail: result.snippet.thumbnails.default.url,
+	                        description: result.snippet.description
 	                    };
 	                });
 	                component.setState({ tracks: tracks });
@@ -38806,12 +38824,17 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
+	var _MediaPlayer = __webpack_require__(182);
+
+	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Results = _react2.default.createClass({
 	    displayName: 'Results',
 	    render: function render() {
 	        var data = this.props.data[0];
+	        var component = this;
 	        if (!data) {
 	            return _react2.default.createElement('div', null);
 	        } else {
@@ -38821,7 +38844,8 @@
 	                _lodash2.default.map(data, function (result) {
 	                    return _react2.default.createElement(Result, {
 	                        key: result.id,
-	                        result: result });
+	                        result: result,
+	                        parent: component });
 	                })
 	            );
 	        }
@@ -38830,6 +38854,20 @@
 
 	var Result = _react2.default.createClass({
 	    displayName: 'Result',
+	    getInitialState: function getInitialState() {
+	        return {
+	            id: this.props.result.id,
+	            title: this.props.result.title,
+	            playing: false
+	        };
+	    },
+	    loadYoutubeVideo: function loadYoutubeVideo() {
+	        var component = this;
+	        component.props.parent.props.addToQueue(this.props.result);
+	    },
+	    playSong: function playSong(e) {
+	        console.log($('#' + this.props.result.id));
+	    },
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
@@ -38839,7 +38877,7 @@
 	                { className: 'content' },
 	                _react2.default.createElement(
 	                    'a',
-	                    { className: 'header' },
+	                    { className: 'header', onClick: this.playSong },
 	                    this.props.result.title
 	                ),
 	                _react2.default.createElement(
@@ -38850,7 +38888,7 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: 'https://www.youtube.com/watch?v=' + this.props.result.id, target: '_blank' },
+	                            { onClick: this.loadYoutubeVideo },
 	                            this.props.result.title
 	                        )
 	                    )
@@ -38886,12 +38924,130 @@
 
 	var MediaPlayer = _react2.default.createClass({
 	    displayName: 'MediaPlayer',
+	    getInitialState: function getInitialState() {
+	        return {
+	            id: ''
+	        };
+	    },
+	    nowPlaying: function nowPlaying(id) {
+	        this.setState({ id: id });
+	    },
 	    render: function render() {
-	        return _react2.default.createElement('div', null);
+	        var component = this;
+	        if (this.state.id) {
+	            return _react2.default.createElement('iframe', {
+	                id: this.state.id,
+	                type: 'text/html',
+	                src: 'http://www.youtube.com/embed/' + this.state.id + '?enablejsapi=1&origin=http://example.com'
+	            });
+	        } else {
+	            return _react2.default.createElement('div', null);
+	        }
 	    }
 	});
 
 	exports.default = MediaPlayer;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _MediaPlayer = __webpack_require__(182);
+
+	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MediaTray = _react2.default.createClass({
+	    displayName: 'MediaTray',
+	    getInitialState: function getInitialState() {
+	        return {
+	            queue: []
+	        };
+	    },
+	    updateQueue: function updateQueue(newTrack, newIndex) {
+	        var component = this;
+	        var queue = component.state.queue;
+	        queue.push(newTrack);
+	        component.setState({ queue: queue });
+	        console.log('id: ' + newTrack);
+
+	        this._child.nowPlaying(queue[0].id);
+	    },
+	    render: function render() {
+	        var _this = this;
+
+	        var component = this;
+	        return _react2.default.createElement(
+	            'div',
+	            { id: 'MediaTray' },
+	            _react2.default.createElement(_MediaPlayer2.default, {
+	                ref: function ref(child) {
+	                    _this._child = child;
+	                } }),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'ui items' },
+	                _.map(component.state.queue, function (track) {
+	                    return _react2.default.createElement(Track, {
+	                        key: track.id,
+	                        track: track,
+	                        parent: component });
+	                })
+	            )
+	        );
+	    }
+	});
+
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    getInitialState: function getInitialState() {
+	        return {
+	            data: ''
+	        };
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item' },
+	            _react2.default.createElement(
+	                'a',
+	                { className: 'ui tiny image' },
+	                _react2.default.createElement('img', { src: this.props.track.thumbnail })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement(
+	                    'a',
+	                    { className: 'header' },
+	                    this.props.track.title
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description' },
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        this.props.track.description
+	                    )
+	                )
+	            )
+	        );
+	    }
+	});
+
+	exports.default = MediaTray;
 
 /***/ }
 /******/ ]);

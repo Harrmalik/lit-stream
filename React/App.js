@@ -2,7 +2,11 @@ import React from 'react'
 import ReactDom from 'react-dom'
 import SearchBox from './components/SearchBox'
 import Results from './components/Results'
-import MediaPlayer from './mediaPlayer'
+import MediaTray from './components/MediaTray'
+
+var containerStyle = {
+    width: "80%"
+}
 
 var App = React.createClass({
     getInitialState() {
@@ -13,14 +17,23 @@ var App = React.createClass({
     updateResults(data) {
         this.setState({data: [data]})
     },
+    addToQueue(newTrack) {
+        this._child.updateQueue(newTrack)
+    },
     render() {
         return (
-            <div className="main">
-                <section className="ui container">
+            <div className="main" style={ !this.state.data ? {} : containerStyle}>
+                <section>
                     <SearchBox
                         callback={this.updateResults}></SearchBox>
+
                     <Results
-                        data={this.state.data ? this.state.data : null}></Results>
+                        data={this.state.data ? this.state.data : null}
+                        addToQueue={this.addToQueue}></Results>
+
+                    <MediaTray
+                        ref={(child) => {this._child = child;}}
+                        parent={this}></MediaTray>
                 </section>
 
                 <footer>

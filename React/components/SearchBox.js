@@ -32,10 +32,13 @@ var SearchBox = React.createClass({
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
+                console.log(data);
                 tracks = _.map(data, function(result) {
                     return {
                         id: result.id.videoId,
-                        title: result.snippet.title
+                        title: result.snippet.title,
+                        thumpnail: result.snippet.thumbnails.default.url,
+                        description: result.snippet.description
                     }
                 })
                 component.setState({tracks});

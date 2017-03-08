@@ -5,4 +5,12 @@ body {
 a {
   color: #00B7FF; }
 
+#MediaTray {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  margin: 0;
+  width: 20%; }
+
 /*# sourceMappingURL=style.css.map */
