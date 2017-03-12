@@ -1,23 +1,34 @@
 import React from 'react'
+import YouTube from '../../node_modules/react-youtube/dist/YouTube'
 
 var MediaPlayer = React.createClass({
     getInitialState() {
         return {
-            id: ''
-        }
+            id: '',
+            opts: {
+                height: '300',
+                width: '300',
+                playerVars: { // https://developers.google.com/youtube/player_parameters
+                    autoplay: 1
+                }
+            }
+        };
     },
     nowPlaying(id) {
         this.setState({id})
     },
+    _onReady(event) {
+      // access to player in all event handlers via event.target
+      //event.target.pauseVideo();
+    },
     render() {
+
         let component = this
         if (this.state.id) {
             return (
-                <iframe
-                    id={this.state.id}
-                    type="text/html"
-                    src={`http://www.youtube.com/embed/${this.state.id}?enablejsapi=1&origin=http://example.com`}
-                    ></iframe>
+                <YouTube
+                  videoId={this.state.id}
+                  opts={this.state.opts}/>
             )
         } else {
             return (

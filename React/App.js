@@ -34,6 +34,7 @@ var App = React.createClass({
                     <MediaTray
                         ref={(child) => {this._child = child;}}
                         parent={this}></MediaTray>
+
                 </section>
 
                 <footer>
