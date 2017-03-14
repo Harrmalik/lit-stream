@@ -40,7 +40,7 @@ var Result = React.createClass({
         component.props.parent.props.addToQueue(this.props.result)
     },
     playSong(e) {
-        console.log($(`#${this.props.result.id}`));
+        
     },
     render() {
         return (

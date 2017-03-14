@@ -11,24 +11,41 @@ var MediaPlayer = React.createClass({
                 playerVars: { // https://developers.google.com/youtube/player_parameters
                     autoplay: 1
                 }
-            }
+            },
+            controls: ''
         };
     },
     nowPlaying(id) {
         this.setState({id})
     },
-    _onReady(event) {
+    playTrack(event) {
       // access to player in all event handlers via event.target
-      //event.target.pauseVideo();
+      event.target.playVideo();
+      if (this.state.controls == '')  {
+          this.setState({controls: event.target});
+      }
+    },
+    stopPlayer() {
+        this.state.controls.pauseVideo();
+    },
+    playPlayer() {
+        this.state.controls.pauseVideo();
+    },
+    getNextTrack(event) {
+        console.log(event)
+        this.props.parent.getNextTrack(event)
     },
     render() {
-
         let component = this
         if (this.state.id) {
             return (
                 <YouTube
                   videoId={this.state.id}
-                  opts={this.state.opts}/>
+                  id={this.state.id}
+                  opts={this.state.opts}
+                  onReady={this.playTrack}
+                  onEnd={this.getNextTrack}/>
+
             )
         } else {
             return (

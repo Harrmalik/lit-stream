@@ -37,8 +37,7 @@ var SearchBox = React.createClass({
                     return {
                         id: result.id.videoId,
                         title: result.snippet.title,
-                        thumpnail: result.snippet.thumbnails.default.url,
-                        description: result.snippet.description
+                        thumbnail: result.snippet.thumbnails.default.url
                     }
                 })
                 component.setState({tracks});
