@@ -18,16 +18,18 @@ var SearchBox = React.createClass({
     },
     componentDidMount() {
       this.SearchBox.focus()
+
     },
     soundcloudSearch(query) {
         console.log('soundcloud')
     },
-    youtubeSearch(query) {
+    youtubeSearch(query, type) {
         let component = this
         let tracks;
+        console.log(type)
 
         $.ajax({
-            url: `/api/findSong`,
+            url: `/api/${type}`,
             data: { query },
             crossDomain : true,
             dataType: 'json',
@@ -48,15 +50,34 @@ var SearchBox = React.createClass({
     searchQuery(e) {
         let component = this
         let query = $(this.SearchBox).val()
-        e.preventDefault()
+        let type;
+        if (e == 'getRelated') {
+            type = e
+            query = $('iframe').attr('id')
+        } else {
+            e.preventDefault()
+            type = 'findSong'
+        }
+
         component.setState({query})
         switch (component.state.engine) {
             case 'soundcloud':
-                component.soundcloudSearch(query)
+                component.soundcloudSearch(query, type)
                 break
             case 'youtube':
-                component.youtubeSearch(query)
+                component.youtubeSearch(query, type)
                 break
+        }
+    },
+    liveSearch() {
+        if ($(this.SearchBox).val()) {
+            // TODO: Live search
+            //this.searchQuery();
+        } else {
+            // TODO: get related tracks
+            if ($('iframe')) {
+                this.searchQuery('getRelated')
+            }
         }
     },
     render() {
@@ -67,7 +88,8 @@ var SearchBox = React.createClass({
                     <div className="ui icon big input">
                         <input
                         ref={(input) => { this.SearchBox = input; }}
-                        type="text" placeholder="Search for a song..."></input>
+                        type="text" placeholder="Search for a song..."
+                        onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
 
                         <SearchEngine

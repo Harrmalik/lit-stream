@@ -1,5 +1,6 @@
 import React from 'react'
 import MediaPlayer from './MediaPlayer'
+import MediaControls from './MediaControls'
 
 var MediaTray = React.createClass({
     getInitialState() {
@@ -14,43 +15,54 @@ var MediaTray = React.createClass({
         component.setState({queue})
 
         if (queue.length === 1) {
-            this._child.nowPlaying(queue[0].id)
+            this.mediaPlayer.nowPlaying(queue[0].id)
         }
     },
-    getNextTrack(event) {
+    playPlayer() {
+        this.mediaPlayer.playPlayer()
+    },
+    stopPlayer() {
+        this.mediaPlayer.stopPlayer();
+    },
+    getNextTrack() {
         let component = this
         let queue = component.state.queue
         queue.shift()
         component.setState({queue})
 
         if (queue.length >= 1) {
-            this._child.nowPlaying(queue[0].id)
-            event.target.playVideo();
+            this.mediaPlayer.nowPlaying(queue[0].id)
+            this.playPlayer()
         } else {
-            //this._child.stopPlayer(event)
-            //event.target.playVideo();
-
+            // TODO: No songs left
         }
     },
-    stopPlayer() {
-        this._child.stopPlayer();
+    prevTrack() {
+
+    },
+    remove(index) {
+        let component = this
+        let queue = component.state.queue
+        queue.splice(index, 1)
+        component.setState({queue})
     },
     playNow(index, track) {
         let component = this
         let queue = component.state.queue
         queue.shift()
-        queue.splice(index, 0)
-        queue.splice(0, 1, track)
+        queue.splice(index - 1, 1)
+        queue.splice(0, 0, track)
         component.setState({queue})
-        this._child.nowPlaying(queue[0].id)
-        this._child.playVideo()
+        this.mediaPlayer.nowPlaying(queue[0].id)
+        this.mediaPlayer.playVideo()
     },
     render() {
         let component = this
         return (
+            <section>
             <div id="MediaTray">
                 <MediaPlayer
-                    ref={(child) => {this._child = child;}}
+                    ref={(child) => {this.mediaPlayer = child;}}
                     parent={this}></MediaPlayer>
                     <button onClick={this.stopPlayer}>Stop me</button>
 
@@ -66,6 +78,8 @@ var MediaTray = React.createClass({
                     })}
                 </div>
             </div>
+            <MediaControls></MediaControls>
+            </section>
         )
     }
 })
@@ -83,10 +97,8 @@ var Track = React.createClass({
         console.log(this.props)
         return (
             <div className="item">
-                <a className="ui tiny image">
-                    <img src={this.props.track.thumbnail}></img>
-                </a>
                 <div className="content">
+                    <i className="remove icon"></i>
                     <a className="header" onClick={this.startThis}>{this.props.track.title}</a>
                 </div>
             </div>

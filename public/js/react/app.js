@@ -69,7 +69,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var containerStyle = {
-	    width: "80%"
+	    width: "70%"
 	};
 
 	var App = _react2.default.createClass({
@@ -21588,12 +21588,13 @@
 	    soundcloudSearch: function soundcloudSearch(query) {
 	        console.log('soundcloud');
 	    },
-	    youtubeSearch: function youtubeSearch(query) {
+	    youtubeSearch: function youtubeSearch(query, type) {
 	        var component = this;
 	        var tracks = void 0;
+	        console.log(type);
 
 	        $.ajax({
-	            url: '/api/findSong',
+	            url: '/api/' + type,
 	            data: { query: query },
 	            crossDomain: true,
 	            dataType: 'json',
@@ -21614,15 +21615,34 @@
 	    searchQuery: function searchQuery(e) {
 	        var component = this;
 	        var query = $(this.SearchBox).val();
-	        e.preventDefault();
+	        var type = void 0;
+	        if (e == 'getRelated') {
+	            type = e;
+	            query = $('iframe').attr('id');
+	        } else {
+	            e.preventDefault();
+	            type = 'findSong';
+	        }
+
 	        component.setState({ query: query });
 	        switch (component.state.engine) {
 	            case 'soundcloud':
-	                component.soundcloudSearch(query);
+	                component.soundcloudSearch(query, type);
 	                break;
 	            case 'youtube':
-	                component.youtubeSearch(query);
+	                component.youtubeSearch(query, type);
 	                break;
+	        }
+	    },
+	    liveSearch: function liveSearch() {
+	        if ($(this.SearchBox).val()) {
+	            // TODO: Live search
+	            //this.searchQuery();
+	        } else {
+	            // TODO: get related tracks
+	            if ($('iframe')) {
+	                this.searchQuery('getRelated');
+	            }
 	        }
 	    },
 	    render: function render() {
@@ -21642,7 +21662,8 @@
 	                        ref: function ref(input) {
 	                            _this.SearchBox = input;
 	                        },
-	                        type: 'text', placeholder: 'Search for a song...' }),
+	                        type: 'text', placeholder: 'Search for a song...',
+	                        onChange: this.liveSearch }),
 	                    _react2.default.createElement('i', { className: 'search icon' }),
 	                    _react2.default.createElement(SearchEngine, {
 	                        parent: this })
@@ -38870,30 +38891,30 @@
 	            'div',
 	            { className: 'item' },
 	            _react2.default.createElement(
+	                'a',
+	                { className: 'ui tiny image' },
+	                _react2.default.createElement('img', { src: this.props.result.thumbnail })
+	            ),
+	            _react2.default.createElement(
 	                'div',
 	                { className: 'content' },
 	                _react2.default.createElement(
-	                    'a',
-	                    { className: 'header', onClick: this.playSong },
-	                    this.props.result.title
+	                    'div',
+	                    { className: 'description' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        { onClick: this.loadYoutubeVideo },
+	                        this.props.result.title
+	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'meta' },
 	                    _react2.default.createElement(
-	                        'span',
-	                        null,
-	                        _react2.default.createElement(
-	                            'a',
-	                            { onClick: this.loadYoutubeVideo },
-	                            this.props.result.title
-	                        )
+	                        'h3',
+	                        { onClick: this.loadYoutubeVideo },
+	                        this.props.result.title
 	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'description' },
-	                    this.props.result.title
 	                ),
 	                _react2.default.createElement('div', { className: 'ui divider' })
 	            )
@@ -38952,7 +38973,7 @@
 	        this.state.controls.pauseVideo();
 	    },
 	    playPlayer: function playPlayer() {
-	        this.state.controls.pauseVideo();
+	        this.state.controls.playVideo();
 	    },
 	    getNextTrack: function getNextTrack(event) {
 	        console.log(event);
@@ -45655,6 +45676,10 @@
 
 	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
 
+	var _MediaControls = __webpack_require__(314);
+
+	var _MediaControls2 = _interopRequireDefault(_MediaControls);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var MediaTray = _react2.default.createClass({
@@ -45671,65 +45696,78 @@
 	        component.setState({ queue: queue });
 
 	        if (queue.length === 1) {
-	            this._child.nowPlaying(queue[0].id);
+	            this.mediaPlayer.nowPlaying(queue[0].id);
 	        }
 	    },
-	    getNextTrack: function getNextTrack(event) {
+	    playPlayer: function playPlayer() {
+	        this.mediaPlayer.playPlayer();
+	    },
+	    stopPlayer: function stopPlayer() {
+	        this.mediaPlayer.stopPlayer();
+	    },
+	    getNextTrack: function getNextTrack() {
 	        var component = this;
 	        var queue = component.state.queue;
 	        queue.shift();
 	        component.setState({ queue: queue });
 
 	        if (queue.length >= 1) {
-	            this._child.nowPlaying(queue[0].id);
-	            event.target.playVideo();
+	            this.mediaPlayer.nowPlaying(queue[0].id);
+	            this.playPlayer();
 	        } else {
-	            //this._child.stopPlayer(event)
-	            //event.target.playVideo();
-
+	            // TODO: No songs left
 	        }
 	    },
-	    stopPlayer: function stopPlayer() {
-	        this._child.stopPlayer();
+	    prevTrack: function prevTrack() {},
+	    remove: function remove(index) {
+	        var component = this;
+	        var queue = component.state.queue;
+	        queue.splice(index, 1);
+	        component.setState({ queue: queue });
 	    },
 	    playNow: function playNow(index, track) {
 	        var component = this;
 	        var queue = component.state.queue;
 	        queue.shift();
-	        queue.splice(index, 0);
-	        queue.splice(0, 1, track);
+	        queue.splice(index - 1, 1);
+	        queue.splice(0, 0, track);
 	        component.setState({ queue: queue });
-	        this._child.nowPlaying(queue[0].id);
-	        this._child.playVideo();
+	        this.mediaPlayer.nowPlaying(queue[0].id);
+	        this.mediaPlayer.playVideo();
 	    },
 	    render: function render() {
 	        var _this = this;
 
 	        var component = this;
 	        return _react2.default.createElement(
-	            'div',
-	            { id: 'MediaTray' },
-	            _react2.default.createElement(_MediaPlayer2.default, {
-	                ref: function ref(child) {
-	                    _this._child = child;
-	                },
-	                parent: this }),
-	            _react2.default.createElement(
-	                'button',
-	                { onClick: this.stopPlayer },
-	                'Stop me'
-	            ),
+	            'section',
+	            null,
 	            _react2.default.createElement(
 	                'div',
-	                { className: 'ui items' },
-	                _.map(component.state.queue, function (track, index) {
-	                    return _react2.default.createElement(Track, {
-	                        key: track.id,
-	                        track: track,
-	                        parent: component,
-	                        position: index });
-	                })
-	            )
+	                { id: 'MediaTray' },
+	                _react2.default.createElement(_MediaPlayer2.default, {
+	                    ref: function ref(child) {
+	                        _this.mediaPlayer = child;
+	                    },
+	                    parent: this }),
+	                _react2.default.createElement(
+	                    'button',
+	                    { onClick: this.stopPlayer },
+	                    'Stop me'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'ui items' },
+	                    _.map(component.state.queue, function (track, index) {
+	                        return _react2.default.createElement(Track, {
+	                            key: track.id,
+	                            track: track,
+	                            parent: component,
+	                            position: index });
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(_MediaControls2.default, null)
 	        );
 	    }
 	});
@@ -45750,13 +45788,9 @@
 	            'div',
 	            { className: 'item' },
 	            _react2.default.createElement(
-	                'a',
-	                { className: 'ui tiny image' },
-	                _react2.default.createElement('img', { src: this.props.track.thumbnail })
-	            ),
-	            _react2.default.createElement(
 	                'div',
 	                { className: 'content' },
+	                _react2.default.createElement('i', { className: 'remove icon' }),
 	                _react2.default.createElement(
 	                    'a',
 	                    { className: 'header', onClick: this.startThis },
@@ -45768,6 +45802,47 @@
 	});
 
 	exports.default = MediaTray;
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MediaControls = _react2.default.createClass({
+	    displayName: 'MediaControls',
+	    getInitialState: function getInitialState() {
+	        return {
+	            controls: ''
+	        };
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { id: 'HUD', className: 'ui raised inverted segment' },
+	            _react2.default.createElement(
+	                'div',
+	                { id: 'MediaControls' },
+	                _react2.default.createElement('i', { className: 'big backward icon', onClick: this.prevTrack }),
+	                _react2.default.createElement('i', { className: 'big play icon', onClick: this.playPlayer }),
+	                _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopPlayer }),
+	                _react2.default.createElement('i', { className: 'big forward icon', onClick: this.getNextTrack })
+	            )
+	        );
+	    }
+	});
+
+	exports.default = MediaControls;
 
 /***/ }
 /******/ ]);

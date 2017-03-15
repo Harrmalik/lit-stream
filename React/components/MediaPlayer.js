@@ -29,7 +29,7 @@ var MediaPlayer = React.createClass({
         this.state.controls.pauseVideo();
     },
     playPlayer() {
-        this.state.controls.pauseVideo();
+        this.state.controls.playVideo();
     },
     getNextTrack(event) {
         console.log(event)

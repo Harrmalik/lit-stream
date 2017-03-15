@@ -40,18 +40,20 @@ var Result = React.createClass({
         component.props.parent.props.addToQueue(this.props.result)
     },
     playSong(e) {
-        
+
     },
     render() {
         return (
             <div className="item">
+                <a className="ui tiny image">
+                    <img src={this.props.result.thumbnail}></img>
+                </a>
               <div className="content">
-                <a className="header" onClick={this.playSong}>{this.props.result.title}</a>
-                <div className="meta">
-                  <span><a onClick={this.loadYoutubeVideo}>{this.props.result.title}</a></span>
-                </div>
                 <div className="description">
-                  {this.props.result.title}
+                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
+                </div>
+                <div className="meta">
+                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
                 </div>
                 <div className="ui divider"></div>
               </div>

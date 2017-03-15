@@ -5,7 +5,7 @@ import Results from './components/Results'
 import MediaTray from './components/MediaTray'
 
 var containerStyle = {
-    width: "80%"
+    width: "70%"
 }
 
 var App = React.createClass({
