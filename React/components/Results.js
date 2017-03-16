@@ -12,7 +12,7 @@ var Results = React.createClass({
             )
         } else {
             return (
-                <div className="ui items">
+                <div className="ui items" id="Results">
                     {_.map(data, function(result) {
                         return (
                             <Result
@@ -44,16 +44,18 @@ var Result = React.createClass({
     },
     render() {
         return (
-            <div className="item">
+            <div className="item" onClick={this.loadYoutubeVideo}>
                 <a className="ui tiny image">
                     <img src={this.props.result.thumbnail}></img>
                 </a>
               <div className="content">
                 <div className="description">
-                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
+                    <h3>{this.props.result.title}</h3>
                 </div>
                 <div className="meta">
-                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
+                    <h3>
+
+                    </h3>
                 </div>
                 <div className="ui divider"></div>
               </div>

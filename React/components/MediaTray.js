@@ -8,6 +8,21 @@ var MediaTray = React.createClass({
             queue:[]
         }
     },
+    componentDidMount() {
+        let component = this
+        $('#queue').sortable({
+          update: function( event, ui ) {
+              let queue = component.state.queue
+              queue.splice(queue.findIndex(track=> track.id == ui.item[0].id), 1)
+              queue.splice($('#queue').find(`#${ui.item[0].id}`).index(), 0, {
+                  id: ui.item[0].id,
+                  title: $('#queue').find(`#${ui.item[0].id}`).data("title"),
+                  thumbnail: $('#queue').find(`#${ui.item[0].id}`).data("thumbnail")
+              })
+              component.setState({queue})
+          }
+        });
+    },
     updateQueue(newTrack, newIndex) {
         let component = this
         let queue = component.state.queue
@@ -45,6 +60,9 @@ var MediaTray = React.createClass({
         let queue = component.state.queue
         queue.splice(index, 1)
         component.setState({queue})
+        if (index == 0) {
+            component.getNextTrack();
+        }
     },
     playNow(index, track) {
         let component = this
@@ -64,9 +82,8 @@ var MediaTray = React.createClass({
                 <MediaPlayer
                     ref={(child) => {this.mediaPlayer = child;}}
                     parent={this}></MediaPlayer>
-                    <button onClick={this.stopPlayer}>Stop me</button>
 
-                <div className="ui items">
+                <div id="queue" className="ui items">
                     {_.map(component.state.queue, function(track, index) {
                         return (
                             <Track
@@ -78,7 +95,8 @@ var MediaTray = React.createClass({
                     })}
                 </div>
             </div>
-            <MediaControls></MediaControls>
+            <MediaControls
+                parent={this}></MediaControls>
             </section>
         )
     }
@@ -93,12 +111,14 @@ var Track = React.createClass({
     startThis() {
         this.props.parent.playNow(this.props.position, this.props.track)
     },
+    removeTrack() {
+        this.props.parent.remove(this.props.position)
+    },
     render() {
-        console.log(this.props)
         return (
-            <div className="item">
+            <div className="item track" id={this.props.track.id} data-title={this.props.track.title} data-thumbnail={this.props.track.thumbnail}>
                 <div className="content">
-                    <i className="remove icon"></i>
+                    <i className="remove icon" onClick={this.removeTrack}></i>
                     <a className="header" onClick={this.startThis}>{this.props.track.title}</a>
                 </div>
             </div>

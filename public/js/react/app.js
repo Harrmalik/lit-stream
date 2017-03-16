@@ -38860,7 +38860,7 @@
 	        } else {
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'ui items' },
+	                { className: 'ui items', id: 'Results' },
 	                _lodash2.default.map(data, function (result) {
 	                    return _react2.default.createElement(Result, {
 	                        key: result.id,
@@ -38889,7 +38889,7 @@
 	    render: function render() {
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'item' },
+	            { className: 'item', onClick: this.loadYoutubeVideo },
 	            _react2.default.createElement(
 	                'a',
 	                { className: 'ui tiny image' },
@@ -38903,18 +38903,14 @@
 	                    { className: 'description' },
 	                    _react2.default.createElement(
 	                        'h3',
-	                        { onClick: this.loadYoutubeVideo },
+	                        null,
 	                        this.props.result.title
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'meta' },
-	                    _react2.default.createElement(
-	                        'h3',
-	                        { onClick: this.loadYoutubeVideo },
-	                        this.props.result.title
-	                    )
+	                    _react2.default.createElement('h3', null)
 	                ),
 	                _react2.default.createElement('div', { className: 'ui divider' })
 	            )
@@ -45689,6 +45685,23 @@
 	            queue: []
 	        };
 	    },
+	    componentDidMount: function componentDidMount() {
+	        var component = this;
+	        $('#queue').sortable({
+	            update: function update(event, ui) {
+	                var queue = component.state.queue;
+	                queue.splice(queue.findIndex(function (track) {
+	                    return track.id == ui.item[0].id;
+	                }), 1);
+	                queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
+	                    id: ui.item[0].id,
+	                    title: $('#queue').find('#' + ui.item[0].id).data("title"),
+	                    thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail")
+	                });
+	                component.setState({ queue: queue });
+	            }
+	        });
+	    },
 	    updateQueue: function updateQueue(newTrack, newIndex) {
 	        var component = this;
 	        var queue = component.state.queue;
@@ -45724,6 +45737,9 @@
 	        var queue = component.state.queue;
 	        queue.splice(index, 1);
 	        component.setState({ queue: queue });
+	        if (index == 0) {
+	            component.getNextTrack();
+	        }
 	    },
 	    playNow: function playNow(index, track) {
 	        var component = this;
@@ -45751,13 +45767,8 @@
 	                    },
 	                    parent: this }),
 	                _react2.default.createElement(
-	                    'button',
-	                    { onClick: this.stopPlayer },
-	                    'Stop me'
-	                ),
-	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'ui items' },
+	                    { id: 'queue', className: 'ui items' },
 	                    _.map(component.state.queue, function (track, index) {
 	                        return _react2.default.createElement(Track, {
 	                            key: track.id,
@@ -45767,7 +45778,8 @@
 	                    })
 	                )
 	            ),
-	            _react2.default.createElement(_MediaControls2.default, null)
+	            _react2.default.createElement(_MediaControls2.default, {
+	                parent: this })
 	        );
 	    }
 	});
@@ -45782,15 +45794,17 @@
 	    startThis: function startThis() {
 	        this.props.parent.playNow(this.props.position, this.props.track);
 	    },
+	    removeTrack: function removeTrack() {
+	        this.props.parent.remove(this.props.position);
+	    },
 	    render: function render() {
-	        console.log(this.props);
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'item' },
+	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'content' },
-	                _react2.default.createElement('i', { className: 'remove icon' }),
+	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
 	                _react2.default.createElement(
 	                    'a',
 	                    { className: 'header', onClick: this.startThis },
@@ -45827,17 +45841,29 @@
 	        };
 	    },
 	    render: function render() {
+	        var MediaTray = this.props.parent;
+	        var controls = this.props.controls;
 	        return _react2.default.createElement(
 	            'div',
 	            { id: 'HUD', className: 'ui raised inverted segment' },
-	            _react2.default.createElement(
+	            MediaTray.state.queue[0] ? _react2.default.createElement(
 	                'div',
-	                { id: 'MediaControls' },
-	                _react2.default.createElement('i', { className: 'big backward icon', onClick: this.prevTrack }),
-	                _react2.default.createElement('i', { className: 'big play icon', onClick: this.playPlayer }),
-	                _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopPlayer }),
-	                _react2.default.createElement('i', { className: 'big forward icon', onClick: this.getNextTrack })
-	            )
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'MediaControls' },
+	                    _react2.default.createElement('i', { className: 'big backward icon', onClick: MediaTray.prevTrack }),
+	                    _react2.default.createElement('i', { className: 'big play icon', onClick: MediaTray.playPlayer }),
+	                    _react2.default.createElement('i', { className: 'big stop icon', onClick: MediaTray.stopPlayer }),
+	                    _react2.default.createElement('i', { className: 'big forward icon', onClick: MediaTray.getNextTrack })
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'Now Playing: ',
+	                    MediaTray.state.queue[0].title
+	                )
+	            ) : ''
 	        );
 	    }
 	});
