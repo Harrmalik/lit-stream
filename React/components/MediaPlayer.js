@@ -33,7 +33,7 @@ var MediaPlayer = React.createClass({
     },
     getNextTrack(event) {
         console.log(event)
-        this.props.parent.getNextTrack(event)
+        this.props.parent.getNextTrack(this.state.id)
     },
     render() {
         let component = this

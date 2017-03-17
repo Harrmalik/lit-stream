@@ -20,7 +20,7 @@ var MediaControls = React.createClass({
                         <i className="big forward icon" onClick={MediaTray.getNextTrack}></i>
                     </div>
 
-                    <p>Now Playing: {MediaTray.state.queue[0].title}</p>
+                    <p>Now Playing: {MediaTray.state.nowPlaying.title}</p>
                     </div> :
                     ''
                 }

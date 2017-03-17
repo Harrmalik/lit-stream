@@ -1,11 +1,20 @@
 import React from 'react'
 import MediaPlayer from './MediaPlayer'
 import MediaControls from './MediaControls'
+import moment from 'moment'
 
 var MediaTray = React.createClass({
     getInitialState() {
         return {
-            queue:[]
+            queue:[],
+            nowPlaying: {},
+            history: [],
+            options: {
+                shuffle: true,
+                showVideo: true,
+                autoplay: true,
+                repeat: false
+            }
         }
     },
     componentDidMount() {
@@ -31,6 +40,7 @@ var MediaTray = React.createClass({
 
         if (queue.length === 1) {
             this.mediaPlayer.nowPlaying(queue[0].id)
+            component.setState({nowPlaying: queue[0]})
         }
     },
     playPlayer() {
@@ -39,17 +49,48 @@ var MediaTray = React.createClass({
     stopPlayer() {
         this.mediaPlayer.stopPlayer();
     },
-    getNextTrack() {
+    getNextTrack(id) {
         let component = this
         let queue = component.state.queue
-        queue.shift()
+        let history = component.state.history
+        let options = component.state.options
+        let nowPlaying = component.state.nowPlaying
+        let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+        console.log(nowPlaying)
+        console.log(prevIndex)
+        let query = queue[prevIndex].id
+
+        history.push(queue[prevIndex])
+        queue.splice(prevIndex,1)
+
+        let index = options.shuffle ? Math.floor(Math.random() * ((queue.length-0)+0) + 0) : 0
         component.setState({queue})
 
         if (queue.length >= 1) {
-            this.mediaPlayer.nowPlaying(queue[0].id)
+            component.mediaPlayer.nowPlaying(queue[index].id)
+            scroller(`Lit Stream: ` + queue[index].title, 'document')
             this.playPlayer()
+            component.setState({nowPlaying: queue[index]})
         } else {
             // TODO: No songs left
+            $.ajax({
+                url: `/api/getRelated`,
+                data: { query },
+                crossDomain : true,
+                dataType: 'json',
+                success: function(data) {
+                    component.mediaPlayer.nowPlaying(data[0].id.videoId)
+                    queue.push({
+                        id: data[0].id.videoId,
+                        title: data[0].snippet.title,
+                        thumbnail: data[0].snippet.thumbnails.default.url
+                    })
+                    scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
+                    component.setState({queue})
+                    component.setState({nowPlaying: queue[0]})
+                    $('#searchBox').val('')
+                }
+            });
         }
     },
     prevTrack() {
@@ -67,12 +108,27 @@ var MediaTray = React.createClass({
     playNow(index, track) {
         let component = this
         let queue = component.state.queue
-        queue.shift()
-        queue.splice(index - 1, 1)
-        queue.splice(0, 0, track)
-        component.setState({queue})
-        this.mediaPlayer.nowPlaying(queue[0].id)
+        let history = component.state.history
+        let nowPlaying = component.state.nowPlaying
+        let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+
+        history.push(queue[0])
+        queue.splice(prevIndex,1)
+        // queue.splice(index - 1, 1)
+        // queue.splice(0, 0, track)
+        component.setState({
+            queue,
+            nowPlaying: track
+        })
+
+        scroller(`Lit Stream: ` + track.title, 'document')
+        this.mediaPlayer.nowPlaying(track.id)
         this.mediaPlayer.playVideo()
+    },
+    getHistory() {
+        $('.ui.modal')
+          .modal('show')
+        ;
     },
     render() {
         let component = this
@@ -83,11 +139,16 @@ var MediaTray = React.createClass({
                     ref={(child) => {this.mediaPlayer = child;}}
                     parent={this}></MediaPlayer>
 
+                <button onClick={this.getHistory}>History</button>
+                <History
+                    history={this.state.history}
+                    parent={this}></History>
+
                 <div id="queue" className="ui items">
                     {_.map(component.state.queue, function(track, index) {
                         return (
                             <Track
-                                key={track.id}
+                                key={track.id + moment().unix()}
                                 track={track}
                                 parent={component}
                                 position={index}></Track>
@@ -96,7 +157,8 @@ var MediaTray = React.createClass({
                 </div>
             </div>
             <MediaControls
-                parent={this}></MediaControls>
+                parent={this}
+                track={this.state.nowPlaying}></MediaControls>
             </section>
         )
     }
@@ -125,5 +187,57 @@ var Track = React.createClass({
         )
     }
 })
+
+var History = React.createClass({
+    close() {
+
+    },
+    render() {
+        let component = this
+        return (
+            <div className="ui modal">
+              <i className="close icon"></i>
+              <div className="header">
+                History
+              </div>
+              <div className="content">
+                <div id="queue" className="ui items">
+                    {_.map(component.props.history, function(track, index) {
+                        return (
+                            <Track
+                                key={track.id + moment().unix()}
+                                track={track}
+                                parent={component.props.parent}
+                                position={index}></Track>
+                        )
+                    })}
+                </div>
+              </div>
+              <div className="actions">
+                <div className="ui black deny button">
+                  Nope
+                </div>
+                <div className="ui positive right labeled icon button">
+                  Yep, thats me
+                  <i className="checkmark icon"></i>
+                </div>
+              </div>
+            </div>
+        )
+    }
+})
+
+var scroller = function(text, element) {
+    (function titleScroller(text) {
+        if (element === 'document') {
+            document.title = text;
+        } else {
+
+        }
+        setTimeout(function () {
+            titleScroller(text.substr(1) + text.substr(0, 1));
+        }, 800);
+    }(text));
+}
 
 export default MediaTray

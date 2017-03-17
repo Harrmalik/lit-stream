@@ -26,7 +26,6 @@ var SearchBox = React.createClass({
     youtubeSearch(query, type) {
         let component = this
         let tracks;
-        console.log(type)
 
         $.ajax({
             url: `/api/${type}`,
@@ -34,7 +33,6 @@ var SearchBox = React.createClass({
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
-                console.log(data);
                 tracks = _.map(data, function(result) {
                     return {
                         id: result.id.videoId,
@@ -86,7 +84,7 @@ var SearchBox = React.createClass({
             <form onSubmit={this.searchQuery} style={ query ? {} : formStyle} className="ui form">
                 <div className="field">
                     <div className="ui icon big input">
-                        <input
+                        <input id="searchBox"
                         ref={(input) => { this.SearchBox = input; }}
                         type="text" placeholder="Search for a song..."
                         onChange={this.liveSearch}></input>

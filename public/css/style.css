@@ -28,8 +28,7 @@ a {
   margin: 0; }
 
 iframe {
-  width: 100%;
-  display: none; }
+  width: 100%; }
 
 .track:hover .remove.icon {
   opacity: 1; }
