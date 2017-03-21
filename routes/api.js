@@ -13,7 +13,7 @@ router.get('/findSong', function(req, res, next) {
     Youtube.search.list({
         part: "snippet",
         q: req.query.query,
-        maxResults: 50,
+        maxResults: 20,
         type: 'video'
     }, (err, data) => {
         if (err) {
@@ -28,7 +28,7 @@ router.get('/getRelated', function(req, res, next) {
     Youtube.search.list({
         part: "snippet",
         relatedToVideoId: req.query.query,
-        maxResults: 50,
+        maxResults: 20,
         type: 'video'
     }, (err, data) => {
         if (err) {

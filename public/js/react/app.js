@@ -38946,7 +38946,7 @@
 	            opts: {
 	                height: '300',
 	                width: '300',
-	                playerVars: { // https://developers.google.com/youtube/player_parameters
+	                playerVars: {
 	                    autoplay: 1
 	                }
 	            },
@@ -38957,7 +38957,6 @@
 	        this.setState({ id: id });
 	    },
 	    playTrack: function playTrack(event) {
-	        // access to player in all event handlers via event.target
 	        event.target.playVideo();
 	        if (this.state.controls == '') {
 	            this.setState({ controls: event.target });
@@ -38970,7 +38969,6 @@
 	        this.state.controls.playVideo();
 	    },
 	    getNextTrack: function getNextTrack(event) {
-	        console.log(event);
 	        this.props.parent.getNextTrack(this.state.id);
 	    },
 	    render: function render() {
@@ -45738,41 +45736,42 @@
 	        var prevIndex = queue.findIndex(function (track) {
 	            return track.id == nowPlaying.id;
 	        });
-	        console.log(nowPlaying);
-	        console.log(prevIndex);
 	        var query = queue[prevIndex].id;
-
-	        history.push(queue[prevIndex]);
-	        queue.splice(prevIndex, 1);
-
-	        var index = options.shuffle ? Math.floor(Math.random() * (queue.length - 0 + 0) + 0) : 0;
-	        component.setState({ queue: queue });
-
-	        if (queue.length >= 1) {
-	            component.mediaPlayer.nowPlaying(queue[index].id);
-	            scroller('Lit Stream: ' + queue[index].title, 'document');
-	            this.playPlayer();
-	            component.setState({ nowPlaying: queue[index] });
+	        if (options.repeat) {
+	            component.playPlayer();
 	        } else {
-	            // TODO: No songs left
-	            $.ajax({
-	                url: '/api/getRelated',
-	                data: { query: query },
-	                crossDomain: true,
-	                dataType: 'json',
-	                success: function success(data) {
-	                    component.mediaPlayer.nowPlaying(data[0].id.videoId);
-	                    queue.push({
-	                        id: data[0].id.videoId,
-	                        title: data[0].snippet.title,
-	                        thumbnail: data[0].snippet.thumbnails.default.url
-	                    });
-	                    scroller('Lit Stream: ' + data[0].snippet.title, 'document');
-	                    component.setState({ queue: queue });
-	                    component.setState({ nowPlaying: queue[0] });
-	                    $('#searchBox').val('');
-	                }
-	            });
+	            history.push(queue[prevIndex]);
+	            queue.splice(prevIndex, 1);
+
+	            var index = options.shuffle ? Math.floor(Math.random() * (queue.length - 0 + 0) + 0) : 0;
+	            component.setState({ queue: queue });
+
+	            if (queue.length >= 1) {
+	                component.mediaPlayer.nowPlaying(queue[index].id);
+	                scroller('Lit Stream: ' + queue[index].title, 'document');
+	                this.playPlayer();
+	                component.setState({ nowPlaying: queue[index] });
+	            } else {
+	                // TODO: No songs left
+	                $.ajax({
+	                    url: '/api/getRelated',
+	                    data: { query: query },
+	                    crossDomain: true,
+	                    dataType: 'json',
+	                    success: function success(data) {
+	                        component.mediaPlayer.nowPlaying(data[0].id.videoId);
+	                        queue.push({
+	                            id: data[0].id.videoId,
+	                            title: data[0].snippet.title,
+	                            thumbnail: data[0].snippet.thumbnails.default.url
+	                        });
+	                        scroller('Lit Stream: ' + data[0].snippet.title, 'document');
+	                        component.setState({ queue: queue });
+	                        component.setState({ nowPlaying: queue[0] });
+	                        $('#searchBox').val('');
+	                    }
+	                });
+	            }
 	        }
 	    },
 	    prevTrack: function prevTrack() {},
@@ -45805,15 +45804,28 @@
 
 	        scroller('Lit Stream: ' + track.title, 'document');
 	        this.mediaPlayer.nowPlaying(track.id);
-	        this.mediaPlayer.playVideo();
 	    },
 	    getHistory: function getHistory() {
 	        $('.ui.modal').modal('show');
+	    },
+	    toggleShuffle: function toggleShuffle() {
+	        var options = this.state.options;
+	        options.shuffle = !options.shuffle;
+	        this.setState({ options: options });
+	    },
+	    toggleRepeat: function toggleRepeat() {
+	        var options = this.state.options;
+	        options.repeat = !options.repeat;
+	        this.setState({ options: options });
+	    },
+	    toggleVideo: function toggleVideo() {
+	        $('iframe').toggle();
 	    },
 	    render: function render() {
 	        var _this = this;
 
 	        var component = this;
+	        console.log(this.state.options);
 	        return _react2.default.createElement(
 	            'section',
 	            null,
@@ -45827,8 +45839,23 @@
 	                    parent: this }),
 	                _react2.default.createElement(
 	                    'button',
-	                    { onClick: this.getHistory },
-	                    'History'
+	                    { className: 'ui button', onClick: this.getHistory },
+	                    _react2.default.createElement('i', { className: 'history icon' })
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'ui button', onClick: this.toggleShuffle },
+	                    _react2.default.createElement('i', { className: 'random icon' })
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'ui button', onClick: this.toggleRepeat },
+	                    _react2.default.createElement('i', { className: 'repeat icon' })
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'ui button', onClick: this.toggleVideo },
+	                    _react2.default.createElement('i', { className: 'youtube play icon' })
 	                ),
 	                _react2.default.createElement(History, {
 	                    history: this.state.history,
@@ -45838,7 +45865,7 @@
 	                    { id: 'queue', className: 'ui items' },
 	                    _.map(component.state.queue, function (track, index) {
 	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (0, _moment2.default)().unix(),
+	                            key: track.id + (0, _moment2.default)().unix(Math.round()),
 	                            track: track,
 	                            parent: component,
 	                            position: index });
@@ -45902,10 +45929,10 @@
 	                { className: 'content' },
 	                _react2.default.createElement(
 	                    'div',
-	                    { id: 'queue', className: 'ui items' },
+	                    { id: 'history', className: 'ui items' },
 	                    _.map(component.props.history, function (track, index) {
 	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (0, _moment2.default)().unix(),
+	                            key: track.id + (0, _moment2.default)().unix(Math.round()),
 	                            track: track,
 	                            parent: component.props.parent,
 	                            position: index });
@@ -45932,14 +45959,16 @@
 	});
 
 	var scroller = function scroller(text, element) {
-	    (function titleScroller(text) {
-	        if (element === 'document') {
-	            document.title = text;
-	        } else {}
-	        setTimeout(function () {
-	            titleScroller(text.substr(1) + text.substr(0, 1));
-	        }, 800);
-	    })(text);
+	    // (function titleScroller(text) {
+	    //     if (element === 'document') {
+	    //         document.title = text;
+	    //     } else {
+	    //
+	    //     }
+	    //     setTimeout(function () {
+	    //         titleScroller(text.substr(1) + text.substr(0, 1));
+	    //     }, 600);
+	    // }(text));
 	};
 
 	exports.default = MediaTray;

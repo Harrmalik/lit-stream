@@ -8,7 +8,7 @@ var MediaPlayer = React.createClass({
             opts: {
                 height: '300',
                 width: '300',
-                playerVars: { // https://developers.google.com/youtube/player_parameters
+                playerVars: {
                     autoplay: 1
                 }
             },
@@ -19,7 +19,6 @@ var MediaPlayer = React.createClass({
         this.setState({id})
     },
     playTrack(event) {
-      // access to player in all event handlers via event.target
       event.target.playVideo();
       if (this.state.controls == '')  {
           this.setState({controls: event.target});
@@ -32,7 +31,6 @@ var MediaPlayer = React.createClass({
         this.state.controls.playVideo();
     },
     getNextTrack(event) {
-        console.log(event)
         this.props.parent.getNextTrack(this.state.id)
     },
     render() {
