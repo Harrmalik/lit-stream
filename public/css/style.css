@@ -10,6 +10,10 @@ a {
 #Results {
   height: 800px;
   overflow: scroll; }
+  #Results .description:hover {
+    cursor: pointer; }
+  #Results .meta i {
+    cursor: pointer; }
 
 #MediaTray {
   position: absolute;
@@ -26,6 +30,12 @@ a {
   height: 5em;
   width: 100%;
   margin: 0; }
+
+#HUD #hudcontainer {
+  width: 600px;
+  align-content: center;
+  text-align: center;
+  margin: auto; }
 
 iframe {
   width: 100%; }

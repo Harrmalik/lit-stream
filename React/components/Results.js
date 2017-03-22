@@ -37,25 +37,25 @@ var Result = React.createClass({
     },
     loadYoutubeVideo() {
         let component = this
-        component.props.parent.props.addToQueue(this.props.result)
+        component.props.parent.props.addToQueue(this.props.result, false)
     },
-    playSong(e) {
-
+    addToUpNext() {
+        let component = this
+        component.props.parent.props.addToQueue(this.props.result, true)
     },
     render() {
         return (
-            <div className="item" onClick={this.loadYoutubeVideo}>
+            <div className="item">
                 <a className="ui tiny image">
                     <img src={this.props.result.thumbnail}></img>
                 </a>
               <div className="content">
                 <div className="description">
-                    <h3>{this.props.result.title}</h3>
+                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
                 </div>
                 <div className="meta">
-                    <h3>
-
-                    </h3>
+                    <i className="plus icon" onClick={this.loadYoutubeVideo}></i>
+                    <i className="forward icon" onClick={this.addToUpNext}></i>
                 </div>
                 <div className="ui divider"></div>
               </div>

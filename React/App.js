@@ -4,37 +4,43 @@ import SearchBox from './components/SearchBox'
 import Results from './components/Results'
 import MediaTray from './components/MediaTray'
 
-var containerStyle = {
+let containerStyle = {
     width: "70%"
 }
 
-var App = React.createClass({
+let App = React.createClass({
     getInitialState() {
         return {
             data: []
         }
     },
+    componentDidMount() {
+        $('.ui.sidebar')
+          .sidebar('toggle')
+        ;
+    },
     updateResults(data) {
         this.setState({data: [data]})
     },
-    addToQueue(newTrack) {
-        this._child.updateQueue(newTrack)
+    addToQueue(newTrack, upNext) {
+        this._child.updateQueue(newTrack, upNext)
     },
     render() {
         return (
             <div className="main" style={ !this.state.data ? {} : containerStyle}>
-                <section>
+                <section className="ui">
                     <SearchBox
                         callback={this.updateResults}></SearchBox>
 
                     <Results
                         data={this.state.data ? this.state.data : null}
                         addToQueue={this.addToQueue}></Results>
+                </section>
 
+                <section className="pusher">
                     <MediaTray
                         ref={(child) => {this._child = child;}}
                         parent={this}></MediaTray>
-
                 </section>
 
                 <footer>

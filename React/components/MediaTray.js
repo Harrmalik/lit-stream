@@ -3,14 +3,18 @@ import MediaPlayer from './MediaPlayer'
 import MediaControls from './MediaControls'
 import moment from 'moment'
 
-var MediaTray = React.createClass({
+let mediaStyle = {
+    display: 'none'
+}
+
+let MediaTray = React.createClass({
     getInitialState() {
         return {
             queue:[],
             nowPlaying: {},
             history: [],
             options: {
-                shuffle: true,
+                shuffle: false,
                 showVideo: true,
                 autoplay: true,
                 repeat: false
@@ -32,10 +36,14 @@ var MediaTray = React.createClass({
           }
         });
     },
-    updateQueue(newTrack, newIndex) {
+    updateQueue(newTrack, upNext) {
         let component = this
         let queue = component.state.queue
-        queue.push(newTrack)
+        if (upNext) {
+            queue.splice(1,0, newTrack)
+        } else {
+            queue.push(newTrack)
+        }
         component.setState({queue})
 
         if (queue.length === 1) {
@@ -95,7 +103,7 @@ var MediaTray = React.createClass({
         }
     },
     prevTrack() {
-
+        this.mediaPlayer.getDuration()
     },
     remove(index) {
         let component = this
@@ -141,22 +149,25 @@ var MediaTray = React.createClass({
         this.setState({options})
     },
     toggleVideo() {
+        let options = this.state.options
+        options.showVideo = !options.showVideo
+        this.setState({options})
         $('iframe').toggle()
     },
     render() {
         let component = this
-        console.log(this.state.options)
+        let options = this.state.options
         return (
-            <section>
+            <section style={this.state.queue.length > 0 ? {} : mediaStyle}>
             <div id="MediaTray">
                 <MediaPlayer
                     ref={(child) => {this.mediaPlayer = child;}}
                     parent={this}></MediaPlayer>
 
-                <button className="ui button" onClick={this.getHistory}><i className="history icon"></i></button>
-                <button className="ui button" onClick={this.toggleShuffle}><i className="random icon"></i></button>
-                <button className="ui button" onClick={this.toggleRepeat}><i className="repeat icon"></i></button>
-                <button className="ui button" onClick={this.toggleVideo}><i className="youtube play icon"></i></button>
+                <button className="ui basic blue icon button" onClick={this.getHistory}><i className="history icon"></i></button>
+                <button className={options.shuffle ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleShuffle}><i className="random icon"></i></button>
+                <button className={options.repeat ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleRepeat}><i className="repeat icon"></i></button>
+                <button className={options.showVideo ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleVideo}><i className="youtube play icon"></i></button>
 
                 <History
                     history={this.state.history}
@@ -166,7 +177,7 @@ var MediaTray = React.createClass({
                     {_.map(component.state.queue, function(track, index) {
                         return (
                             <Track
-                                key={track.id + moment().unix(Math.round())}
+                                key={track.id + (Math.floor(Math.random() * 100000) + 1)  }
                                 track={track}
                                 parent={component}
                                 position={index}></Track>
@@ -174,15 +185,17 @@ var MediaTray = React.createClass({
                     })}
                 </div>
             </div>
+            {this.mediaPlayer ?
             <MediaControls
                 parent={this}
-                track={this.state.nowPlaying}></MediaControls>
+                nowPlaying={this.mediaPlayer}
+                track={this.state.nowPlaying}></MediaControls> : ''}
             </section>
         )
     }
 })
 
-var Track = React.createClass({
+let Track = React.createClass({
     getInitialState() {
         return {
             data:''
@@ -199,14 +212,18 @@ var Track = React.createClass({
             <div className="item track" id={this.props.track.id} data-title={this.props.track.title} data-thumbnail={this.props.track.thumbnail}>
                 <div className="content">
                     <i className="remove icon" onClick={this.removeTrack}></i>
-                    <a className="header" onClick={this.startThis}>{this.props.track.title}</a>
+                    {this.props.parent.state.nowPlaying.id == this.props.track.id ?
+                        <i className="volume up icon"></i>
+                    : <a className="ui blue circular label">{this.props.position + 1}</a>}
+                    <a className={this.props.parent.state.nowPlaying.id == this.props.track.id ?
+                    'ui blue header' : 'header'} onClick={this.startThis}>{this.props.track.title}</a>
                 </div>
             </div>
         )
     }
 })
 
-var History = React.createClass({
+let History = React.createClass({
     close() {
 
     },
@@ -223,7 +240,7 @@ var History = React.createClass({
                     {_.map(component.props.history, function(track, index) {
                         return (
                             <Track
-                                key={track.id + moment().unix(Math.round())}
+                                key={track.id + (Math.floor(Math.random() * 100000) + 1)}
                                 track={track}
                                 parent={component.props.parent}
                                 position={index}></Track>
@@ -245,7 +262,7 @@ var History = React.createClass({
     }
 })
 
-var scroller = function(text, element) {
+let scroller = function(text, element) {
     // (function titleScroller(text) {
     //     if (element === 'document') {
     //         document.title = text;
