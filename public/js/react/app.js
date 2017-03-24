@@ -69,7 +69,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var containerStyle = {
-	    width: "70%"
+	    width: "100%",
+	    height: "100%"
 	};
 
 	var App = _react2.default.createClass({
@@ -96,7 +97,7 @@
 	            { className: 'main', style: !this.state.data ? {} : containerStyle },
 	            _react2.default.createElement(
 	                'section',
-	                { className: 'ui' },
+	                { id: 'Search', className: 'ui' },
 	                _react2.default.createElement(_SearchBox2.default, {
 	                    callback: this.updateResults }),
 	                _react2.default.createElement(_Results2.default, {
@@ -105,7 +106,7 @@
 	            ),
 	            _react2.default.createElement(
 	                'section',
-	                { className: 'pusher' },
+	                { className: 'pusher', style: containerStyle },
 	                _react2.default.createElement(_MediaTray2.default, {
 	                    ref: function ref(child) {
 	                        _this._child = child;
@@ -38971,6 +38972,7 @@
 	    playTrack: function playTrack(event) {
 	        event.target.playVideo();
 	        if (this.state.controls == '') {
+	            $('#Overlay').show();
 	            this.setState({ controls: event.target });
 	        }
 	    },
@@ -39045,10 +39047,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mediaStyle = {
-	    display: 'none'
-	};
-
 	var MediaTray = _react2.default.createClass({
 	    displayName: 'MediaTray',
 	    getInitialState: function getInitialState() {
@@ -39102,7 +39100,7 @@
 	    stopPlayer: function stopPlayer() {
 	        this.mediaPlayer.stopPlayer();
 	    },
-	    getNextTrack: function getNextTrack(id) {
+	    getNextTrack: function getNextTrack(e) {
 	        var component = this;
 	        var queue = component.state.queue;
 	        var history = component.state.history;
@@ -39150,7 +39148,21 @@
 	        }
 	    },
 	    prevTrack: function prevTrack() {
-	        this.mediaPlayer.getDuration();
+	        var component = this;
+	        var queue = component.state.queue;
+	        var history = component.state.history;
+	        var nowPlaying = component.state.nowPlaying;
+	        var prevIndex = queue.findIndex(function (track) {
+	            return track.id == nowPlaying.id;
+	        });
+	        var query = queue[prevIndex].id;
+	        var lastTrack = history[history.length - 1];
+	        history.push(queue[prevIndex]);
+	        queue.splice(prevIndex, 1);
+	        queue.splice(0, 0, lastTrack);
+	        component.setState({ queue: queue });
+	        component.mediaPlayer.nowPlaying(lastTrack.id);
+	        component.setState({ nowPlaying: queue[0] });
 	    },
 	    remove: function remove(index) {
 	        var component = this;
@@ -39166,19 +39178,23 @@
 	        var queue = component.state.queue;
 	        var history = component.state.history;
 	        var nowPlaying = component.state.nowPlaying;
-	        var prevIndex = queue.findIndex(function (track) {
+	        var lastTrack = history[history.length - 1];
+	        var prevIndex = queue.length > 1 ? queue.findIndex(function (track) {
 	            return track.id == nowPlaying.id;
+	        }) : history.findIndex(function (track) {
+	            return track.id == lastTrack.id;
 	        });
 
 	        history.push(queue[0]);
 	        queue.splice(prevIndex, 1);
-	        // queue.splice(index - 1, 1)
-	        // queue.splice(0, 0, track)
+	        if (queue.length == 0) {
+	            queue.splice(0, 0, lastTrack);
+	        }
+
 	        component.setState({
 	            queue: queue,
 	            nowPlaying: track
 	        });
-
 	        scroller('Lit Stream: ' + track.title, 'document');
 	        this.mediaPlayer.nowPlaying(track.id);
 	    },
@@ -39199,7 +39215,7 @@
 	        var options = this.state.options;
 	        options.showVideo = !options.showVideo;
 	        this.setState({ options: options });
-	        $('iframe').toggle();
+	        $('#MediaTray').toggle();
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -39208,7 +39224,7 @@
 	        var options = this.state.options;
 	        return _react2.default.createElement(
 	            'section',
-	            { style: this.state.queue.length > 0 ? {} : mediaStyle },
+	            { id: 'Overlay' },
 	            _react2.default.createElement(
 	                'div',
 	                { id: 'MediaTray' },
@@ -39398,7 +39414,8 @@
 	                    _react2.default.createElement('i', { className: 'big backward icon', onClick: MediaTray.prevTrack }),
 	                    _react2.default.createElement('i', { className: 'big play icon', onClick: MediaTray.playPlayer }),
 	                    _react2.default.createElement('i', { className: 'big stop icon', onClick: MediaTray.stopPlayer }),
-	                    _react2.default.createElement('i', { className: 'big forward icon', onClick: MediaTray.getNextTrack })
+	                    _react2.default.createElement('i', { className: 'big forward icon', onClick: MediaTray.getNextTrack }),
+	                    _react2.default.createElement('i', { className: 'youtube play big icon', onClick: MediaTray.toggleVideo })
 	                ),
 	                _react2.default.createElement(
 	                    'p',

@@ -1,36 +1,54 @@
 body
-    padding: 50px
     height: 100%
     overflow: hidden
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
 
+#react-app
+    height: 100%
+
 a
     color: #00B7FF
 
+.fullHeight
+    height: 100%
+
+#Search
+    width: 75%
+    margin-left: 25%
+    height: 90%
+
 #Results
-    height: 800px
+    height: 100%
     overflow: scroll
+    margin: 0
+    padding-bottom: 3em
 
     .description:hover
         cursor: pointer
     .meta i
         cursor: pointer
+#Overlay
+    display: none
+    height: 100%
 
 #MediaTray
     position: absolute
     top: 0
     right: 0
     height: 100%
-    margin: 0
-    width: 30%
+    margin-left: 25%
+    background-color: white
+    width: 75%
+
+#queue
+    height: 40%
+    overflow: scroll
 
 #HUD
-    position: absolute
-    bottom: 0
-    left: 0
-    height: 5em
+    height: 100%
     width: 100%
     margin: 0
+
 #HUD #hudcontainer
     width: 600px
     align-content: center
@@ -39,6 +57,7 @@ a
 
 iframe
     width: 100%
+    height: 50%
 
 
 .track:hover

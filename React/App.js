@@ -5,7 +5,8 @@ import Results from './components/Results'
 import MediaTray from './components/MediaTray'
 
 let containerStyle = {
-    width: "70%"
+    width: "100%",
+    height: "100%"
 }
 
 let App = React.createClass({
@@ -28,7 +29,7 @@ let App = React.createClass({
     render() {
         return (
             <div className="main" style={ !this.state.data ? {} : containerStyle}>
-                <section className="ui">
+                <section id="Search" className="ui">
                     <SearchBox
                         callback={this.updateResults}></SearchBox>
 
@@ -37,7 +38,7 @@ let App = React.createClass({
                         addToQueue={this.addToQueue}></Results>
                 </section>
 
-                <section className="pusher">
+                <section className="pusher" style={containerStyle}>
                     <MediaTray
                         ref={(child) => {this._child = child;}}
                         parent={this}></MediaTray>

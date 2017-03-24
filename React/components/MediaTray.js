@@ -3,10 +3,6 @@ import MediaPlayer from './MediaPlayer'
 import MediaControls from './MediaControls'
 import moment from 'moment'
 
-let mediaStyle = {
-    display: 'none'
-}
-
 let MediaTray = React.createClass({
     getInitialState() {
         return {
@@ -57,7 +53,7 @@ let MediaTray = React.createClass({
     stopPlayer() {
         this.mediaPlayer.stopPlayer();
     },
-    getNextTrack(id) {
+    getNextTrack(e) {
         let component = this
         let queue = component.state.queue
         let history = component.state.history
@@ -103,7 +99,19 @@ let MediaTray = React.createClass({
         }
     },
     prevTrack() {
-        this.mediaPlayer.getDuration()
+        let component = this
+        let queue = component.state.queue
+        let history = component.state.history
+        let nowPlaying = component.state.nowPlaying
+        let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+        let query = queue[prevIndex].id
+        let lastTrack =  history[history.length -1]
+        history.push(queue[prevIndex])
+        queue.splice(prevIndex,1)
+        queue.splice(0,0, lastTrack)
+        component.setState({queue})
+        component.mediaPlayer.nowPlaying(lastTrack.id)
+        component.setState({nowPlaying: queue[0]})
     },
     remove(index) {
         let component = this
@@ -119,17 +127,19 @@ let MediaTray = React.createClass({
         let queue = component.state.queue
         let history = component.state.history
         let nowPlaying = component.state.nowPlaying
-        let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+        let lastTrack =  history[history.length -1]
+        let prevIndex = queue.length > 1 ? queue.findIndex(track => track.id == nowPlaying.id) : history.findIndex(track => track.id == lastTrack.id)
 
         history.push(queue[0])
         queue.splice(prevIndex,1)
-        // queue.splice(index - 1, 1)
-        // queue.splice(0, 0, track)
+        if (queue.length == 0) {
+            queue.splice(0,0, lastTrack)
+        }
+
         component.setState({
             queue,
             nowPlaying: track
         })
-
         scroller(`Lit Stream: ` + track.title, 'document')
         this.mediaPlayer.nowPlaying(track.id)
     },
@@ -152,13 +162,13 @@ let MediaTray = React.createClass({
         let options = this.state.options
         options.showVideo = !options.showVideo
         this.setState({options})
-        $('iframe').toggle()
+        $('#MediaTray').toggle()
     },
     render() {
         let component = this
         let options = this.state.options
         return (
-            <section style={this.state.queue.length > 0 ? {} : mediaStyle}>
+            <section id="Overlay">
             <div id="MediaTray">
                 <MediaPlayer
                     ref={(child) => {this.mediaPlayer = child;}}

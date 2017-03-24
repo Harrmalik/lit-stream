@@ -22,6 +22,7 @@ var MediaPlayer = React.createClass({
     playTrack(event) {
       event.target.playVideo()
       if (this.state.controls == '')  {
+          $('#Overlay').show()
           this.setState({controls: event.target});
       }
     },
