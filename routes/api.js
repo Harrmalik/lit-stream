@@ -24,6 +24,24 @@ router.get('/findSong', function(req, res, next) {
     });
 });
 
+router.get('/getPlaylist', function(req, res, next) {
+    console.log(req.query.query)
+    Youtube.playlistItems.list({
+        part: "snippet",
+        playlistId: req.query.query,
+        maxResults: 20
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        if (data) {
+            res.json(data.items);
+        } else {
+            res.json({});
+        }
+    });
+});
+
 router.get('/getRelated', function(req, res, next) {
     Youtube.search.list({
         part: "snippet",

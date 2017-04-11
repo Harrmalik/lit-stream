@@ -19,6 +19,7 @@ var MediaControls = React.createClass({
                         <i className="big stop icon" onClick={MediaTray.stopPlayer}></i>
                         <i className="big forward icon" onClick={MediaTray.getNextTrack}></i>
                         <i className="youtube play big icon"  onClick={MediaTray.toggleVideo}></i>
+                        <i className="list layout big icon" onClick={MediaTray.toggleLibrary}></i>
                     </div>
 
                     <p>

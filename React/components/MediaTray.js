@@ -164,6 +164,9 @@ let MediaTray = React.createClass({
         this.setState({options})
         $('#MediaTray').toggle()
     },
+    toggleLibrary() {
+        $('#libraryContainer').toggle()
+    },
     render() {
         let component = this
         let options = this.state.options
@@ -218,8 +221,9 @@ let Track = React.createClass({
         this.props.parent.remove(this.props.position)
     },
     render() {
+        let track = this.props.track
         return (
-            <div className="item track" id={this.props.track.id} data-title={this.props.track.title} data-thumbnail={this.props.track.thumbnail}>
+            <div className="item track" id={track.id} data-title={track.title} data-thumbnail={track.thumbnail} data-type={track.type} data-platform={track.platform}>
                 <div className="content">
                     <i className="remove icon" onClick={this.removeTrack}></i>
                     {this.props.parent.state.nowPlaying.id == this.props.track.id ?

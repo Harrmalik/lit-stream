@@ -54,9 +54,9 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _SearchBox = __webpack_require__(178);
+	var _SidePane = __webpack_require__(426);
 
-	var _SearchBox2 = _interopRequireDefault(_SearchBox);
+	var _SidePane2 = _interopRequireDefault(_SidePane);
 
 	var _Results = __webpack_require__(181);
 
@@ -65,6 +65,10 @@
 	var _MediaTray = __webpack_require__(313);
 
 	var _MediaTray2 = _interopRequireDefault(_MediaTray);
+
+	var _Library = __webpack_require__(425);
+
+	var _Library2 = _interopRequireDefault(_Library);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -92,14 +96,14 @@
 	    render: function render() {
 	        var _this = this;
 
+	        console.log(this.state.data);
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'main', style: !this.state.data ? {} : containerStyle },
+	            _react2.default.createElement(_SidePane2.default, { parent: this }),
 	            _react2.default.createElement(
 	                'section',
 	                { id: 'Search', className: 'ui' },
-	                _react2.default.createElement(_SearchBox2.default, {
-	                    callback: this.updateResults }),
 	                _react2.default.createElement(_Results2.default, {
 	                    data: this.state.data ? this.state.data : null,
 	                    addToQueue: this.addToQueue })
@@ -107,6 +111,7 @@
 	            _react2.default.createElement(
 	                'section',
 	                { className: 'pusher', style: containerStyle },
+	                _react2.default.createElement(_Library2.default, null),
 	                _react2.default.createElement(_MediaTray2.default, {
 	                    ref: function ref(child) {
 	                        _this._child = child;
@@ -21575,11 +21580,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var formStyle = {
-	    position: "absolute",
-	    top: "45%",
 	    width: "100%",
-	    padding: "1em",
-	    left: "0"
+	    padding: "0"
 	};
 
 	var SearchBox = _react2.default.createClass({
@@ -21608,9 +21610,11 @@
 	            success: function success(data) {
 	                tracks = _lodash2.default.map(data, function (result) {
 	                    return {
-	                        id: result.id.videoId,
+	                        id: result.id.videoId ? result.id.videoId : result.id.playlistId,
 	                        title: result.snippet.title,
-	                        thumbnail: result.snippet.thumbnails.default.url
+	                        thumbnail: result.snippet.thumbnails.default.url,
+	                        type: result.id.videoId ? 'video' : 'playlist',
+	                        platform: 'youtube'
 	                    };
 	                });
 	                component.setState({ tracks: tracks });
@@ -21670,9 +21674,7 @@
 	                        },
 	                        type: 'text', placeholder: 'Search for a song...',
 	                        onChange: this.liveSearch }),
-	                    _react2.default.createElement('i', { className: 'search icon' }),
-	                    _react2.default.createElement(SearchEngine, {
-	                        parent: this })
+	                    _react2.default.createElement('i', { className: 'search icon' })
 	                )
 	            )
 	        );
@@ -38920,7 +38922,8 @@
 	                    'div',
 	                    { className: 'meta' },
 	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.loadYoutubeVideo }),
-	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.addToUpNext })
+	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.addToUpNext }),
+	                    _react2.default.createElement('i', { className: 'ellipsis horizontal icon' })
 	                ),
 	                _react2.default.createElement('div', { className: 'ui divider' })
 	            )
@@ -38970,10 +38973,17 @@
 	        this.setState({ id: id });
 	    },
 	    playTrack: function playTrack(event) {
+	        var _this = this;
+
 	        event.target.playVideo();
 	        if (this.state.controls == '') {
 	            $('#Overlay').show();
 	            this.setState({ controls: event.target });
+	            $('iframe').on('click', function (e) {
+	                e.preventDefault();
+	                console.log(e);
+	                console.log(_this);
+	            });
 	        }
 	    },
 	    stopPlayer: function stopPlayer() {
@@ -45879,6 +45889,9 @@
 	        this.setState({ options: options });
 	        $('#MediaTray').toggle();
 	    },
+	    toggleLibrary: function toggleLibrary() {
+	        $('#libraryContainer').toggle();
+	    },
 	    render: function render() {
 	        var _this = this;
 
@@ -45952,9 +45965,10 @@
 	        this.props.parent.remove(this.props.position);
 	    },
 	    render: function render() {
+	        var track = this.props.track;
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
+	            { className: 'item track', id: track.id, 'data-title': track.title, 'data-thumbnail': track.thumbnail, 'data-type': track.type, 'data-platform': track.platform },
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'content' },
@@ -46077,7 +46091,8 @@
 	                    _react2.default.createElement('i', { className: 'big play icon', onClick: MediaTray.playPlayer }),
 	                    _react2.default.createElement('i', { className: 'big stop icon', onClick: MediaTray.stopPlayer }),
 	                    _react2.default.createElement('i', { className: 'big forward icon', onClick: MediaTray.getNextTrack }),
-	                    _react2.default.createElement('i', { className: 'youtube play big icon', onClick: MediaTray.toggleVideo })
+	                    _react2.default.createElement('i', { className: 'youtube play big icon', onClick: MediaTray.toggleVideo }),
+	                    _react2.default.createElement('i', { className: 'list layout big icon', onClick: MediaTray.toggleLibrary })
 	                ),
 	                _react2.default.createElement(
 	                    'p',
@@ -60978,6 +60993,236 @@
 
 	})));
 
+
+/***/ },
+/* 425 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Library = _react2.default.createClass({
+	    displayName: 'Library',
+	    getInitialState: function getInitialState() {
+	        return {
+	            playlist: '',
+	            songs: [{
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }]
+	        };
+	    },
+	    getSongs: function getSongs() {
+	        $.ajax({
+	            url: '',
+	            data: {}
+	        }).success(function (songs) {
+	            // TODO: get songs and add them to state
+	        }).fail(function (message) {
+	            // TODO: handle failure to load tracks
+	        });
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.getSongs();
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { id: 'libraryContainer' },
+	            _react2.default.createElement(
+	                'table',
+	                { id: 'library', className: 'ui table striped compact' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement('th', null),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Title'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Artist'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Liked'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Date added'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'rating'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    _.map(this.state.songs, function (song, index) {
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'ui checkbox' },
+	                                    _react2.default.createElement('input', { type: 'checkbox' }),
+	                                    _react2.default.createElement('label', null)
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.title
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.artist
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.liked
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.created
+	                            ),
+	                            _react2.default.createElement('td', null)
+	                        );
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                { id: 'libraryHUD' },
+	                this.state.songs.length,
+	                ' songs'
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Library;
+
+/***/ },
+/* 426 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SearchBox = __webpack_require__(178);
+
+	var _SearchBox2 = _interopRequireDefault(_SearchBox);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SidePane = _react2.default.createClass({
+	    displayName: 'SidePane',
+	    getInitialState: function getInitialState() {
+	        return {};
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'section',
+	            { id: 'SidePane' },
+	            _react2.default.createElement(_SearchBox2.default, {
+	                callback: this.props.parent.updateResults }),
+	            _react2.default.createElement(
+	                'h3',
+	                { className: 'ui header' },
+	                'Library'
+	            ),
+	            '``',
+	            _react2.default.createElement(
+	                'h3',
+	                { className: 'ui header' },
+	                'Playlist'
+	            ),
+	            _react2.default.createElement(
+	                'h3',
+	                { className: 'ui header' },
+	                'Favorites'
+	            ),
+	            _react2.default.createElement(
+	                'h3',
+	                { className: 'ui header' },
+	                'History'
+	            )
+	        );
+	    }
+	});
+
+	exports.default = SidePane;
 
 /***/ }
 /******/ ]);

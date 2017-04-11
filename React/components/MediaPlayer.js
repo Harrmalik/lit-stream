@@ -24,6 +24,11 @@ var MediaPlayer = React.createClass({
       if (this.state.controls == '')  {
           $('#Overlay').show()
           this.setState({controls: event.target});
+          $('iframe').on('click', (e)=> {
+              e.preventDefault()
+              console.log(e)
+              console.log(this)
+          })
       }
     },
     stopPlayer() {

@@ -1,8 +1,9 @@
 import React from 'react'
 import ReactDom from 'react-dom'
-import SearchBox from './components/SearchBox'
+import SidePane from './components/SidePane'
 import Results from './components/Results'
 import MediaTray from './components/MediaTray'
+import Library from './components/Library'
 
 let containerStyle = {
     width: "100%",
@@ -27,18 +28,18 @@ let App = React.createClass({
         this._child.updateQueue(newTrack, upNext)
     },
     render() {
+        console.log(this.state.data)
         return (
             <div className="main" style={ !this.state.data ? {} : containerStyle}>
+                <SidePane parent={this}></SidePane>
                 <section id="Search" className="ui">
-                    <SearchBox
-                        callback={this.updateResults}></SearchBox>
-
                     <Results
                         data={this.state.data ? this.state.data : null}
                         addToQueue={this.addToQueue}></Results>
                 </section>
 
                 <section className="pusher" style={containerStyle}>
+                    <Library></Library>
                     <MediaTray
                         ref={(child) => {this._child = child;}}
                         parent={this}></MediaTray>

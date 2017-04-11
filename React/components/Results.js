@@ -56,6 +56,7 @@ var Result = React.createClass({
                 <div className="meta">
                     <i className="plus icon" onClick={this.loadYoutubeVideo}></i>
                     <i className="forward icon" onClick={this.addToUpNext}></i>
+                    <i className="ellipsis horizontal icon"></i>
                 </div>
                 <div className="ui divider"></div>
               </div>

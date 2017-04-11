@@ -2,11 +2,8 @@ import React from 'react'
 import _ from 'lodash'
 
 var formStyle = {
-    position: "absolute",
-    top: "45%",
     width: "100%",
-    padding: "1em",
-    left: "0"
+    padding: "0"
 }
 
 var SearchBox = React.createClass({
@@ -35,9 +32,11 @@ var SearchBox = React.createClass({
             success: function(data) {
                 tracks = _.map(data, function(result) {
                     return {
-                        id: result.id.videoId,
+                        id: result.id.videoId ? result.id.videoId : result.id.playlistId,
                         title: result.snippet.title,
-                        thumbnail: result.snippet.thumbnails.default.url
+                        thumbnail: result.snippet.thumbnails.default.url,
+                        type: result.id.videoId ? 'video' : 'playlist',
+                        platform: 'youtube'
                     }
                 })
                 component.setState({tracks});
@@ -89,9 +88,6 @@ var SearchBox = React.createClass({
                         type="text" placeholder="Search for a song..."
                         onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
-
-                        <SearchEngine
-                            parent={this}></SearchEngine>
                     </div>
                 </div>
             </form>
