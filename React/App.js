@@ -1,9 +1,20 @@
+// Dependencies
 import React from 'react'
 import ReactDom from 'react-dom'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+
+// Components
 import SidePane from './components/SidePane'
-import Results from './components/Results'
-import MediaTray from './components/MediaTray'
-import Library from './components/Library'
+import MediaControls from './components/MediaControls'
+
+// Pages
+import HomePage from './pages/HomePage'
+import SearchPage from './pages/SearchPage'
+import MediaViewPage from './pages/MediaViewPage'
+import HistoryPage from './pages/HistoryPage'
+import QueuePage from './pages/QueuePage'
+import SettingsPage from './pages/SettingsPage'
+import LibraryPage from './pages/LibraryPage'
 
 let containerStyle = {
     width: "100%",
@@ -17,9 +28,7 @@ let App = React.createClass({
         }
     },
     componentDidMount() {
-        $('.ui.sidebar')
-          .sidebar('toggle')
-        ;
+
     },
     updateResults(data) {
         this.setState({data: [data]})
@@ -30,28 +39,59 @@ let App = React.createClass({
     render() {
         console.log(this.state.data)
         return (
-            <div className="main" style={ !this.state.data ? {} : containerStyle}>
-                <SidePane parent={this}></SidePane>
-                <section id="Search" className="ui">
-                    <Results
-                        data={this.state.data ? this.state.data : null}
-                        addToQueue={this.addToQueue}></Results>
-                </section>
+            <Router>
+                <div className="main" style={ !this.state.data ? {} : containerStyle}>
+                    <SidePane parent={this}></SidePane>
 
-                <section className="pusher" style={containerStyle}>
-                    <Library></Library>
-                    <MediaTray
-                        ref={(child) => {this._child = child;}}
-                        parent={this}></MediaTray>
-                </section>
+                    <Route path="/" component={HomePage}/>
+                    <Route path="/search" component={SearchPage}/>
+                    <Route path="/player" component={MediaViewPage}/>
+                    <Route path="/queue" component={QueuePage}/>
+                    <Route path="/history" component={HistoryPage}/>
+                    <Route path="/library" component={LibraryPage}/>
+                    <Route path="/settings" component={SettingsPage}/>
 
-                <footer>
+                    <MediaControls parent={this}></MediaControls>
+                </div>
+            </Router>
 
-                </footer>
-            </div>
         )
     }
 })
+
+const Topic = ({ match }) => (
+  <div>
+    <h3>{match.params.topicId}</h3>
+  </div>
+)
+
+const Topics = ({ match }) => (
+  <div>
+    <h2>Topics</h2>
+    <ul>
+      <li>
+        <Link to={`${match.url}/rendering`}>
+          Rendering with React
+        </Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/components`}>
+          Components
+        </Link>
+      </li>
+      <li>
+        <Link to={`${match.url}/props-v-state`}>
+          Props v. State
+        </Link>
+      </li>
+    </ul>
+
+    <Route path={`${match.url}/:topicId`} component={Topic}/>
+    <Route exact path={match.url} render={() => (
+      <h3>Please select a topic.</h3>
+    )}/>
+  </div>
+)
 
 ReactDom.render(<App />,
 document.getElementById('react-app'))

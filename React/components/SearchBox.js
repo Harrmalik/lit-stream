@@ -1,5 +1,6 @@
 import React from 'react'
 import _ from 'lodash'
+import {Link, Redirect, BrowserRouter as Router} from 'react-router-dom'
 
 var formStyle = {
     width: "100%",
@@ -65,6 +66,12 @@ var SearchBox = React.createClass({
                 component.youtubeSearch(query, type)
                 break
         }
+
+        return (
+            <Router>
+            <Redirect push to="/search"/>
+            </Router>
+        )
     },
     liveSearch() {
         if ($(this.SearchBox).val()) {
