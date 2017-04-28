@@ -2,6 +2,9 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 
 // Components
 import SidePane from './components/SidePane'
@@ -21,6 +24,8 @@ let containerStyle = {
     height: "100%"
 }
 
+const store = createStore(reducer)
+
 let App = React.createClass({
     getInitialState() {
         return {
@@ -39,25 +44,32 @@ let App = React.createClass({
     render() {
         console.log(this.state.data)
         return (
-            <Router>
-                <div className="main" style={ !this.state.data ? {} : containerStyle}>
-                    <SidePane parent={this}></SidePane>
+            <Provider store={store}>
+                <Router>
+                    <div className="main" style={ !this.state.data ? {} : containerStyle}>
+                        <SidePane parent={this}></SidePane>
 
-                    <Route path="/" component={HomePage}/>
-                    <Route path="/search" component={SearchPage}/>
-                    <Route path="/player" component={MediaViewPage}/>
-                    <Route path="/queue" component={QueuePage}/>
-                    <Route path="/history" component={HistoryPage}/>
-                    <Route path="/library" component={LibraryPage}/>
-                    <Route path="/settings" component={SettingsPage}/>
+                        <Route exact path="/" component={HomePage}/>
+                        <Route path="/search" component={SearchPage}/>
+                        <Route path="/player" component={MediaViewPage}/>
+                        <Route path="/queue" component={QueuePage}/>
+                        <Route path="/history" component={HistoryPage}/>
+                        <Route path="/library" component={LibraryPage}/>
+                        <Route path="/settings" component={SettingsPage}/>
 
-                    <MediaControls parent={this}></MediaControls>
-                </div>
-            </Router>
-
+                        <MediaControls parent={this}></MediaControls>
+                    </div>
+                </Router>
+            </Provider>
         )
     }
 })
+
+console.log(store.getState())
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState())
+)
+
 
 const Topic = ({ match }) => (
   <div>
