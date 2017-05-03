@@ -12,12 +12,6 @@ let MediaTray = React.createClass({
             queue:[],
             nowPlaying: {},
             history: [],
-            options: {
-                shuffle: false,
-                showVideo: true,
-                autoplay: true,
-                repeat: false
-            }
         }
     },
     componentDidMount() {

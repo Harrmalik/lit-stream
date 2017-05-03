@@ -101,120 +101,38 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Dependencies
-	var containerStyle = {
-	  width: "100%",
-	  height: "100%"
-	};
+	var App = _react2.default.createClass({
+	    displayName: 'App',
+	    render: function render() {
+	        return _react2.default.createElement(
+	            _reactRedux.Provider,
+	            { store: _Store2.default },
+	            _react2.default.createElement(
+	                _reactRouterDom.BrowserRouter,
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'main' },
+	                    _react2.default.createElement(_SidePane2.default, { parent: this }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _HomePage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/search', component: _SearchPage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/player', component: _MediaViewPage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/queue', component: _QueuePage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/history', component: _HistoryPage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/library', component: _LibraryPage2.default }),
+	                    _react2.default.createElement(_reactRouterDom.Route, { path: '/settings', component: _SettingsPage2.default }),
+	                    _react2.default.createElement(_MediaControls2.default, null)
+	                )
+	            )
+	        );
+	    }
+	});
 
 	// Pages
 
 
 	// Components
 
-
-	var App = _react2.default.createClass({
-	  displayName: 'App',
-	  getInitialState: function getInitialState() {
-	    return {
-	      data: []
-	    };
-	  },
-	  componentDidMount: function componentDidMount() {},
-	  updateResults: function updateResults(data) {
-	    this.setState({ data: [data] });
-	  },
-	  addToQueue: function addToQueue(newTrack, upNext) {
-	    this._child.updateQueue(newTrack, upNext);
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      _reactRedux.Provider,
-	      { store: _Store2.default },
-	      _react2.default.createElement(
-	        _reactRouterDom.BrowserRouter,
-	        null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'main', style: !this.state.data ? {} : containerStyle },
-	          _react2.default.createElement(_SidePane2.default, { parent: this }),
-	          _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _HomePage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/search', component: _SearchPage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/player', component: _MediaViewPage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/queue', component: _QueuePage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/history', component: _HistoryPage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/library', component: _LibraryPage2.default }),
-	          _react2.default.createElement(_reactRouterDom.Route, { path: '/settings', component: _SettingsPage2.default }),
-	          _react2.default.createElement(_MediaControls2.default, { parent: this })
-	        )
-	      )
-	    );
-	  }
-	});
-
-	var Topic = function Topic(_ref) {
-	  var match = _ref.match;
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'h3',
-	      null,
-	      match.params.topicId
-	    )
-	  );
-	};
-
-	var Topics = function Topics(_ref2) {
-	  var match = _ref2.match;
-	  return _react2.default.createElement(
-	    'div',
-	    null,
-	    _react2.default.createElement(
-	      'h2',
-	      null,
-	      'Topics'
-	    ),
-	    _react2.default.createElement(
-	      'ul',
-	      null,
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/rendering' },
-	          'Rendering with React'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/components' },
-	          'Components'
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'li',
-	        null,
-	        _react2.default.createElement(
-	          _reactRouterDom.Link,
-	          { to: match.url + '/props-v-state' },
-	          'Props v. State'
-	        )
-	      )
-	    ),
-	    _react2.default.createElement(_reactRouterDom.Route, { path: match.url + '/:topicId', component: Topic }),
-	    _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: match.url, render: function render() {
-	        return _react2.default.createElement(
-	          'h3',
-	          null,
-	          'Please select a topic.'
-	        );
-	      } })
-	  );
-	};
 
 	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('react-app'));
 
@@ -43272,42 +43190,81 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(479);
+
+	var _reactRedux = __webpack_require__(491);
+
+	var _actions = __webpack_require__(507);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var MediaControls = _react2.default.createClass({
 	    displayName: 'MediaControls',
-	    getInitialState: function getInitialState() {
-	        return {
-	            controls: ''
-	        };
+	    stopTrack: function stopTrack() {
+	        this.props.controls.pauseVideo();
+	    },
+	    playTrack: function playTrack() {
+	        this.props.controls.playVideo();
+	    },
+	    nextTrack: function nextTrack() {
+	        this.props.nextTrack();
 	    },
 	    render: function render() {
-	        // let MediaTray = this.props.parent
-	        // let controls = this.props.controls
-	        // let nowPlaying = this.props.nowPlaying
-	        return _react2.default.createElement('div', { id: 'HUD', className: 'ui raised inverted segment' });
+	        var controls = this.props.controls;
+	        if (controls) {
+	            var duration = controls.getDuration();
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'HUD', className: 'ui raised inverted segment' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'hudcontainer' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'MediaControls' },
+	                        _react2.default.createElement('i', { className: 'big backward icon', onClick: controls.prevTrack }),
+	                        _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }),
+	                        _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
+	                        _react2.default.createElement('i', { className: 'big forward icon', onClick: this.nextTrack })
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Now Playing: ',
+	                        this.props.currentTrack.title
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            'Duration ',
+	                            Math.floor(duration / 60) + '.' + (duration % 60).toFixed(0)
+	                        )
+	                    )
+	                )
+	            );
+	        } else {
+	            return _react2.default.createElement('div', { id: 'HUD', className: 'ui raised inverted segment' });
+	        }
 	    }
 	});
-	// 
-	// <div id="hudcontainer">
-	// <div id="MediaControls">
-	//     <i className="big backward icon" onClick={MediaTray.prevTrack}></i>
-	//     <i className="big play icon" onClick={MediaTray.playPlayer}></i>
-	//     <i className="big stop icon" onClick={MediaTray.stopPlayer}></i>
-	//     <i className="big forward icon" onClick={MediaTray.getNextTrack}></i>
-	//     <i className="youtube play big icon"  onClick={MediaTray.toggleVideo}></i>
-	//     <i className="list layout big icon" onClick={MediaTray.toggleLibrary}></i>
-	// </div>
-	//
-	// <p>
-	//     Now Playing: {MediaTray.state.nowPlaying.title}
-	// </p>
-	// </div>
 
-	// { nowPlaying.state.nowPlaying.duration ?
-	// <span>Duration {Math.floor(nowPlaying.state.nowPlaying.duration / 60) + '.' + (nowPlaying.state.nowPlaying.duration%60).toFixed(2)}</span> : '' }
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        controls: state.controls,
+	        currentTrack: state.nowPlaying
+	    };
+	};
 
-	exports.default = MediaControls;
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaControls);
 
 /***/ },
 /* 229 */
@@ -43494,7 +43451,6 @@
 	    },
 	    render: function render() {
 	        var component = this;
-	        console.log(this.props.currentTrack);
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'page' },
@@ -43502,7 +43458,6 @@
 	                'div',
 	                { id: 'queue', className: 'ui items' },
 	                _.map(component.props.queue, function (track, index) {
-	                    console.log(track);
 	                    return _react2.default.createElement(Track, {
 	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
 	                        track: track,
@@ -43918,16 +43873,13 @@
 	        this.setState({ id: id });
 	    },
 	    playTrack: function playTrack(event) {
-	        var _this = this;
-
 	        event.target.playVideo();
 	        if (this.state.controls == '') {
 	            $('#Overlay').show();
+	            this.props.setControls(event.target);
 	            this.setState({ controls: event.target });
 	            $('iframe').on('click', function (e) {
 	                e.preventDefault();
-	                console.log(e);
-	                console.log(_this);
 	            });
 	        }
 	    },
@@ -43948,9 +43900,6 @@
 	            id: this.state.id,
 	            duration: this.state.controls.getDuration()
 	        };
-	        // console.log('ready')
-	        // console.log(this.state.controls.getDuration())
-	        // console.log(this.state.nowPlaying)
 	        this.setState({ nowPlaying: nowPlaying });
 	    },
 	    getNextTrack: function getNextTrack(event) {
@@ -43975,12 +43924,15 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        nowPlaying: state.nowPlaying
+	        nowPlaying: state.nowPlaying,
+	        controls: state.controls
 	    };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {};
+	    return {
+	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
+	    };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaPlayer);
@@ -50687,13 +50639,7 @@
 	        return {
 	            queue: [],
 	            nowPlaying: {},
-	            history: [],
-	            options: {
-	                shuffle: false,
-	                showVideo: true,
-	                autoplay: true,
-	                repeat: false
-	            }
+	            history: []
 	        };
 	    },
 	    componentDidMount: function componentDidMount() {
@@ -67766,7 +67712,23 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var defaultOptions = {
+	    shuffle: false,
+	    showVideo: true,
+	    autoplay: true,
+	    repeat: false
+	};
 	var theQueue = [];
+
+	function options() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOptions;
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        default:
+	            return state;
+	    }
+	}
 
 	function queue() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
@@ -67803,9 +67765,24 @@
 	    }
 	}
 
+	function controls() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'SET_CONTROLS':
+	            return action.controls;
+
+	        default:
+	            return state;
+	    }
+	}
+
 	var rootReducer = (0, _redux.combineReducers)({
+	    options: options,
 	    nowPlaying: nowPlaying,
-	    queue: queue
+	    queue: queue,
+	    controls: controls
 	});
 
 	exports.default = rootReducer;
@@ -67820,7 +67797,6 @@
 	    value: true
 	});
 	// Top level actions
-
 
 	// Search actions
 
@@ -67843,6 +67819,14 @@
 	var nextTrack = exports.nextTrack = function nextTrack() {
 	    return {
 	        type: 'NEXT_TRACK'
+	    };
+	};
+
+	// MediaPlayer actions
+	var setControls = exports.setControls = function setControls(controls) {
+	    return {
+	        type: 'SET_CONTROLS',
+	        controls: controls
 	    };
 	};
 

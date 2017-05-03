@@ -1,6 +1,5 @@
 // Top level actions
 
-
 // Search actions
 
 // Queue actions
@@ -17,4 +16,10 @@ export const updateQueue = (newTrack, upNext) => ({
 
 export const nextTrack = () => ({
     type: 'NEXT_TRACK'
+})
+
+// MediaPlayer actions
+export const setControls = (controls) => ({
+    type: 'SET_CONTROLS',
+    controls
 })

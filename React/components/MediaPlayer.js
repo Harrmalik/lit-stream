@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { nowPlaying } from '../actions'
+import { nowPlaying, setControls } from '../actions'
 import YouTube from '../../node_modules/react-youtube/dist/YouTube'
 
 var MediaPlayer = React.createClass({
@@ -26,11 +26,10 @@ var MediaPlayer = React.createClass({
       event.target.playVideo()
       if (this.state.controls == '')  {
           $('#Overlay').show()
+          this.props.setControls(event.target)
           this.setState({controls: event.target});
           $('iframe').on('click', (e)=> {
               e.preventDefault()
-              console.log(e)
-              console.log(this)
           })
       }
     },
@@ -51,9 +50,6 @@ var MediaPlayer = React.createClass({
             id: this.state.id,
             duration: this.state.controls.getDuration()
         }
-        // console.log('ready')
-        // console.log(this.state.controls.getDuration())
-        // console.log(this.state.nowPlaying)
         this.setState({nowPlaying})
     },
     getNextTrack(event) {
@@ -83,11 +79,12 @@ var MediaPlayer = React.createClass({
 })
 
 const mapStateToProps = state => ({
-  nowPlaying: state.nowPlaying
+  nowPlaying: state.nowPlaying,
+  controls: state.controls
 })
 
 const mapDispatchToProps = dispatch => ({
-    
+    setControls: bindActionCreators(setControls, dispatch)
 })
 
 export default connect(

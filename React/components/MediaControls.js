@@ -1,39 +1,63 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { nowPlaying, nextTrack } from '../actions'
 
 var MediaControls = React.createClass({
-    getInitialState() {
-        return {
-            controls: ''
-        }
+    stopTrack() {
+        this.props.controls.pauseVideo()
+    },
+    playTrack() {
+        this.props.controls.playVideo()
+    },
+    nextTrack() {
+        this.props.nextTrack()
     },
     render() {
-        // let MediaTray = this.props.parent
-        // let controls = this.props.controls
-        // let nowPlaying = this.props.nowPlaying
-        return (
-            <div id="HUD" className="ui raised inverted segment">
+        let controls = this.props.controls
+        if (controls) {
+            let duration = controls.getDuration()
+            return (
+                <div id="HUD" className="ui raised inverted segment">
+                        <div id="hudcontainer">
+                        <div id="MediaControls">
+                            <i className="big backward icon" onClick={controls.prevTrack}></i>
+                            <i className="big play icon" onClick={this.playTrack}></i>
+                            <i className="big stop icon" onClick={this.stopTrack}></i>
+                            <i className="big forward icon" onClick={this.nextTrack}></i>
+                        </div>
 
-            </div>
-        )
+                        <p>
+                            Now Playing: {this.props.currentTrack.title}
+                        </p>
+                        <p>
+                            <span>Duration {Math.floor(duration / 60) + '.' + (duration %60).toFixed(0)}</span>
+                        </p>
+                        </div>
+
+                </div>
+            )
+        } else {
+            return (
+                <div id="HUD" className="ui raised inverted segment">
+
+                </div>
+            )
+        }
+
     }
 })
-// 
-// <div id="hudcontainer">
-// <div id="MediaControls">
-//     <i className="big backward icon" onClick={MediaTray.prevTrack}></i>
-//     <i className="big play icon" onClick={MediaTray.playPlayer}></i>
-//     <i className="big stop icon" onClick={MediaTray.stopPlayer}></i>
-//     <i className="big forward icon" onClick={MediaTray.getNextTrack}></i>
-//     <i className="youtube play big icon"  onClick={MediaTray.toggleVideo}></i>
-//     <i className="list layout big icon" onClick={MediaTray.toggleLibrary}></i>
-// </div>
-//
-// <p>
-//     Now Playing: {MediaTray.state.nowPlaying.title}
-// </p>
-// </div>
 
-// { nowPlaying.state.nowPlaying.duration ?
-// <span>Duration {Math.floor(nowPlaying.state.nowPlaying.duration / 60) + '.' + (nowPlaying.state.nowPlaying.duration%60).toFixed(2)}</span> : '' }
+const mapStateToProps = state => ({
+    controls: state.controls,
+    currentTrack: state.nowPlaying
+})
 
-export default MediaControls
+const mapDispatchToProps = dispatch => ({
+    nextTrack: bindActionCreators(nextTrack, dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MediaControls)

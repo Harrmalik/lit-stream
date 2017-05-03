@@ -1,5 +1,19 @@
 import { combineReducers } from 'redux'
+let defaultOptions = {
+    shuffle: false,
+    showVideo: true,
+    autoplay: true,
+    repeat: false
+}
 let theQueue = []
+
+
+function options (state = defaultOptions, action) {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
 
 function queue (state = [], action) {
     theQueue = [...state]
@@ -33,9 +47,21 @@ function nowPlaying (state = null, action) {
     }
 }
 
+function controls (state = null, action) {
+    switch (action.type) {
+        case 'SET_CONTROLS':
+            return action.controls
+
+        default:
+            return state
+    }
+}
+
 const rootReducer = combineReducers({
+    options,
     nowPlaying,
-    queue
+    queue,
+    controls
 })
 
 export default rootReducer

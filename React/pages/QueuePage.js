@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateQueue, nowPlaying, nextTrack } from '../actions'
+import { updateQueue, nowPlaying } from '../actions'
 
 let QueuePage = React.createClass({
     getInitialState() {
@@ -9,12 +9,10 @@ let QueuePage = React.createClass({
     },
     render() {
         let component = this
-        console.log(this.props.currentTrack);
         return (
             <div className="page">
                 <div id="queue" className="ui items">
                     {_.map(component.props.queue, function(track, index) {
-                        console.log(track);
                         return (
                             <Track
                                 key={track.id + (Math.floor(Math.random() * 100000) + 1)  }
