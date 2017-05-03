@@ -49,7 +49,9 @@ a {
     bottom: 0; }
 
 #Overlay {
-  height: 100%; }
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 30%; }
 
 .page {
   position: absolute;

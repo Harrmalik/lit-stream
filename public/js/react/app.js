@@ -56,13 +56,11 @@
 
 	var _reactRouterDom = __webpack_require__(178);
 
-	var _redux = __webpack_require__(479);
-
 	var _reactRedux = __webpack_require__(491);
 
-	var _reducers = __webpack_require__(506);
+	var _Store = __webpack_require__(508);
 
-	var _reducers2 = _interopRequireDefault(_reducers);
+	var _Store2 = _interopRequireDefault(_Store);
 
 	var _SidePane = __webpack_require__(224);
 
@@ -102,6 +100,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// Dependencies
 	var containerStyle = {
 	  width: "100%",
 	  height: "100%"
@@ -111,10 +110,7 @@
 
 
 	// Components
-	// Dependencies
 
-
-	var store = (0, _redux.createStore)(_reducers2.default);
 
 	var App = _react2.default.createClass({
 	  displayName: 'App',
@@ -131,10 +127,9 @@
 	    this._child.updateQueue(newTrack, upNext);
 	  },
 	  render: function render() {
-	    console.log(this.state.data);
 	    return _react2.default.createElement(
 	      _reactRedux.Provider,
-	      { store: store },
+	      { store: _Store2.default },
 	      _react2.default.createElement(
 	        _reactRouterDom.BrowserRouter,
 	        null,
@@ -154,11 +149,6 @@
 	      )
 	    );
 	  }
-	});
-
-	console.log(store.getState());
-	var unsubscribe = store.subscribe(function () {
-	  return console.log(store.getState());
 	});
 
 	var Topic = function Topic(_ref) {
@@ -25903,6 +25893,10 @@
 
 	var _SearchBox2 = _interopRequireDefault(_SearchBox);
 
+	var _MediaTray = __webpack_require__(368);
+
+	var _MediaTray2 = _interopRequireDefault(_MediaTray);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SidePane = _react2.default.createClass({
@@ -25973,7 +25967,8 @@
 	                    { to: '/history' },
 	                    'History'
 	                )
-	            )
+	            ),
+	            _react2.default.createElement(_MediaTray2.default, { parent: this })
 	        );
 	    }
 	});
@@ -43364,10 +43359,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _redux = __webpack_require__(479);
-
-	var _reactRedux = __webpack_require__(491);
-
 	var _SearchBox = __webpack_require__(225);
 
 	var _SearchBox2 = _interopRequireDefault(_SearchBox);
@@ -43375,16 +43366,6 @@
 	var _Results = __webpack_require__(236);
 
 	var _Results2 = _interopRequireDefault(_Results);
-
-	var _MediaTray = __webpack_require__(368);
-
-	var _MediaTray2 = _interopRequireDefault(_MediaTray);
-
-	var _actions = __webpack_require__(507);
-
-	var QueueActions = _interopRequireWildcard(_actions);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43398,43 +43379,19 @@
 	    updateResults: function updateResults(data) {
 	        this.setState({ data: [data] });
 	    },
-	    addToQueue: function addToQueue(newTrack, upNext) {
-	        //this._child.updateQueue(newTrack, upNext)
-	        this.props.actions.updateQueue(newTrack, upNext);
-	    },
 	    render: function render() {
-	        var _this = this;
-
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'page' },
 	            _react2.default.createElement(_SearchBox2.default, {
 	                callback: this.updateResults }),
 	            _react2.default.createElement(_Results2.default, {
-	                data: this.state.data ? this.state.data : null,
-	                addToQueue: this.addToQueue }),
-	            _react2.default.createElement(_MediaTray2.default, {
-	                ref: function ref(child) {
-	                    _this._child = child;
-	                },
-	                parent: this })
+	                data: this.state.data ? this.state.data : null })
 	        );
 	    }
 	});
 
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        actions: (0, _redux.bindActionCreators)(QueueActions, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SearchPage);
+	exports.default = SearchPage;
 
 /***/ },
 /* 231 */
@@ -43512,7 +43469,7 @@
 /* 233 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -43522,27 +43479,87 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(479);
+
+	var _reactRedux = __webpack_require__(491);
+
+	var _actions = __webpack_require__(507);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var QueuePage = _react2.default.createClass({
-	    displayName: "QueuePage",
+	    displayName: 'QueuePage',
 	    getInitialState: function getInitialState() {
 	        return {};
 	    },
 	    render: function render() {
+	        var component = this;
+	        console.log(this.props.currentTrack);
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "page" },
+	            'div',
+	            { className: 'page' },
 	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "QueuePage"
+	                'div',
+	                { id: 'queue', className: 'ui items' },
+	                _.map(component.props.queue, function (track, index) {
+	                    console.log(track);
+	                    return _react2.default.createElement(Track, {
+	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                        track: track,
+	                        parent: component,
+	                        position: index });
+	                })
 	            )
 	        );
 	    }
 	});
 
-	exports.default = QueuePage;
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    getInitialState: function getInitialState() {
+	        return {
+	            data: ''
+	        };
+	    },
+	    startThis: function startThis() {
+	        this.props.parent.playNow(this.props.position, this.props.track);
+	    },
+	    removeTrack: function removeTrack() {
+	        this.props.parent.remove(this.props.position);
+	    },
+	    render: function render() {
+	        var track = this.props.track;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item track', id: track.id, 'data-title': track.title, 'data-thumbnail': track.thumbnail, 'data-type': track.type, 'data-platform': track.platform },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                _react2.default.createElement(
+	                    'a',
+	                    { onClick: this.startThis },
+	                    this.props.track.title
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
 
 /***/ },
 /* 234 */
@@ -43770,50 +43787,42 @@
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _MediaPlayer = __webpack_require__(237);
+	var _redux = __webpack_require__(479);
 
-	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
+	var _reactRedux = __webpack_require__(491);
+
+	var _actions = __webpack_require__(507);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Results = _react2.default.createClass({
 	    displayName: 'Results',
+	    updateQueue: function updateQueue(newTrack, upNext) {
+	        this.props.updateQueue(newTrack, upNext);
+	    },
 	    render: function render() {
 	        var data = this.props.data[0];
 	        var component = this;
-	        if (!data) {
-	            return _react2.default.createElement('div', null);
-	        } else {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'ui items', id: 'Results' },
-	                _lodash2.default.map(data, function (result) {
-	                    return _react2.default.createElement(Result, {
-	                        key: result.id,
-	                        result: result,
-	                        parent: component });
-	                })
-	            );
-	        }
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'ui items', id: 'Results' },
+	            _lodash2.default.map(data, function (result) {
+	                return _react2.default.createElement(Result, {
+	                    key: result.id,
+	                    result: result,
+	                    callback: component.updateQueue });
+	            })
+	        );
 	    }
 	});
 
 	var Result = _react2.default.createClass({
 	    displayName: 'Result',
-	    getInitialState: function getInitialState() {
-	        return {
-	            id: this.props.result.id,
-	            title: this.props.result.title,
-	            playing: false
-	        };
+	    add: function add() {
+	        this.props.callback(this.props.result, false);
 	    },
-	    loadYoutubeVideo: function loadYoutubeVideo() {
-	        var component = this;
-	        component.props.parent.props.addToQueue(this.props.result, false);
-	    },
-	    addToUpNext: function addToUpNext() {
-	        var component = this;
-	        component.props.parent.props.addToQueue(this.props.result, true);
+	    upNext: function upNext() {
+	        this.props.callback(this.props.result, true);
 	    },
 	    render: function render() {
 	        return _react2.default.createElement(
@@ -43832,15 +43841,15 @@
 	                    { className: 'description' },
 	                    _react2.default.createElement(
 	                        'h3',
-	                        { onClick: this.loadYoutubeVideo },
+	                        { onClick: this.add },
 	                        this.props.result.title
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'meta' },
-	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.loadYoutubeVideo }),
-	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.addToUpNext }),
+	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
+	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
 	                    _react2.default.createElement('i', { className: 'ellipsis horizontal icon' })
 	                ),
 	                _react2.default.createElement('div', { className: 'ui divider' })
@@ -43849,7 +43858,19 @@
 	    }
 	});
 
-	exports.default = Results;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Results);
 
 /***/ },
 /* 237 */
@@ -43864,6 +43885,12 @@
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(479);
+
+	var _reactRedux = __webpack_require__(491);
+
+	var _actions = __webpack_require__(507);
 
 	var _YouTube = __webpack_require__(238);
 
@@ -43931,10 +43958,11 @@
 	    },
 	    render: function render() {
 	        var component = this;
-	        if (this.state.id) {
+	        var nowPlaying = this.props.nowPlaying;
+	        if (nowPlaying) {
 	            return _react2.default.createElement(_YouTube2.default, {
-	                videoId: this.state.id,
-	                id: this.state.id,
+	                videoId: nowPlaying.id,
+	                id: nowPlaying.id,
 	                opts: this.state.opts,
 	                onReady: this.playTrack,
 	                onStateChange: this.setNowPlaying,
@@ -43945,7 +43973,17 @@
 	    }
 	});
 
-	exports.default = MediaPlayer;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        nowPlaying: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaPlayer);
 
 /***/ },
 /* 238 */
@@ -50623,6 +50661,16 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(479);
+
+	var _reactRedux = __webpack_require__(491);
+
+	var _actions = __webpack_require__(507);
+
+	var _moment = __webpack_require__(369);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _MediaPlayer = __webpack_require__(237);
 
 	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
@@ -50630,10 +50678,6 @@
 	var _MediaControls = __webpack_require__(228);
 
 	var _MediaControls2 = _interopRequireDefault(_MediaControls);
-
-	var _moment = __webpack_require__(369);
-
-	var _moment2 = _interopRequireDefault(_moment);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50669,21 +50713,6 @@
 	            }
 	        });
 	    },
-	    updateQueue: function updateQueue(newTrack, upNext) {
-	        var component = this;
-	        var queue = component.state.queue;
-	        if (upNext) {
-	            queue.splice(1, 0, newTrack);
-	        } else {
-	            queue.push(newTrack);
-	        }
-	        component.setState({ queue: queue });
-
-	        if (queue.length === 1) {
-	            this.mediaPlayer.nowPlaying(queue[0].id);
-	            component.setState({ nowPlaying: queue[0] });
-	        }
-	    },
 	    playPlayer: function playPlayer() {
 	        this.mediaPlayer.playPlayer();
 	    },
@@ -50691,51 +50720,51 @@
 	        this.mediaPlayer.stopPlayer();
 	    },
 	    getNextTrack: function getNextTrack(e) {
-	        var component = this;
-	        var queue = component.state.queue;
-	        var history = component.state.history;
-	        var options = component.state.options;
-	        var nowPlaying = component.state.nowPlaying;
-	        var prevIndex = queue.findIndex(function (track) {
-	            return track.id == nowPlaying.id;
-	        });
-	        var query = queue[prevIndex].id;
-	        if (options.repeat) {
-	            component.playPlayer();
-	        } else {
-	            history.push(queue[prevIndex]);
-	            queue.splice(prevIndex, 1);
-
-	            var index = options.shuffle ? Math.floor(Math.random() * (queue.length - 0 + 0) + 0) : 0;
-	            component.setState({ queue: queue });
-
-	            if (queue.length >= 1) {
-	                component.mediaPlayer.nowPlaying(queue[index].id);
-	                scroller('Lit Stream: ' + queue[index].title, 'document');
-	                this.playPlayer();
-	                component.setState({ nowPlaying: queue[index] });
-	            } else {
-	                // TODO: No songs left
-	                $.ajax({
-	                    url: '/api/getRelated',
-	                    data: { query: query },
-	                    crossDomain: true,
-	                    dataType: 'json',
-	                    success: function success(data) {
-	                        component.mediaPlayer.nowPlaying(data[0].id.videoId);
-	                        queue.push({
-	                            id: data[0].id.videoId,
-	                            title: data[0].snippet.title,
-	                            thumbnail: data[0].snippet.thumbnails.default.url
-	                        });
-	                        scroller('Lit Stream: ' + data[0].snippet.title, 'document');
-	                        component.setState({ queue: queue });
-	                        component.setState({ nowPlaying: queue[0] });
-	                        $('#searchBox').val('');
-	                    }
-	                });
-	            }
-	        }
+	        this.props.nextTrack();
+	        // this.props.nowPlaying({id: "NLZRYQMLDW4"})
+	        // let component = this
+	        // let queue = component.state.queue
+	        // let history = component.state.history
+	        // let options = component.state.options
+	        // let nowPlaying = component.state.nowPlaying
+	        // let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+	        // let query = queue[prevIndex].id
+	        // if (options.repeat) {
+	        //     component.playPlayer()
+	        // } else {
+	        //     history.push(queue[prevIndex])
+	        //     queue.splice(prevIndex,1)
+	        //
+	        //     let index = options.shuffle ? Math.floor(Math.random() * ((queue.length-0)+0) + 0) : 0
+	        //     component.setState({queue})
+	        //
+	        //     if (queue.length >= 1) {
+	        //         component.mediaPlayer.nowPlaying(queue[index].id)
+	        //         scroller(`Lit Stream: ` + queue[index].title, 'document')
+	        //         this.playPlayer()
+	        //         component.setState({nowPlaying: queue[index]})
+	        //     } else {
+	        //         // TODO: No songs left
+	        //         $.ajax({
+	        //             url: `/api/getRelated`,
+	        //             data: { query },
+	        //             crossDomain : true,
+	        //             dataType: 'json',
+	        //             success: function(data) {
+	        //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
+	        //                 queue.push({
+	        //                     id: data[0].id.videoId,
+	        //                     title: data[0].snippet.title,
+	        //                     thumbnail: data[0].snippet.thumbnails.default.url
+	        //                 })
+	        //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
+	        //                 component.setState({queue})
+	        //                 component.setState({nowPlaying: queue[0]})
+	        //                 $('#searchBox').val('')
+	        //             }
+	        //         });
+	        //     }
+	        // }
 	    },
 	    prevTrack: function prevTrack() {
 	        var component = this;
@@ -50815,6 +50844,10 @@
 
 	        var component = this;
 	        var options = this.state.options;
+	        if (this.props.queue.length > 0 && this.props.currentTrack == null) {
+	            this.props.nowPlaying(this.props.queue[0]);
+	        }
+
 	        return _react2.default.createElement(
 	            'section',
 	            { id: 'Overlay' },
@@ -50825,82 +50858,7 @@
 	                    ref: function ref(child) {
 	                        _this.mediaPlayer = child;
 	                    },
-	                    parent: this }),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'ui basic blue icon button', onClick: this.getHistory },
-	                    _react2.default.createElement('i', { className: 'history icon' })
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: options.shuffle ? "ui primary icon button" : "ui basic blue icon button", onClick: this.toggleShuffle },
-	                    _react2.default.createElement('i', { className: 'random icon' })
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: options.repeat ? "ui primary icon button" : "ui basic blue icon button", onClick: this.toggleRepeat },
-	                    _react2.default.createElement('i', { className: 'repeat icon' })
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: options.showVideo ? "ui primary icon button" : "ui basic blue icon button", onClick: this.toggleVideo },
-	                    _react2.default.createElement('i', { className: 'youtube play icon' })
-	                ),
-	                _react2.default.createElement(History, {
-	                    history: this.state.history,
-	                    parent: this }),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'queue', className: 'ui items' },
-	                    _.map(component.state.queue, function (track, index) {
-	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                            track: track,
-	                            parent: component,
-	                            position: index });
-	                    })
-	                )
-	            ),
-	            this.mediaPlayer ? _react2.default.createElement(_MediaControls2.default, {
-	                parent: this,
-	                nowPlaying: this.mediaPlayer,
-	                track: this.state.nowPlaying }) : ''
-	        );
-	    }
-	});
-
-	var Track = _react2.default.createClass({
-	    displayName: 'Track',
-	    getInitialState: function getInitialState() {
-	        return {
-	            data: ''
-	        };
-	    },
-	    startThis: function startThis() {
-	        this.props.parent.playNow(this.props.position, this.props.track);
-	    },
-	    removeTrack: function removeTrack() {
-	        this.props.parent.remove(this.props.position);
-	    },
-	    render: function render() {
-	        var track = this.props.track;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'item track', id: track.id, 'data-title': track.title, 'data-thumbnail': track.thumbnail, 'data-type': track.type, 'data-platform': track.platform },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'content' },
-	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                this.props.parent.state.nowPlaying.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	                    'a',
-	                    { className: 'ui blue circular label' },
-	                    this.props.position + 1
-	                ),
-	                _react2.default.createElement(
-	                    'a',
-	                    { className: this.props.parent.state.nowPlaying.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
-	                    this.props.track.title
-	                )
+	                    parent: this })
 	            )
 	        );
 	    }
@@ -50967,7 +50925,22 @@
 	    // }(text));
 	};
 
-	exports.default = MediaTray;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaTray);
 
 /***/ },
 /* 369 */
@@ -67793,13 +67766,37 @@
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+	var theQueue = [];
+
 	function queue() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
 	    var action = arguments[1];
 
+	    theQueue = [].concat(_toConsumableArray(state));
 	    switch (action.type) {
 	        case 'UPDATE_QUEUE':
-	            return [].concat(_toConsumableArray(state), [action.newTrack]);
+	            action.upNext ? theQueue.splice(1, 0, action.newTrack) : theQueue.push(action.newTrack);
+	            return theQueue;
+
+	        case 'NEXT_TRACK':
+	            theQueue.splice(0, 1);
+	            return theQueue;
+
+	        default:
+	            return theQueue;
+	    }
+	}
+
+	function nowPlaying() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case 'NOW_PLAYING':
+	            return action.track;
+
+	        case 'NEXT_TRACK':
+	            return theQueue[1];
 
 	        default:
 	            return state;
@@ -67807,6 +67804,7 @@
 	}
 
 	var rootReducer = (0, _redux.combineReducers)({
+	    nowPlaying: nowPlaying,
 	    queue: queue
 	});
 
@@ -67827,6 +67825,13 @@
 	// Search actions
 
 	// Queue actions
+	var nowPlaying = exports.nowPlaying = function nowPlaying(track) {
+	    return {
+	        type: 'NOW_PLAYING',
+	        track: track
+	    };
+	};
+
 	var updateQueue = exports.updateQueue = function updateQueue(newTrack, upNext) {
 	    return {
 	        type: 'UPDATE_QUEUE',
@@ -67834,6 +67839,34 @@
 	        upNext: upNext
 	    };
 	};
+
+	var nextTrack = exports.nextTrack = function nextTrack() {
+	    return {
+	        type: 'NEXT_TRACK'
+	    };
+	};
+
+/***/ },
+/* 508 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(479);
+
+	var _reducers = __webpack_require__(506);
+
+	var _reducers2 = _interopRequireDefault(_reducers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Store = (0, _redux.createStore)(_reducers2.default);
+
+	exports.default = Store;
 
 /***/ }
 /******/ ]);

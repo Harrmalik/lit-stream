@@ -2,9 +2,8 @@
 import React from 'react'
 import ReactDom from 'react-dom'
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
-import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import reducer from './reducers'
+import store from './Store.js'
 
 // Components
 import SidePane from './components/SidePane'
@@ -24,8 +23,6 @@ let containerStyle = {
     height: "100%"
 }
 
-const store = createStore(reducer)
-
 let App = React.createClass({
     getInitialState() {
         return {
@@ -42,7 +39,6 @@ let App = React.createClass({
         this._child.updateQueue(newTrack, upNext)
     },
     render() {
-        console.log(this.state.data)
         return (
             <Provider store={store}>
                 <Router>
@@ -64,12 +60,6 @@ let App = React.createClass({
         )
     }
 })
-
-console.log(store.getState())
-let unsubscribe = store.subscribe(() =>
-  console.log(store.getState())
-)
-
 
 const Topic = ({ match }) => (
   <div>

@@ -1,16 +1,16 @@
 import React from 'react'
 import _ from 'lodash'
-import MediaPlayer from './MediaPlayer'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { updateQueue } from '../actions'
 
 var Results = React.createClass({
+    updateQueue(newTrack, upNext) {
+        this.props.updateQueue(newTrack, upNext)
+    },
     render() {
         let data = this.props.data[0]
         let component = this
-        if (!data) {
-            return (
-                <div></div>
-            )
-        } else {
             return (
                 <div className="ui items" id="Results">
                     {_.map(data, function(result) {
@@ -18,30 +18,21 @@ var Results = React.createClass({
                             <Result
                                 key={result.id}
                                 result={result}
-                                parent={component}></Result>
+                                callback={component.updateQueue}></Result>
                         )
                     })}
                 </div>
             )
-        }
+
     }
 });
 
 var Result = React.createClass({
-    getInitialState() {
-        return {
-            id: this.props.result.id,
-            title: this.props.result.title,
-            playing: false
-        }
+    add() {
+        this.props.callback(this.props.result, false)
     },
-    loadYoutubeVideo() {
-        let component = this
-        component.props.parent.props.addToQueue(this.props.result, false)
-    },
-    addToUpNext() {
-        let component = this
-        component.props.parent.props.addToQueue(this.props.result, true)
+    upNext() {
+        this.props.callback(this.props.result, true)
     },
     render() {
         return (
@@ -51,11 +42,11 @@ var Result = React.createClass({
                 </a>
               <div className="content">
                 <div className="description">
-                    <h3 onClick={this.loadYoutubeVideo}>{this.props.result.title}</h3>
+                    <h3 onClick={this.add}>{this.props.result.title}</h3>
                 </div>
                 <div className="meta">
-                    <i className="plus icon" onClick={this.loadYoutubeVideo}></i>
-                    <i className="forward icon" onClick={this.addToUpNext}></i>
+                    <i className="plus icon" onClick={this.add}></i>
+                    <i className="forward icon" onClick={this.upNext}></i>
                     <i className="ellipsis horizontal icon"></i>
                 </div>
                 <div className="ui divider"></div>
@@ -65,4 +56,15 @@ var Result = React.createClass({
     }
 })
 
-export default Results;
+const mapStateToProps = state => ({
+  queue: state.queue
+})
+
+const mapDispatchToProps = dispatch => ({
+    updateQueue: bindActionCreators(updateQueue, dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Results)

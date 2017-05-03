@@ -1,7 +1,10 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { updateQueue, nowPlaying, nextTrack } from '../actions'
+import moment from 'moment'
 import MediaPlayer from './MediaPlayer'
 import MediaControls from './MediaControls'
-import moment from 'moment'
 
 let MediaTray = React.createClass({
     getInitialState() {
@@ -32,21 +35,6 @@ let MediaTray = React.createClass({
           }
         });
     },
-    updateQueue(newTrack, upNext) {
-        let component = this
-        let queue = component.state.queue
-        if (upNext) {
-            queue.splice(1,0, newTrack)
-        } else {
-            queue.push(newTrack)
-        }
-        component.setState({queue})
-
-        if (queue.length === 1) {
-            this.mediaPlayer.nowPlaying(queue[0].id)
-            component.setState({nowPlaying: queue[0]})
-        }
-    },
     playPlayer() {
         this.mediaPlayer.playPlayer()
     },
@@ -54,49 +42,51 @@ let MediaTray = React.createClass({
         this.mediaPlayer.stopPlayer();
     },
     getNextTrack(e) {
-        let component = this
-        let queue = component.state.queue
-        let history = component.state.history
-        let options = component.state.options
-        let nowPlaying = component.state.nowPlaying
-        let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
-        let query = queue[prevIndex].id
-        if (options.repeat) {
-            component.playPlayer()
-        } else {
-            history.push(queue[prevIndex])
-            queue.splice(prevIndex,1)
-
-            let index = options.shuffle ? Math.floor(Math.random() * ((queue.length-0)+0) + 0) : 0
-            component.setState({queue})
-
-            if (queue.length >= 1) {
-                component.mediaPlayer.nowPlaying(queue[index].id)
-                scroller(`Lit Stream: ` + queue[index].title, 'document')
-                this.playPlayer()
-                component.setState({nowPlaying: queue[index]})
-            } else {
-                // TODO: No songs left
-                $.ajax({
-                    url: `/api/getRelated`,
-                    data: { query },
-                    crossDomain : true,
-                    dataType: 'json',
-                    success: function(data) {
-                        component.mediaPlayer.nowPlaying(data[0].id.videoId)
-                        queue.push({
-                            id: data[0].id.videoId,
-                            title: data[0].snippet.title,
-                            thumbnail: data[0].snippet.thumbnails.default.url
-                        })
-                        scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
-                        component.setState({queue})
-                        component.setState({nowPlaying: queue[0]})
-                        $('#searchBox').val('')
-                    }
-                });
-            }
-        }
+        this.props.nextTrack()
+        // this.props.nowPlaying({id: "NLZRYQMLDW4"})
+        // let component = this
+        // let queue = component.state.queue
+        // let history = component.state.history
+        // let options = component.state.options
+        // let nowPlaying = component.state.nowPlaying
+        // let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
+        // let query = queue[prevIndex].id
+        // if (options.repeat) {
+        //     component.playPlayer()
+        // } else {
+        //     history.push(queue[prevIndex])
+        //     queue.splice(prevIndex,1)
+        //
+        //     let index = options.shuffle ? Math.floor(Math.random() * ((queue.length-0)+0) + 0) : 0
+        //     component.setState({queue})
+        //
+        //     if (queue.length >= 1) {
+        //         component.mediaPlayer.nowPlaying(queue[index].id)
+        //         scroller(`Lit Stream: ` + queue[index].title, 'document')
+        //         this.playPlayer()
+        //         component.setState({nowPlaying: queue[index]})
+        //     } else {
+        //         // TODO: No songs left
+        //         $.ajax({
+        //             url: `/api/getRelated`,
+        //             data: { query },
+        //             crossDomain : true,
+        //             dataType: 'json',
+        //             success: function(data) {
+        //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
+        //                 queue.push({
+        //                     id: data[0].id.videoId,
+        //                     title: data[0].snippet.title,
+        //                     thumbnail: data[0].snippet.thumbnails.default.url
+        //                 })
+        //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
+        //                 component.setState({queue})
+        //                 component.setState({nowPlaying: queue[0]})
+        //                 $('#searchBox').val('')
+        //             }
+        //         });
+        //     }
+        // }
     },
     prevTrack() {
         let component = this
@@ -170,69 +160,18 @@ let MediaTray = React.createClass({
     render() {
         let component = this
         let options = this.state.options
+        if (this.props.queue.length > 0 && this.props.currentTrack == null) {
+            this.props.nowPlaying(this.props.queue[0])
+        }
+
         return (
             <section id="Overlay">
             <div id="MediaTray">
                 <MediaPlayer
                     ref={(child) => {this.mediaPlayer = child;}}
                     parent={this}></MediaPlayer>
-
-                <button className="ui basic blue icon button" onClick={this.getHistory}><i className="history icon"></i></button>
-                <button className={options.shuffle ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleShuffle}><i className="random icon"></i></button>
-                <button className={options.repeat ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleRepeat}><i className="repeat icon"></i></button>
-                <button className={options.showVideo ? "ui primary icon button" : "ui basic blue icon button"} onClick={this.toggleVideo}><i className="youtube play icon"></i></button>
-
-                <History
-                    history={this.state.history}
-                    parent={this}></History>
-
-                <div id="queue" className="ui items">
-                    {_.map(component.state.queue, function(track, index) {
-                        return (
-                            <Track
-                                key={track.id + (Math.floor(Math.random() * 100000) + 1)  }
-                                track={track}
-                                parent={component}
-                                position={index}></Track>
-                        )
-                    })}
-                </div>
             </div>
-            {this.mediaPlayer ?
-            <MediaControls
-                parent={this}
-                nowPlaying={this.mediaPlayer}
-                track={this.state.nowPlaying}></MediaControls> : ''}
             </section>
-        )
-    }
-})
-
-let Track = React.createClass({
-    getInitialState() {
-        return {
-            data:''
-        }
-    },
-    startThis() {
-        this.props.parent.playNow(this.props.position, this.props.track)
-    },
-    removeTrack() {
-        this.props.parent.remove(this.props.position)
-    },
-    render() {
-        let track = this.props.track
-        return (
-            <div className="item track" id={track.id} data-title={track.title} data-thumbnail={track.thumbnail} data-type={track.type} data-platform={track.platform}>
-                <div className="content">
-                    <i className="remove icon" onClick={this.removeTrack}></i>
-                    {this.props.parent.state.nowPlaying.id == this.props.track.id ?
-                        <i className="volume up icon"></i>
-                    : <a className="ui blue circular label">{this.props.position + 1}</a>}
-                    <a className={this.props.parent.state.nowPlaying.id == this.props.track.id ?
-                    'ui blue header' : 'header'} onClick={this.startThis}>{this.props.track.title}</a>
-                </div>
-            </div>
         )
     }
 })
@@ -289,4 +228,18 @@ let scroller = function(text, element) {
     // }(text));
 }
 
-export default MediaTray
+const mapStateToProps = state => ({
+  queue: state.queue,
+  currentTrack: state.nowPlaying
+})
+
+const mapDispatchToProps = dispatch => ({
+    updateQueue: bindActionCreators(updateQueue, dispatch),
+    nowPlaying: bindActionCreators(nowPlaying, dispatch),
+    nextTrack: bindActionCreators(nextTrack, dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MediaTray)

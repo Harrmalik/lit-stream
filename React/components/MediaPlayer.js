@@ -1,4 +1,7 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { nowPlaying } from '../actions'
 import YouTube from '../../node_modules/react-youtube/dist/YouTube'
 
 var MediaPlayer = React.createClass({
@@ -58,11 +61,12 @@ var MediaPlayer = React.createClass({
     },
     render() {
         let component = this
-        if (this.state.id) {
+        let nowPlaying = this.props.nowPlaying
+        if (nowPlaying) {
             return (
                 <YouTube
-                  videoId={this.state.id}
-                  id={this.state.id}
+                  videoId={nowPlaying.id}
+                  id={nowPlaying.id}
                   opts={this.state.opts}
                   onReady={this.playTrack}
                   onStateChange={this.setNowPlaying}
@@ -78,4 +82,15 @@ var MediaPlayer = React.createClass({
     }
 })
 
-export default MediaPlayer
+const mapStateToProps = state => ({
+  nowPlaying: state.nowPlaying
+})
+
+const mapDispatchToProps = dispatch => ({
+    
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MediaPlayer)

@@ -1,6 +1,7 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import SearchBox from './SearchBox'
+import MediaTray from '../components/MediaTray'
 
 let SidePane = React.createClass({
     getInitialState() {
@@ -20,6 +21,8 @@ let SidePane = React.createClass({
                 <h3 className="ui header"><Link to="/settings">Settings</Link></h3>
                 <h3 className="ui header"><Link to="/history">History</Link></h3>
 
+
+                <MediaTray parent={this}></MediaTray>
             </section>
         )
     }
