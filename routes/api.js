@@ -1,8 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const request = require('request');
 const Youtube = require('youtube-api');
 const ytApiKey = process.env.youtubeApiKey;
+const slsGetAlbumUrl = 'https://bgmv70svsg.execute-api.us-east-1.amazonaws.com/prod/album-covers-dev-getAlbum';
 
 Youtube.authenticate({
     type: "key"
@@ -59,5 +60,22 @@ router.get('/getRelated', function(req, res, next) {
         }
     });
 });
+
+router.get('/getCover', (req, res, next) => {
+    request.get(`${slsGetAlbumUrl}?track=${req.query.track}&artist=${req.query.artist}`, function(error, response, body) {
+        let nowPlaying = {}
+        if (body) {
+            body = JSON.parse(body);
+            console.log(body);
+            if (body.image) {
+                nowPlaying.image = body.image;
+                nowPlaying.album = body.album;
+            }
+            res.send(nowPlaying);
+        } else {
+            res.send(nowPlaying);
+        }
+    });
+})
 
 module.exports = router;
