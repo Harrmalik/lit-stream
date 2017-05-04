@@ -1,17 +1,20 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { nowPlaying, nextTrack } from '../actions'
+import { nextTrack, prevTrack } from '../actions'
 
 var MediaControls = React.createClass({
-    stopTrack() {
-        this.props.controls.pauseVideo()
+    prevTrack() {
+        this.props.prevTrack(this.props.nowPlaying)
     },
     playTrack() {
         this.props.controls.playVideo()
     },
+    stopTrack() {
+        this.props.controls.pauseVideo()
+    },
     nextTrack() {
-        this.props.nextTrack()
+        this.props.nextTrack(this.props.nowPlaying)
     },
     render() {
         let controls = this.props.controls
@@ -21,14 +24,14 @@ var MediaControls = React.createClass({
                 <div id="HUD" className="ui raised inverted segment">
                         <div id="hudcontainer">
                         <div id="MediaControls">
-                            <i className="big backward icon" onClick={controls.prevTrack}></i>
+                            <i className="big backward icon" onClick={this.prevTrack}></i>
                             <i className="big play icon" onClick={this.playTrack}></i>
                             <i className="big stop icon" onClick={this.stopTrack}></i>
                             <i className="big forward icon" onClick={this.nextTrack}></i>
                         </div>
 
                         <p>
-                            Now Playing: {this.props.currentTrack.title}
+                            Now Playing: {this.props.nowPlaying.title}
                         </p>
                         <p>
                             <span>Duration {Math.floor(duration / 60) + '.' + (duration %60).toFixed(0)}</span>
@@ -50,11 +53,12 @@ var MediaControls = React.createClass({
 
 const mapStateToProps = state => ({
     controls: state.controls,
-    currentTrack: state.nowPlaying
+    nowPlaying: state.nowPlaying
 })
 
 const mapDispatchToProps = dispatch => ({
-    nextTrack: bindActionCreators(nextTrack, dispatch)
+    nextTrack: bindActionCreators(nextTrack, dispatch),
+    prevTrack: bindActionCreators(prevTrack, dispatch)
 })
 
 export default connect(

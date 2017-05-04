@@ -58,6 +58,7 @@ var MediaPlayer = React.createClass({
     render() {
         let component = this
         let nowPlaying = this.props.nowPlaying
+        console.log(nowPlaying);
         if (nowPlaying) {
             return (
                 <YouTube

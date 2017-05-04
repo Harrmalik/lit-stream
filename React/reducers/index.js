@@ -24,8 +24,13 @@ function queue (state = [], action) {
                 theQueue.push(action.newTrack)
                 return theQueue
 
-        case 'NEXT_TRACK':
-            theQueue.splice(0,1)
+        case 'SET_QUEUE':
+            theQueue = action.queue
+            return theQueue
+
+        case 'REMOVE_TRACK':
+            let index = theQueue.findIndex(track => track.id == action.track.id)
+            theQueue.splice(index,1)
             return theQueue
 
         default:
@@ -39,8 +44,23 @@ function nowPlaying (state = null, action) {
             return action.track
 
         case 'NEXT_TRACK':
-            return theQueue[1]
+            if (theQueue.length > 0) {
+                let prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                let newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex
+                return theQueue[newIndex]
 
+            } else {
+                return state
+            }
+
+        case 'PREV_TRACK':
+            if (theQueue.length > 0) {
+                let prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                let newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex
+                return theQueue[newIndex]
+            } else {
+                return state
+            }
 
         default:
             return state
@@ -59,8 +79,8 @@ function controls (state = null, action) {
 
 const rootReducer = combineReducers({
     options,
-    nowPlaying,
     queue,
+    nowPlaying,
     controls
 })
 

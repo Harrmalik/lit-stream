@@ -14,12 +14,28 @@ export const updateQueue = (newTrack, upNext) => ({
     upNext
 })
 
-export const nextTrack = () => ({
-    type: 'NEXT_TRACK'
+export const setQueue = (queue) => ({
+    type: 'SET_QUEUE',
+    queue
+})
+
+export const removeTrack = (track) => ({
+    type: 'REMOVE_TRACK',
+    track
 })
 
 // MediaPlayer actions
 export const setControls = (controls) => ({
     type: 'SET_CONTROLS',
     controls
+})
+
+export const nextTrack = (track) => ({
+    type: 'NEXT_TRACK',
+    track
+})
+
+export const prevTrack = (track) => ({
+    type: 'PREV_TRACK',
+    track
 })
