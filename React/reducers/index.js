@@ -6,6 +6,7 @@ let defaultOptions = {
     repeat: false
 }
 let theQueue = []
+let theHistory = []
 
 
 function options (state = defaultOptions, action) {
@@ -35,6 +36,21 @@ function queue (state = [], action) {
 
         default:
             return theQueue
+    }
+}
+
+function history (state = [], action) {
+    theHistory = [...state]
+    switch (action.type) {
+        case 'NEXT_TRACK':
+            theHistory.push(theQueue[0])
+            return theHistory
+
+        case 'PREV_TRACK':
+            return theHistory.push(theQueue[0])
+
+        default:
+            return state
     }
 }
 
@@ -79,6 +95,7 @@ function controls (state = null, action) {
 
 const rootReducer = combineReducers({
     options,
+    history,
     queue,
     nowPlaying,
     controls

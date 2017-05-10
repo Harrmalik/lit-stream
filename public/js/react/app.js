@@ -27984,6 +27984,7 @@
 	    repeat: false
 	};
 	var theQueue = [];
+	var theHistory = [];
 
 	function options() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOptions;
@@ -28018,6 +28019,24 @@
 
 	        default:
 	            return theQueue;
+	    }
+	}
+
+	function history() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+	    var action = arguments[1];
+
+	    theHistory = [].concat(_toConsumableArray(state));
+	    switch (action.type) {
+	        case 'NEXT_TRACK':
+	            theHistory.push(theQueue[0]);
+	            return theHistory;
+
+	        case 'PREV_TRACK':
+	            return theHistory.push(theQueue[0]);
+
+	        default:
+	            return state;
 	    }
 	}
 
@@ -28071,6 +28090,7 @@
 
 	var rootReducer = (0, _redux.combineReducers)({
 	    options: options,
+	    history: history,
 	    queue: queue,
 	    nowPlaying: nowPlaying,
 	    controls: controls
@@ -28098,9 +28118,9 @@
 
 	var _SearchBox2 = _interopRequireDefault(_SearchBox);
 
-	var _MediaTray = __webpack_require__(265);
+	var _MediaPlayer = __webpack_require__(267);
 
-	var _MediaTray2 = _interopRequireDefault(_MediaTray);
+	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -28110,6 +28130,8 @@
 	        return {};
 	    },
 	    render: function render() {
+	        var _this = this;
+
 	        return _react2.default.createElement(
 	            'section',
 	            { id: 'SidePane' },
@@ -28173,7 +28195,11 @@
 	                    'History'
 	                )
 	            ),
-	            _react2.default.createElement(_MediaTray2.default, { parent: this })
+	            _react2.default.createElement(_MediaPlayer2.default, {
+	                ref: function ref(child) {
+	                    _this.mediaPlayer = child;
+	                },
+	                parent: this })
 	        );
 	    }
 	});
@@ -28253,7 +28279,6 @@
 	            type = e;
 	            query = $('iframe').attr('id');
 	        } else {
-	            e.preventDefault();
 	            type = 'findSong';
 	        }
 
@@ -28275,10 +28300,8 @@
 	    },
 	    liveSearch: function liveSearch() {
 	        if ($(this.SearchBox).val()) {
-	            // TODO: Live search
-	            //this.searchQuery();
+	            this.searchQuery();
 	        } else {
-	            // TODO: get related tracks
 	            if ($('iframe')) {
 	                this.searchQuery('getRelated');
 	            }
@@ -28289,8 +28312,8 @@
 
 	        var query = this.state.query;
 	        return _react2.default.createElement(
-	            'form',
-	            { onSubmit: this.searchQuery, style: query ? {} : formStyle, className: 'ui form' },
+	            'div',
+	            { style: query ? {} : formStyle, className: 'ui form' },
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'field' },
@@ -45448,163 +45471,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(247)(module)))
 
 /***/ },
-/* 265 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	var _MediaPlayer = __webpack_require__(267);
-
-	var _MediaPlayer2 = _interopRequireDefault(_MediaPlayer);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var MediaTray = _react2.default.createClass({
-	    displayName: 'MediaTray',
-	    getNextTrack: function getNextTrack(e) {
-	        this.props.nextTrack(this.props.currentTrack.index);
-	        // let component = this
-	        // let queue = component.state.queue
-	        // let history = component.state.history
-	        // let options = component.state.options
-	        // let nowPlaying = component.state.nowPlaying
-	        // let prevIndex = queue.findIndex(track => track.id == nowPlaying.id)
-	        // let query = queue[prevIndex].id
-	        // if (options.repeat) {
-	        //     component.playPlayer()
-	        // } else {
-	        //     history.push(queue[prevIndex])
-	        //     queue.splice(prevIndex,1)
-	        //
-	        //     let index = options.shuffle ? Math.floor(Math.random() * ((queue.length-0)+0) + 0) : 0
-	        //     component.setState({queue})
-	        //
-	        //     if (queue.length >= 1) {
-	        //         component.mediaPlayer.nowPlaying(queue[index].id)
-	        //         scroller(`Lit Stream: ` + queue[index].title, 'document')
-	        //         this.playPlayer()
-	        //         component.setState({nowPlaying: queue[index]})
-	        //     } else {
-	        //         // TODO: No songs left
-
-	        //     }
-	        // }
-	    },
-	    prevTrack: function prevTrack() {
-	        var component = this;
-	        var queue = component.state.queue;
-	        var history = component.state.history;
-	        var nowPlaying = component.state.nowPlaying;
-	        var prevIndex = queue.findIndex(function (track) {
-	            return track.id == nowPlaying.id;
-	        });
-	        var query = queue[prevIndex].id;
-	        var lastTrack = history[history.length - 1];
-	        history.push(queue[prevIndex]);
-	        queue.splice(prevIndex, 1);
-	        queue.splice(0, 0, lastTrack);
-	        component.setState({ queue: queue });
-	        component.mediaPlayer.nowPlaying(lastTrack.id);
-	        component.setState({ nowPlaying: queue[0] });
-	    },
-	    playNow: function playNow(index, track) {
-	        var component = this;
-	        var queue = component.state.queue;
-	        var history = component.state.history;
-	        var nowPlaying = component.state.nowPlaying;
-	        var lastTrack = history[history.length - 1];
-	        var prevIndex = queue.length > 1 ? queue.findIndex(function (track) {
-	            return track.id == nowPlaying.id;
-	        }) : history.findIndex(function (track) {
-	            return track.id == lastTrack.id;
-	        });
-
-	        history.push(queue[0]);
-	        queue.splice(prevIndex, 1);
-	        if (queue.length == 0) {
-	            queue.splice(0, 0, lastTrack);
-	        }
-
-	        component.setState({
-	            queue: queue,
-	            nowPlaying: track
-	        });
-	        scroller('Lit Stream: ' + track.title, 'document');
-	        this.mediaPlayer.nowPlaying(track.id);
-	    },
-	    toggleShuffle: function toggleShuffle() {
-	        var options = this.state.options;
-	        options.shuffle = !options.shuffle;
-	        this.setState({ options: options });
-	    },
-	    toggleRepeat: function toggleRepeat() {
-	        var options = this.state.options;
-	        options.repeat = !options.repeat;
-	        this.setState({ options: options });
-	    },
-	    toggleVideo: function toggleVideo() {
-	        var options = this.state.options;
-	        options.showVideo = !options.showVideo;
-	        this.setState({ options: options });
-	        $('#MediaTray').toggle();
-	    },
-	    render: function render() {
-	        var _this = this;
-
-	        var component = this;
-	        console.log(this.props.queue);
-	        if (this.props.queue.length > 0 && this.props.currentTrack == null) {
-	            this.props.nowPlaying(this.props.queue[0], 0);
-	        }
-
-	        return _react2.default.createElement(
-	            'section',
-	            { id: 'Overlay' },
-	            _react2.default.createElement(
-	                'div',
-	                { id: 'MediaTray' },
-	                _react2.default.createElement(_MediaPlayer2.default, {
-	                    ref: function ref(child) {
-	                        _this.mediaPlayer = child;
-	                    },
-	                    parent: this })
-	            )
-	        );
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue,
-	        currentTrack: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaTray);
-
-/***/ },
+/* 265 */,
 /* 266 */
 /***/ function(module, exports) {
 
@@ -45699,65 +45566,38 @@
 	    displayName: 'MediaPlayer',
 	    getInitialState: function getInitialState() {
 	        return {
-	            id: '',
-	            nowPlaying: {},
 	            opts: {
 	                height: '300',
 	                width: '300',
 	                playerVars: {
 	                    autoplay: 1
 	                }
-	            },
-	            controls: ''
+	            }
 	        };
-	    },
-	    nowPlaying: function nowPlaying(id) {
-	        this.setState({ id: id });
 	    },
 	    playTrack: function playTrack(event) {
 	        event.target.playVideo();
-	        if (this.state.controls == '') {
-	            $('#Overlay').show();
+	        if (this.props.controls == null) {
 	            this.props.setControls(event.target);
-	            this.setState({ controls: event.target });
 	            $('iframe').on('click', function (e) {
 	                e.preventDefault();
 	            });
 	        }
 	    },
-	    stopPlayer: function stopPlayer() {
-	        this.state.controls.pauseVideo();
-	    },
-	    playPlayer: function playPlayer() {
-	        this.state.controls.playVideo();
-	    },
-	    getDuration: function getDuration() {
-	        this.state.controls.getDuration();
-	        console.log(this.state.controls.getDuration());
-	        console.log(this.state.controls.getPlaylist());
-	        console.log(this.state.controls.getVolume());
-	    },
-	    setNowPlaying: function setNowPlaying(event) {
-	        var nowPlaying = {
-	            id: this.state.id,
-	            duration: this.state.controls.getDuration()
-	        };
-	        this.setState({ nowPlaying: nowPlaying });
-	    },
 	    getNextTrack: function getNextTrack(event) {
-	        this.props.parent.getNextTrack(this.state.id);
+	        this.props.nextTrack(this.props.nowPlaying);
 	    },
 	    render: function render() {
-	        var component = this;
 	        var nowPlaying = this.props.nowPlaying;
-	        console.log(nowPlaying);
+	        if (this.props.queue.length > 0 && this.props.nowPlaying == null) {
+	            this.props.startPlayer(this.props.queue[0]);
+	        }
 	        if (nowPlaying) {
 	            return _react2.default.createElement(_YouTube2.default, {
 	                videoId: nowPlaying.id,
 	                id: nowPlaying.id,
 	                opts: this.state.opts,
 	                onReady: this.playTrack,
-	                onStateChange: this.setNowPlaying,
 	                onEnd: this.getNextTrack });
 	        } else {
 	            return _react2.default.createElement('div', null);
@@ -45768,13 +45608,17 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
 	        nowPlaying: state.nowPlaying,
-	        controls: state.controls
+	        controls: state.controls,
+	        queue: state.queue
 	    };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
-	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
+	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch),
+	        // TODO: remove nowplaying from media player
+	        startPlayer: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch)
 	    };
 	};
 
@@ -52541,18 +52385,24 @@
 
 	var MediaViewPage = _react2.default.createClass({
 	    displayName: 'MediaViewPage',
-	    componentDidMount: function componentDidMount() {
+	    componentWillMount: function componentWillMount() {
+	        this.getAlbum();
+	    },
+	    componentDidUpdate: function componentDidUpdate() {
+	        this.getAlbum();
+	    },
+	    getAlbum: function getAlbum() {
 	        var _this = this;
 
 	        var component = this;
 	        var nowPlaying = component.props.nowPlaying;
-	        $.ajax({
-	            url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
-	        }).done(function (album) {
-	            console.log('got album');
-	            console.log(album);
-	            _this.getColors(album);
-	        });
+	        if (component.props.nowPlaying) {
+	            $.ajax({
+	                url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
+	            }).done(function (album) {
+	                _this.getColors(album);
+	            });
+	        }
 	    },
 	    getColors: function getColors(album) {
 	        var track = this.props.nowPlaying;
@@ -52563,7 +52413,6 @@
 	        img.setAttribute('src', src);
 	        $('.v').html(track.title.split('-')[1]);
 	        $('.0').html(track.title.split('-')[0] + ' - ' + album.album);
-	        // $('.dom').html(track.album);
 
 	        img.addEventListener('load', function () {
 	            // Set variables and get colors from images
@@ -52627,7 +52476,7 @@
 /* 395 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -52637,62 +52486,117 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var HistoryPage = _react2.default.createClass({
-	    displayName: "HistoryPage",
-	    getInitialState: function getInitialState() {
-	        return {};
+	    displayName: 'HistoryPage',
+	    componentDidMount: function componentDidMount() {
+	        var component = this;
+	        $('#history').sortable({
+	            update: function update(event, ui) {
+	                var history = component.props.history;
+	                history.splice(history.findIndex(function (track) {
+	                    return track.id == ui.item[0].id;
+	                }), 1);
+	                history.splice($('#history').find('#' + ui.item[0].id).index(), 0, {
+	                    id: ui.item[0].id,
+	                    title: $('#history').find('#' + ui.item[0].id).data("title"),
+	                    thumbnail: $('#history').find('#' + ui.item[0].id).data("thumbnail")
+	                });
+	                component.props.sethistory(history);
+	            }
+	        });
+	    },
+	    remove: function remove(index) {
+	        var component = this;
+	        var history = component.state.history;
+	        history.splice(index, 1);
+	        component.setState({ history: history });
+	        if (index == 0) {
+	            component.getNextTrack();
+	        }
 	    },
 	    render: function render() {
+	        var component = this;
+	        console.log(this.props.history);
 	        return _react2.default.createElement(
-	            "div",
-	            { className: "page" },
+	            'div',
+	            { className: 'page' },
 	            _react2.default.createElement(
-	                "div",
-	                { className: "ui modal" },
-	                _react2.default.createElement("i", { className: "close icon" }),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "header" },
-	                    "History"
+	                'div',
+	                { className: 'header' },
+	                'History'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { id: 'history', className: 'ui items' },
+	                _.map(component.props.history, function (track, index) {
+	                    return _react2.default.createElement(Track, {
+	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                        track: track,
+	                        parent: component.props.parent,
+	                        position: index });
+	                })
+	            )
+	        );
+	    }
+	});
+
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    startThis: function startThis() {
+	        this.props.parent.props.nowPlaying(this.props.track);
+	    },
+	    removeTrack: function removeTrack() {
+	        this.props.parent.props.removeTrack(this.props.track);
+	    },
+	    render: function render() {
+	        var track = this.props.track;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	                    'a',
+	                    { className: 'ui blue circular label' },
+	                    this.props.position + 1
 	                ),
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "content" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { id: "history", className: "ui items" },
-	                        _.map(component.props.history, function (track, index) {
-	                            return _react2.default.createElement(Track, {
-	                                key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                                track: track,
-	                                parent: component.props.parent,
-	                                position: index });
-	                        })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    "div",
-	                    { className: "actions" },
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "ui black deny button" },
-	                        "Nope"
-	                    ),
-	                    _react2.default.createElement(
-	                        "div",
-	                        { className: "ui positive right labeled icon button" },
-	                        "Yep, thats me",
-	                        _react2.default.createElement("i", { className: "checkmark icon" })
-	                    )
+	                    'a',
+	                    { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
+	                    this.props.track.title
 	                )
 	            )
 	        );
 	    }
 	});
 
-	exports.default = HistoryPage;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        history: state.history,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
 
 /***/ },
 /* 396 */
@@ -52766,7 +52670,6 @@
 	    },
 	    render: function render() {
 	        var component = this;
-	        console.log(this.props.queue);
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'page' },

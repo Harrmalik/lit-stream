@@ -53,7 +53,6 @@ var SearchBox = React.createClass({
             type = e
             query = $('iframe').attr('id')
         } else {
-            e.preventDefault()
             type = 'findSong'
         }
 
@@ -75,10 +74,8 @@ var SearchBox = React.createClass({
     },
     liveSearch() {
         if ($(this.SearchBox).val()) {
-            // TODO: Live search
-            //this.searchQuery();
+            this.searchQuery();
         } else {
-            // TODO: get related tracks
             if ($('iframe')) {
                 this.searchQuery('getRelated')
             }
@@ -87,7 +84,7 @@ var SearchBox = React.createClass({
     render() {
         let query = this.state.query;
         return (
-            <form onSubmit={this.searchQuery} style={ query ? {} : formStyle} className="ui form">
+            <div style={ query ? {} : formStyle} className="ui form">
                 <div className="field">
                     <div className="ui icon big input">
                         <input id="searchBox"
@@ -97,7 +94,7 @@ var SearchBox = React.createClass({
                         <i className="search icon"></i>
                     </div>
                 </div>
-            </form>
+            </div>
         )
     }
 })

@@ -5,16 +5,22 @@ import { nowPlaying, setControls } from '../actions'
 var ct = new ColorThief();
 
 let MediaViewPage = React.createClass({
-    componentDidMount() {
+    componentWillMount() {
+        this.getAlbum()
+    },
+    componentDidUpdate() {
+        this.getAlbum()
+    },
+    getAlbum() {
         let component = this
         let nowPlaying = component.props.nowPlaying
-        $.ajax({
-            url: `/api/getCover?track=${nowPlaying.title.split('-')[1]}&artist=${nowPlaying.title.split('-')[0]}`
-        }).done((album) => {
-            console.log('got album');
-            console.log(album);
-            this.getColors(album)
-        });
+        if (component.props.nowPlaying) {
+            $.ajax({
+                url: `/api/getCover?track=${nowPlaying.title.split('-')[1]}&artist=${nowPlaying.title.split('-')[0]}`
+            }).done((album) => {
+                this.getColors(album)
+            });
+        }
     },
     getColors(album) {
         let track = this.props.nowPlaying
@@ -25,7 +31,6 @@ let MediaViewPage = React.createClass({
         img.setAttribute('src', src);
         $('.v').html(track.title.split('-')[1]);
         $('.0').html(`${track.title.split('-')[0]} - ${album.album}`);
-        // $('.dom').html(track.album);
 
         img.addEventListener('load', function() {
             // Set variables and get colors from images

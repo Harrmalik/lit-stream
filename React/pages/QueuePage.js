@@ -50,7 +50,6 @@ let QueuePage = React.createClass({
     },
     render() {
         let component = this
-        console.log(this.props.queue);
         return (
             <div className="page">
                 <h2 className="ui header">Queue</h2>
