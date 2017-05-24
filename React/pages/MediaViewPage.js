@@ -43,14 +43,14 @@ let MediaViewPage = React.createClass({
 
                 // Change UI colors based on colors found
                 $(".v").css("color", swatches['Vibrant'].getHex());
-                $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+                // $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
                 $('#image').css('boxShadow', `0 0 50px ${swatches['Vibrant'].getHex()}`);
                 $('.dom').css("color", `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
                 $('.0').css("color", `rgb(${pal[0][0]}, ${pal[0][1]}, ${pal[0][2]})`);
             } else {
                 // Change UI colors based on colors found
                 $(".v").css("color", `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
-                $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+                // $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
                 $('#image').css('boxShadow', `0 0 50px rgb(${color[0]}, ${color[1]}, ${color[2]})`);
                 $('.dom').css("color", `rgb(${color[0]}, ${color[1]}, ${color[2]})`);
                 $('.0').css("color", `rgb(${pal[0][0]}, ${pal[0][1]}, ${pal[0][2]})`);

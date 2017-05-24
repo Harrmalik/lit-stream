@@ -16,7 +16,6 @@ var SearchBox = React.createClass({
     },
     componentDidMount() {
       this.SearchBox.focus()
-
     },
     soundcloudSearch(query) {
         console.log('soundcloud')

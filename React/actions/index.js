@@ -39,3 +39,16 @@ export const prevTrack = (track) => ({
     type: 'PREV_TRACK',
     track
 })
+
+// Options actions
+export const shuffle = () => ({
+    type: 'SHUFFLE'
+})
+
+export const repeat = () => ({
+    type: 'SHUFFLE'
+})
+
+export const autoPlay = () => ({
+    type: 'AUTO_PLAY'
+})

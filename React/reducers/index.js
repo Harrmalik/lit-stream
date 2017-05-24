@@ -11,6 +11,15 @@ let theHistory = []
 
 function options (state = defaultOptions, action) {
     switch (action.type) {
+        case 'SUFFLE':
+            return { ...state, shuffle: !state.shuffle }
+
+        case 'REPEAT':
+            return { ...state, repeat: !state.repeat }
+
+        case 'AUTOPLAY':
+            return { ...state, autoplay: !state.autoplay }
+
         default:
             return state
     }
@@ -55,6 +64,7 @@ function history (state = [], action) {
 }
 
 function nowPlaying (state = null, action) {
+    console.log(queue.state);
     switch (action.type) {
         case 'NOW_PLAYING':
             return action.track

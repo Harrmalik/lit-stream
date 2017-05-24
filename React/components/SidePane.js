@@ -12,18 +12,25 @@ let SidePane = React.createClass({
     render() {
         return (
             <section id="SidePane">
-                <Link to="/search"><SearchBox
-                    parent={this}></SearchBox></Link>
-                <h3 className="ui header"><Link to="/search">Search</Link></h3>
-                <h3 className="ui header"><Link to="/player">Player</Link></h3>
-                <h3 className="ui header"><Link to="/library">Library</Link></h3>
-                <h3 className="ui header"><Link to="/queue">Queue</Link></h3>
-                <h3 className="ui header"><Link to="/settings">Settings</Link></h3>
-                <h3 className="ui header"><Link to="/history">History</Link></h3>
-
-                <MediaPlayer
-                    ref={(child) => {this.mediaPlayer = child;}}
-                    parent={this}></MediaPlayer>
+                <Link to="/search"><SearchBox></SearchBox></Link>
+                <div className="ui secondary vertical pointing menu">
+                  <h3 className="item">
+                    <Link to="/search">Search</Link>
+                  </h3>
+                  <h3 className="item">
+                    <Link to="/player">Player</Link>
+                  </h3>
+                  <h3 className="item">
+                    <Link to="/library">Library</Link>
+                  </h3>
+                  <h3 className="item">
+                    <Link to="/queue">Queue</Link>
+                  </h3>
+                  <h3 className="item">
+                    <Link to="/history">History</Link>
+                  </h3>
+                </div>
+                <MediaPlayer></MediaPlayer>
             </section>
         )
     }

@@ -16,6 +16,12 @@ var MediaControls = React.createClass({
     nextTrack() {
         this.props.nextTrack(this.props.nowPlaying)
     },
+    shuffle() {
+        this.props.shuffle()
+    },
+    repeat() {
+        this.props.repeat()
+    },
     render() {
         let controls = this.props.controls
         if (controls) {
@@ -24,10 +30,12 @@ var MediaControls = React.createClass({
                 <div id="HUD" className="ui raised inverted segment">
                         <div id="hudcontainer">
                         <div id="MediaControls">
-                            <i className="big backward icon" onClick={this.prevTrack}></i>
+                            <i className="step random icon" onClick={this.shuffle}></i>
+                            <i className="step backward icon" onClick={this.prevTrack}></i>
                             <i className="big play icon" onClick={this.playTrack}></i>
                             <i className="big stop icon" onClick={this.stopTrack}></i>
-                            <i className="big forward icon" onClick={this.nextTrack}></i>
+                            <i className="step forward icon" onClick={this.nextTrack}></i>
+                            <i className="step repeat icon" onClick={this.repeat}></i>
                         </div>
 
                         <p>
