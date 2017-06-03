@@ -8,9 +8,9 @@ export const nowPlaying = (track) => ({
     track
 })
 
-export const updateQueue = (newTrack, upNext) => ({
+export const updateQueue = (track, upNext) => ({
     type: 'UPDATE_QUEUE',
-    newTrack,
+    track,
     upNext
 })
 
@@ -46,7 +46,7 @@ export const shuffle = () => ({
 })
 
 export const repeat = () => ({
-    type: 'SHUFFLE'
+    type: 'REPEAT'
 })
 
 export const autoPlay = () => ({

@@ -26,7 +26,17 @@ var MediaPlayer = React.createClass({
       }
     },
     getNextTrack(event) {
-        this.props.nextTrack(this.props.nowPlaying)
+        if (this.props.options.repeat) {
+            event.target.playVideo()
+        } else {
+            if (this.props.options.shuffle) {
+                let numSongs = this.props.queue.length
+                this.props.nowPlaying.nextIndex= Math.floor(Math.random() * numSongs)
+                this.props.nextTrack(this.props.nowPlaying)
+            } else {
+                this.props.nextTrack(this.props.nowPlaying)
+            }
+        }
     },
     render() {
         let nowPlaying = this.props.nowPlaying
@@ -54,6 +64,7 @@ var MediaPlayer = React.createClass({
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,
   controls: state.controls,
+  options: state.options,
   queue: state.queue
 })
 

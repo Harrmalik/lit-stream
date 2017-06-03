@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 let defaultOptions = {
-    shuffle: false,
+    shuffle: true,
     showVideo: true,
     autoplay: true,
     repeat: false
@@ -11,7 +11,9 @@ let theHistory = []
 
 function options (state = defaultOptions, action) {
     switch (action.type) {
-        case 'SUFFLE':
+        case 'SHUFFLE':
+            console.log(state);
+            console.log(!state.shuffle);
             return { ...state, shuffle: !state.shuffle }
 
         case 'REPEAT':
@@ -27,11 +29,16 @@ function options (state = defaultOptions, action) {
 
 function queue (state = [], action) {
     theQueue = [...state]
+    let index = 0
+    if (action.track) {
+        index = theQueue.findIndex(track => track.id == action.track.id)
+    }
+
     switch (action.type) {
         case 'UPDATE_QUEUE':
             action.upNext ?
-                theQueue.splice(1,0, action.newTrack) :
-                theQueue.push(action.newTrack)
+                theQueue.splice(index,0, action.track) :
+                theQueue.push(action.track)
                 return theQueue
 
         case 'SET_QUEUE':
@@ -39,7 +46,6 @@ function queue (state = [], action) {
             return theQueue
 
         case 'REMOVE_TRACK':
-            let index = theQueue.findIndex(track => track.id == action.track.id)
             theQueue.splice(index,1)
             return theQueue
 
@@ -64,15 +70,21 @@ function history (state = [], action) {
 }
 
 function nowPlaying (state = null, action) {
-    console.log(queue.state);
+    let prevIndex,newIndex
     switch (action.type) {
         case 'NOW_PLAYING':
             return action.track
 
         case 'NEXT_TRACK':
             if (theQueue.length > 0) {
-                let prevIndex = theQueue.findIndex(track => track.id == action.track.id)
-                let newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex
+                if (action.track.repeat) {
+                    newIndex = theQueue.findIndex(track => track.id == action.track.id)
+                } else if (action.track.nextIndex) {
+                    newIndex = action.track.nextIndex
+                } else {
+                    prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                    newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex
+                }
                 return theQueue[newIndex]
 
             } else {
@@ -81,8 +93,8 @@ function nowPlaying (state = null, action) {
 
         case 'PREV_TRACK':
             if (theQueue.length > 0) {
-                let prevIndex = theQueue.findIndex(track => track.id == action.track.id)
-                let newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex
+                prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex
                 return theQueue[newIndex]
             } else {
                 return state

@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { nextTrack, prevTrack } from '../actions'
+import { nextTrack, prevTrack, shuffle, repeat } from '../actions'
 
 var MediaControls = React.createClass({
     prevTrack() {
@@ -14,7 +14,13 @@ var MediaControls = React.createClass({
         this.props.controls.pauseVideo()
     },
     nextTrack() {
-        this.props.nextTrack(this.props.nowPlaying)
+        if (this.props.options.shuffle) {
+            let numSongs = this.props.queue.length
+            this.props.nowPlaying.nextIndex= Math.floor(Math.random() * numSongs)
+            this.props.nextTrack(this.props.nowPlaying)
+        } else {
+            this.props.nextTrack(this.props.nowPlaying)
+        }
     },
     shuffle() {
         this.props.shuffle()
@@ -23,19 +29,22 @@ var MediaControls = React.createClass({
         this.props.repeat()
     },
     render() {
-        let controls = this.props.controls
+        let controls = this.props.controls,
+            options = this.props.options
+
         if (controls) {
+            console.log(options);
             let duration = controls.getDuration()
             return (
                 <div id="HUD" className="ui raised inverted segment">
                         <div id="hudcontainer">
                         <div id="MediaControls">
-                            <i className="step random icon" onClick={this.shuffle}></i>
+                            <i className={options.shuffle ? 'step random icon blue' : 'step random icon'} onClick={this.shuffle}></i>
                             <i className="step backward icon" onClick={this.prevTrack}></i>
                             <i className="big play icon" onClick={this.playTrack}></i>
                             <i className="big stop icon" onClick={this.stopTrack}></i>
                             <i className="step forward icon" onClick={this.nextTrack}></i>
-                            <i className="step repeat icon" onClick={this.repeat}></i>
+                            <i className={options.repeat ? 'step repeat icon blue' : 'step repeat icon'} onClick={this.repeat}></i>
                         </div>
 
                         <p>
@@ -60,13 +69,17 @@ var MediaControls = React.createClass({
 })
 
 const mapStateToProps = state => ({
+    options: state.options,
     controls: state.controls,
-    nowPlaying: state.nowPlaying
+    nowPlaying: state.nowPlaying,
+    queue: state.queue
 })
 
 const mapDispatchToProps = dispatch => ({
     nextTrack: bindActionCreators(nextTrack, dispatch),
-    prevTrack: bindActionCreators(prevTrack, dispatch)
+    prevTrack: bindActionCreators(prevTrack, dispatch),
+    shuffle: bindActionCreators(shuffle, dispatch),
+    repeat: bindActionCreators(repeat, dispatch)
 })
 
 export default connect(

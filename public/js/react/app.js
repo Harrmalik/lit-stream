@@ -27980,7 +27980,7 @@
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var defaultOptions = {
-	    shuffle: false,
+	    shuffle: true,
 	    showVideo: true,
 	    autoplay: true,
 	    repeat: false
@@ -27993,7 +27993,9 @@
 	    var action = arguments[1];
 
 	    switch (action.type) {
-	        case 'SUFFLE':
+	        case 'SHUFFLE':
+	            console.log(state);
+	            console.log(!state.shuffle);
 	            return _extends({}, state, { shuffle: !state.shuffle });
 
 	        case 'REPEAT':
@@ -28012,9 +28014,16 @@
 	    var action = arguments[1];
 
 	    theQueue = [].concat(_toConsumableArray(state));
+	    var index = 0;
+	    if (action.track) {
+	        index = theQueue.findIndex(function (track) {
+	            return track.id == action.track.id;
+	        });
+	    }
+
 	    switch (action.type) {
 	        case 'UPDATE_QUEUE':
-	            action.upNext ? theQueue.splice(1, 0, action.newTrack) : theQueue.push(action.newTrack);
+	            action.upNext ? theQueue.splice(index, 0, action.track) : theQueue.push(action.track);
 	            return theQueue;
 
 	        case 'SET_QUEUE':
@@ -28022,9 +28031,6 @@
 	            return theQueue;
 
 	        case 'REMOVE_TRACK':
-	            var index = theQueue.findIndex(function (track) {
-	                return track.id == action.track.id;
-	            });
 	            theQueue.splice(index, 1);
 	            return theQueue;
 
@@ -28055,17 +28061,26 @@
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 	    var action = arguments[1];
 
-	    console.log(queue.state);
+	    var prevIndex = void 0,
+	        newIndex = void 0;
 	    switch (action.type) {
 	        case 'NOW_PLAYING':
 	            return action.track;
 
 	        case 'NEXT_TRACK':
 	            if (theQueue.length > 0) {
-	                var prevIndex = theQueue.findIndex(function (track) {
-	                    return track.id == action.track.id;
-	                });
-	                var newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex;
+	                if (action.track.repeat) {
+	                    newIndex = theQueue.findIndex(function (track) {
+	                        return track.id == action.track.id;
+	                    });
+	                } else if (action.track.nextIndex) {
+	                    newIndex = action.track.nextIndex;
+	                } else {
+	                    prevIndex = theQueue.findIndex(function (track) {
+	                        return track.id == action.track.id;
+	                    });
+	                    newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex;
+	                }
 	                return theQueue[newIndex];
 	            } else {
 	                return state;
@@ -28073,11 +28088,11 @@
 
 	        case 'PREV_TRACK':
 	            if (theQueue.length > 0) {
-	                var _prevIndex = theQueue.findIndex(function (track) {
+	                prevIndex = theQueue.findIndex(function (track) {
 	                    return track.id == action.track.id;
 	                });
-	                var _newIndex = _prevIndex > 0 ? _prevIndex - 1 : _prevIndex;
-	                return theQueue[_newIndex];
+	                newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex;
+	                return theQueue[newIndex];
 	            } else {
 	                return state;
 	            }
@@ -45519,7 +45534,17 @@
 	        }
 	    },
 	    getNextTrack: function getNextTrack(event) {
-	        this.props.nextTrack(this.props.nowPlaying);
+	        if (this.props.options.repeat) {
+	            event.target.playVideo();
+	        } else {
+	            if (this.props.options.shuffle) {
+	                var numSongs = this.props.queue.length;
+	                this.props.nowPlaying.nextIndex = Math.floor(Math.random() * numSongs);
+	                this.props.nextTrack(this.props.nowPlaying);
+	            } else {
+	                this.props.nextTrack(this.props.nowPlaying);
+	            }
+	        }
 	    },
 	    render: function render() {
 	        var nowPlaying = this.props.nowPlaying;
@@ -45543,6 +45568,7 @@
 	    return {
 	        nowPlaying: state.nowPlaying,
 	        controls: state.controls,
+	        options: state.options,
 	        queue: state.queue
 	    };
 	};
@@ -45579,10 +45605,10 @@
 	    };
 	};
 
-	var updateQueue = exports.updateQueue = function updateQueue(newTrack, upNext) {
+	var updateQueue = exports.updateQueue = function updateQueue(track, upNext) {
 	    return {
 	        type: 'UPDATE_QUEUE',
-	        newTrack: newTrack,
+	        track: track,
 	        upNext: upNext
 	    };
 	};
@@ -45632,7 +45658,7 @@
 
 	var repeat = exports.repeat = function repeat() {
 	    return {
-	        type: 'SHUFFLE'
+	        type: 'REPEAT'
 	    };
 	};
 
@@ -52130,7 +52156,13 @@
 	        this.props.controls.pauseVideo();
 	    },
 	    nextTrack: function nextTrack() {
-	        this.props.nextTrack(this.props.nowPlaying);
+	        if (this.props.options.shuffle) {
+	            var numSongs = this.props.queue.length;
+	            this.props.nowPlaying.nextIndex = Math.floor(Math.random() * numSongs);
+	            this.props.nextTrack(this.props.nowPlaying);
+	        } else {
+	            this.props.nextTrack(this.props.nowPlaying);
+	        }
 	    },
 	    shuffle: function shuffle() {
 	        this.props.shuffle();
@@ -52139,8 +52171,11 @@
 	        this.props.repeat();
 	    },
 	    render: function render() {
-	        var controls = this.props.controls;
+	        var controls = this.props.controls,
+	            options = this.props.options;
+
 	        if (controls) {
+	            console.log(options);
 	            var duration = controls.getDuration();
 	            return _react2.default.createElement(
 	                'div',
@@ -52151,12 +52186,12 @@
 	                    _react2.default.createElement(
 	                        'div',
 	                        { id: 'MediaControls' },
-	                        _react2.default.createElement('i', { className: 'step random icon', onClick: this.shuffle }),
+	                        _react2.default.createElement('i', { className: options.shuffle ? 'step random icon blue' : 'step random icon', onClick: this.shuffle }),
 	                        _react2.default.createElement('i', { className: 'step backward icon', onClick: this.prevTrack }),
 	                        _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }),
 	                        _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
 	                        _react2.default.createElement('i', { className: 'step forward icon', onClick: this.nextTrack }),
-	                        _react2.default.createElement('i', { className: 'step repeat icon', onClick: this.repeat })
+	                        _react2.default.createElement('i', { className: options.repeat ? 'step repeat icon blue' : 'step repeat icon', onClick: this.repeat })
 	                    ),
 	                    _react2.default.createElement(
 	                        'p',
@@ -52184,15 +52219,19 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
+	        options: state.options,
 	        controls: state.controls,
-	        nowPlaying: state.nowPlaying
+	        nowPlaying: state.nowPlaying,
+	        queue: state.queue
 	    };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
 	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch),
-	        prevTrack: (0, _redux.bindActionCreators)(_actions.prevTrack, dispatch)
+	        prevTrack: (0, _redux.bindActionCreators)(_actions.prevTrack, dispatch),
+	        shuffle: (0, _redux.bindActionCreators)(_actions.shuffle, dispatch),
+	        repeat: (0, _redux.bindActionCreators)(_actions.repeat, dispatch)
 	    };
 	};
 
