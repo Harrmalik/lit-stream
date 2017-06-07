@@ -11,19 +11,18 @@ var Results = React.createClass({
     render() {
         let data = this.props.data[0]
         let component = this
-            return (
-                <div className="ui items" id="Results">
-                    {_.map(data, function(result) {
-                        return (
-                            <Result
-                                key={result.id}
-                                result={result}
-                                callback={component.updateQueue}></Result>
-                        )
-                    })}
-                </div>
-            )
-
+        return (
+            <div className="ui divided items" id="Results">
+                {_.map(data, function(result) {
+                    return (
+                        <Result
+                            key={result.id}
+                            result={result}
+                            callback={component.updateQueue}></Result>
+                    )
+                })}
+            </div>
+        )
     }
 });
 
@@ -49,7 +48,6 @@ var Result = React.createClass({
                     <i className="forward icon" onClick={this.upNext}></i>
                     <i className="ellipsis horizontal icon"></i>
                 </div>
-                <div className="ui divider"></div>
               </div>
             </div>
         )

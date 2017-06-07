@@ -5,6 +5,8 @@ import { nextTrack, prevTrack, shuffle, repeat } from '../actions'
 
 var MediaControls = React.createClass({
     prevTrack() {
+        if (this.props.controls.getCurrentTime() > 5)
+            this.props.controls.seekTo(0)
         this.props.prevTrack(this.props.nowPlaying)
     },
     playTrack() {
@@ -34,6 +36,7 @@ var MediaControls = React.createClass({
 
         if (controls) {
             console.log(options);
+            console.log(this.props.nowPlaying);
             let duration = controls.getDuration()
             return (
                 <div id="HUD" className="ui raised inverted segment">

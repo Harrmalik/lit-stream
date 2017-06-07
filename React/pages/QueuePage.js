@@ -29,6 +29,7 @@ let QueuePage = React.createClass({
         }
     },
     getRelated() {
+        // TODO: Get related songs when queue is finished
         //         $.ajax({
         //             url: `/api/getRelated`,
         //             data: { query },
@@ -53,7 +54,7 @@ let QueuePage = React.createClass({
         return (
             <div className="page">
                 <h2 className="ui header">Queue</h2>
-                <div id="queue" className="ui items">
+                <div id="queue" className="ui divided items">
                     {_.map(component.props.queue, function(track, index) {
                         return (
                             <Track
@@ -80,14 +81,23 @@ let Track = React.createClass({
         let track = this.props.track
         return (
             <div className="item track" id={this.props.track.id} data-title={this.props.track.title} data-thumbnail={this.props.track.thumbnail}>
-                <div className="content">
+                <a className="ui tiny image">
+                    <img src={this.props.track.thumbnail}></img>
+                </a>
+              <div className="content">
+                <div className="description">
                     <i className="remove icon" onClick={this.removeTrack}></i>
                     {this.props.parent.props.currentTrack.id == this.props.track.id ?
                         <i className="volume up icon"></i>
                     : <a className="ui blue circular label">{this.props.position + 1}</a>}
                     <a className={this.props.parent.props.currentTrack.id == this.props.track.id ?
-                    'ui blue header' : 'header'} onClick={this.startThis}>{this.props.track.title}</a>
+                    'ui blue header' : 'ui header'} onClick={this.startThis}>{this.props.track.title}</a>
                 </div>
+                <div className="meta">
+                    <i className="empty heart icon"></i>
+                    <span>Add to playlist</span>
+                </div>
+              </div>
             </div>
         )
     }

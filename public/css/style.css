@@ -53,13 +53,13 @@ a {
   padding: 1em;
   top: 0;
   right: 0;
-  height: 100%;
+  height: 80%;
   margin-left: 25%;
   background-color: white;
   width: 75%; }
 
 #queue {
-  height: 40%;
+  height: 90%;
   overflow: scroll; }
 
 #Viewer {

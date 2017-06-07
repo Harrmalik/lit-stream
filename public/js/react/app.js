@@ -28132,7 +28132,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -28152,71 +28152,74 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SidePane = _react2.default.createClass({
-	  displayName: 'SidePane',
-	  getInitialState: function getInitialState() {
-	    return {};
-	  },
-	  render: function render() {
-	    return _react2.default.createElement(
-	      'section',
-	      { id: 'SidePane' },
-	      _react2.default.createElement(
-	        _reactRouterDom.Link,
-	        { to: '/search' },
-	        _react2.default.createElement(_SearchBox2.default, null)
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'ui secondary vertical pointing menu' },
-	        _react2.default.createElement(
-	          'h3',
-	          { className: 'item' },
-	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: '/search' },
-	            'Search'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          { className: 'item' },
-	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: '/player' },
-	            'Player'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          { className: 'item' },
-	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: '/library' },
-	            'Library'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          { className: 'item' },
-	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: '/queue' },
-	            'Queue'
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'h3',
-	          { className: 'item' },
-	          _react2.default.createElement(
-	            _reactRouterDom.Link,
-	            { to: '/history' },
-	            'History'
-	          )
-	        )
-	      ),
-	      _react2.default.createElement(_MediaPlayer2.default, null)
-	    );
-	  }
+	    displayName: 'SidePane',
+	    componentDidMount: function componentDidMount() {
+	        $('#SidePane a').on('click', function (e) {
+	            $('#SidePane h3').removeClass('active');
+	            $(e.target).parent().addClass('active');
+	        });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'section',
+	            { id: 'SidePane' },
+	            _react2.default.createElement(
+	                _reactRouterDom.Link,
+	                { to: '/search' },
+	                _react2.default.createElement(_SearchBox2.default, null)
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'ui secondary vertical pointing menu', style: { width: "100%" } },
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'item ui' },
+	                    _react2.default.createElement(
+	                        _reactRouterDom.Link,
+	                        { to: '/search' },
+	                        'Search'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'item ui' },
+	                    _react2.default.createElement(
+	                        _reactRouterDom.Link,
+	                        { to: '/player' },
+	                        'Player'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'item ui' },
+	                    _react2.default.createElement(
+	                        _reactRouterDom.Link,
+	                        { to: '/library' },
+	                        'Library'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'item ui' },
+	                    _react2.default.createElement(
+	                        _reactRouterDom.Link,
+	                        { to: '/queue' },
+	                        'Queue'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'h3',
+	                    { className: 'item ui' },
+	                    _react2.default.createElement(
+	                        _reactRouterDom.Link,
+	                        { to: '/history' },
+	                        'History'
+	                    )
+	                )
+	            ),
+	            _react2.default.createElement(_MediaPlayer2.default, null)
+	        );
+	    }
 	});
 
 	exports.default = SidePane;
@@ -52147,6 +52150,7 @@
 	var MediaControls = _react2.default.createClass({
 	    displayName: 'MediaControls',
 	    prevTrack: function prevTrack() {
+	        if (this.props.controls.getCurrentTime() > 5) this.props.controls.seekTo(0);
 	        this.props.prevTrack(this.props.nowPlaying);
 	    },
 	    playTrack: function playTrack() {
@@ -52176,6 +52180,7 @@
 
 	        if (controls) {
 	            console.log(options);
+	            console.log(this.props.nowPlaying);
 	            var duration = controls.getDuration();
 	            return _react2.default.createElement(
 	                'div',
@@ -52357,7 +52362,7 @@
 	        var component = this;
 	        return _react2.default.createElement(
 	            'div',
-	            { className: 'ui items', id: 'Results' },
+	            { className: 'ui divided items', id: 'Results' },
 	            _lodash2.default.map(data, function (result) {
 	                return _react2.default.createElement(Result, {
 	                    key: result.id,
@@ -52403,8 +52408,7 @@
 	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
 	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
 	                    _react2.default.createElement('i', { className: 'ellipsis horizontal icon' })
-	                ),
-	                _react2.default.createElement('div', { className: 'ui divider' })
+	                )
 	            )
 	        );
 	    }
@@ -52714,6 +52718,7 @@
 	        }
 	    },
 	    getRelated: function getRelated() {
+	        // TODO: Get related songs when queue is finished
 	        //         $.ajax({
 	        //             url: `/api/getRelated`,
 	        //             data: { query },
@@ -52745,7 +52750,7 @@
 	            ),
 	            _react2.default.createElement(
 	                'div',
-	                { id: 'queue', className: 'ui items' },
+	                { id: 'queue', className: 'ui divided items' },
 	                _.map(component.props.queue, function (track, index) {
 	                    return _react2.default.createElement(Track, {
 	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
@@ -52772,18 +52777,37 @@
 	            'div',
 	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
 	            _react2.default.createElement(
+	                'a',
+	                { className: 'ui tiny image' },
+	                _react2.default.createElement('img', { src: this.props.track.thumbnail })
+	            ),
+	            _react2.default.createElement(
 	                'div',
 	                { className: 'content' },
-	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	                    'a',
-	                    { className: 'ui blue circular label' },
-	                    this.props.position + 1
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description' },
+	                    _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                    this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	                        'a',
+	                        { className: 'ui blue circular label' },
+	                        this.props.position + 1
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui header', onClick: this.startThis },
+	                        this.props.track.title
+	                    )
 	                ),
 	                _react2.default.createElement(
-	                    'a',
-	                    { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
-	                    this.props.track.title
+	                    'div',
+	                    { className: 'meta' },
+	                    _react2.default.createElement('i', { className: 'empty heart icon' }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        null,
+	                        'Add to playlist'
+	                    )
 	                )
 	            )
 	        );
