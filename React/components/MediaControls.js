@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { nextTrack, prevTrack, shuffle, repeat } from '../actions'
+import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking } from '../actions'
 
 var MediaControls = React.createClass({
     prevTrack() {
@@ -10,10 +10,10 @@ var MediaControls = React.createClass({
         this.props.prevTrack(this.props.nowPlaying)
     },
     playTrack() {
-        this.props.controls.playVideo()
+        this.props.playTrack()
     },
     stopTrack() {
-        this.props.controls.pauseVideo()
+        this.props.stopTrack()
     },
     nextTrack() {
         if (this.props.options.shuffle) {
@@ -30,14 +30,24 @@ var MediaControls = React.createClass({
     repeat() {
         this.props.repeat()
     },
+    onSeekChange(e) {
+        this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds })
+    },
+    onSeekMouseUp() {
+        this.props.isSeeking()
+        this.props.controls.player.seekTo(parseFloat(e.target.value))
+    },
+    onSeekMouseDown() {
+        this.props.isSeeking()
+    },
     render() {
         let controls = this.props.controls,
-            options = this.props.options
+            options = this.props.options,
+            nowPlaying = this.props.nowPlaying
 
         if (controls) {
-            console.log(options);
-            console.log(this.props.nowPlaying);
-            let duration = controls.getDuration()
+            console.log(controls);
+            let duration = nowPlaying.duration
             return (
                 <div id="HUD" className="ui raised inverted segment">
                         <div id="hudcontainer">
@@ -54,7 +64,15 @@ var MediaControls = React.createClass({
                             Now Playing: {this.props.nowPlaying.title}
                         </p>
                         <p>
-                            <span>Duration {Math.floor(duration / 60) + '.' + (duration %60).toFixed(0)}</span>
+                            <span>{nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds) : 0}</span>
+                        <input
+                          type='range' min={0} max={1} step='any'
+                          value={nowPlaying.played}
+                          onMouseDown={this.onSeekMouseDown}
+                          onChange={this.onSeekChange}
+                          onMouseUp={this.onSeekMouseUp}
+                        ></input>
+                            <span>{duration ? Math.floor(duration / 60) + '.' + (duration %60).toFixed(0) : 0}</span>
                         </p>
                         </div>
 
@@ -82,7 +100,11 @@ const mapDispatchToProps = dispatch => ({
     nextTrack: bindActionCreators(nextTrack, dispatch),
     prevTrack: bindActionCreators(prevTrack, dispatch),
     shuffle: bindActionCreators(shuffle, dispatch),
-    repeat: bindActionCreators(repeat, dispatch)
+    repeat: bindActionCreators(repeat, dispatch),
+    playTrack: bindActionCreators(playTrack, dispatch),
+    stopTrack: bindActionCreators(stopTrack, dispatch),
+    updateProgess: bindActionCreators(updateProgess, dispatch),
+    isSeeking: bindActionCreators(isSeeking, dispatch)
 })
 
 export default connect(

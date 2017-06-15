@@ -9,7 +9,7 @@ let MediaViewPage = React.createClass({
         this.getAlbum()
     },
     componentDidUpdate() {
-        this.getAlbum()
+        // this.getAlbum()
     },
     getAlbum() {
         let component = this

@@ -17,8 +17,31 @@ var SearchBox = React.createClass({
     componentDidMount() {
       this.SearchBox.focus()
     },
-    soundcloudSearch(query) {
-        console.log('soundcloud')
+    soundcloudSearch(query, type) {
+        let component = this
+        let tracks;
+
+        $.ajax({
+            url: `/api/${type}`,
+            data: { query, platform: 'soundcloud' },
+            crossDomain : true,
+            dataType: 'json',
+            success: function(data) {
+                tracks = _.map(data, function(result) {
+                    return {
+                        id: result.id,
+                        genre: result.genere,
+                        url: result.permalink_url,
+                        title: result.title,
+                        thumbnail: result.artwork_url,
+                        type: result.kind == 'track' ? 'video' : 'playlist',
+                        platform: 'soundcloud'
+                    }
+                })
+                component.setState({tracks});
+                component.props.callback(tracks);
+            }
+        });
     },
     youtubeSearch(query, type) {
         let component = this
@@ -26,13 +49,14 @@ var SearchBox = React.createClass({
 
         $.ajax({
             url: `/api/${type}`,
-            data: { query },
+            data: { query, platform: 'youtube' },
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
                 tracks = _.map(data, function(result) {
                     return {
                         id: result.id.videoId ? result.id.videoId : result.id.playlistId,
+                        url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
                         title: result.snippet.title,
                         thumbnail: result.snippet.thumbnails.default.url,
                         type: result.id.videoId ? 'video' : 'playlist',
@@ -91,6 +115,9 @@ var SearchBox = React.createClass({
                         type="text" placeholder="Search for a song..."
                         onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
+                        { this.props.showEngines ?
+                            <SearchEngine parent={this} />
+                        : null}
                     </div>
                 </div>
             </div>

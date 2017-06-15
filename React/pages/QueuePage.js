@@ -23,7 +23,7 @@ let QueuePage = React.createClass({
         let component = this
         let queue = component.state.queue
         queue.splice(index, 1)
-        component.setState({queue})
+        // component.setState({queue})
         if (index == 0) {
             component.getNextTrack();
         }
@@ -77,6 +77,23 @@ let Track = React.createClass({
     removeTrack() {
         this.props.parent.props.removeTrack(this.props.track)
     },
+    renderPlatform() {
+        let color,platform
+
+        switch (this.props.track.platform) {
+            case 'youtube':
+                color = 'red'
+                break;
+            case 'soundcloud':
+                color = 'orange'
+                break;
+
+        }
+        return (
+
+             <a className={`ui ${color} label`}>{this.props.track.platform}</a>
+        )
+    },
     render() {
         let track = this.props.track
         return (
@@ -96,6 +113,7 @@ let Track = React.createClass({
                 <div className="meta">
                     <i className="empty heart icon"></i>
                     <span>Add to playlist</span>
+                    {this.renderPlatform()}
                 </div>
               </div>
             </div>

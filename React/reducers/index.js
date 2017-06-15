@@ -1,6 +1,12 @@
 import { combineReducers } from 'redux'
 let defaultOptions = {
-    shuffle: true,
+    playing: true,
+    volume: 1,
+    played: 0,
+    loaded: 0,
+    duration: 0,
+    playbackRate: 1.0,
+    shuffle: false,
     showVideo: true,
     autoplay: true,
     repeat: false
@@ -12,8 +18,6 @@ let theHistory = []
 function options (state = defaultOptions, action) {
     switch (action.type) {
         case 'SHUFFLE':
-            console.log(state);
-            console.log(!state.shuffle);
             return { ...state, shuffle: !state.shuffle }
 
         case 'REPEAT':
@@ -99,6 +103,21 @@ function nowPlaying (state = null, action) {
             } else {
                 return state
             }
+
+        case 'PLAY_TRACK':
+            return { ...state, playing: true }
+
+        case 'STOP_TRACK':
+            return { ...state, playing: false }
+
+        case 'UPDATE_PROGRESS':
+            return { ...state, played: action.played, playedSeconds: action.playedSeconds}
+
+        case 'SET_DURATION':
+            return { ...state, duration: action.duration}
+
+        case 'IS_SEEKING':
+            return {...state, isSeeking: !state.isSeeking}
 
         default:
             return state
