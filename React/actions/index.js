@@ -40,6 +40,29 @@ export const prevTrack = (track) => ({
     track
 })
 
+export const playTrack = () => ({
+    type: 'PLAY_TRACK'
+})
+
+export const stopTrack = () => ({
+    type: 'STOP_TRACK'
+})
+
+export const updateProgess = (progress) => ({
+    type: 'UPDATE_PROGRESS',
+    played: progress.played,
+    playedSeconds: progress.playedSeconds
+})
+
+export const setDuration = (duration) => ({
+    type: 'SET_DURATION',
+    duration
+})
+
+export const isSeeking = () => ({
+    type: 'IS_SEEKING'
+})
+
 // Options actions
 export const shuffle = () => ({
     type: 'SHUFFLE'

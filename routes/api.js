@@ -11,18 +11,33 @@ Youtube.authenticate({
 });
 
 router.get('/findSong', function(req, res, next) {
-    Youtube.search.list({
-        part: "snippet",
-        q: req.query.query,
-        maxResults: 20,
-        type: 'video'
-    }, (err, data) => {
-        if (err) {
-            console.log(err);
-        }
+    switch (req.query.platform) {
+        case 'youtube':
+            Youtube.search.list({
+                part: "snippet",
+                q: req.query.query,
+                maxResults: 20,
+                type: 'video'
+            }, (err, data) => {
+                if (err) {
+                    console.log(err);
+                }
 
-        res.json(data.items);
-    });
+                res.json(data.items);
+            });
+            break;
+        case 'soundcloud':
+            request.get(`http://api.soundcloud.com/tracks?client_id=ac896ad5490da37d6c8064572d06d7bb&q=${req.query.query}`, function(error, response, body) {
+                if (body) {
+                    body = JSON.parse(body);
+                    res.json(body);
+                }
+            });
+            break;
+        default:
+
+    }
+
 });
 
 router.get('/getPlaylist', function(req, res, next) {

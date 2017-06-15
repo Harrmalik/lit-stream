@@ -6,6 +6,9 @@ import { updateQueue } from '../actions'
 
 var Results = React.createClass({
     updateQueue(newTrack, upNext) {
+        newTrack.playing = true
+        newTrack.played = 0
+        newTrack.isSeeking = false
         this.props.updateQueue(newTrack, upNext)
     },
     render() {
@@ -33,6 +36,23 @@ var Result = React.createClass({
     upNext() {
         this.props.callback(this.props.result, true)
     },
+    renderPlatform() {
+        let color,platform
+
+        switch (this.props.result.platform) {
+            case 'youtube':
+                color = 'red'
+                break;
+            case 'soundcloud':
+                color = 'orange'
+                break;
+
+        }
+        return (
+
+             <a className={`ui ${color} label`}>{this.props.result.platform}</a>
+        )
+    },
     render() {
         return (
             <div className="item">
@@ -47,6 +67,7 @@ var Result = React.createClass({
                     <i className="plus icon" onClick={this.add}></i>
                     <i className="forward icon" onClick={this.upNext}></i>
                     <i className="ellipsis horizontal icon"></i>
+                    {this.renderPlatform()}
                 </div>
               </div>
             </div>

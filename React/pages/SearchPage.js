@@ -15,7 +15,7 @@ let SearchPage = React.createClass({
         return (
             <div className="page">
                 <SearchBox
-                    callback={this.updateResults}></SearchBox>
+                    callback={this.updateResults} showEngines="true"></SearchBox>
 
                 <Results
                     data={this.state.data ? this.state.data : null}></Results>
