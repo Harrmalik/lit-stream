@@ -46,7 +46,6 @@ var MediaControls = React.createClass({
             nowPlaying = this.props.nowPlaying
 
         if (controls) {
-            console.log(controls);
             let duration = nowPlaying.duration
             return (
                 <div id="HUD" className="ui raised inverted segment">

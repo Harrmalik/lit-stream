@@ -5,11 +5,16 @@ import { nowPlaying, setControls } from '../actions'
 var ct = new ColorThief();
 
 let MediaViewPage = React.createClass({
-    componentWillMount() {
-        this.getAlbum()
+    getInitialState() {
+            return {
+                track: null
+            }
     },
     componentDidUpdate() {
-        // this.getAlbum()
+        if (this.state.track !== this.props.nowPlaying.title) {
+            this.setState({track: this.props.nowPlaying.title})
+            this.getAlbum()
+        }
     },
     getAlbum() {
         let component = this

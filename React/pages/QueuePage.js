@@ -13,19 +13,24 @@ let QueuePage = React.createClass({
               queue.splice($('#queue').find(`#${ui.item[0].id}`).index(), 0, {
                   id: ui.item[0].id,
                   title: $('#queue').find(`#${ui.item[0].id}`).data("title"),
-                  thumbnail: $('#queue').find(`#${ui.item[0].id}`).data("thumbnail")
+                  thumbnail: $('#queue').find(`#${ui.item[0].id}`).data("thumbnail"),
+                  genre: $('#queue').find(`#${ui.item[0].id}`).data("genre"),
+                  url: $('#queue').find(`#${ui.item[0].id}`).data("url"),
+                  type: $('#queue').find(`#${ui.item[0].id}`).data("type"),
+                  platform: $('#queue').find(`#${ui.item[0].id}`).data("platform"),
+                  isSeeking: $('#queue').find(`#${ui.item[0].id}`).data("isSeeking"),
+                  played: $('#queue').find(`#${ui.item[0].id}`).data("played"),
+                  playing: $('#queue').find(`#${ui.item[0].id}`).data("playing")
               })
               component.props.setQueue(queue)
           }
         });
     },
-    remove(index) {
-        let component = this
-        let queue = component.state.queue
-        queue.splice(index, 1)
-        // component.setState({queue})
-        if (index == 0) {
-            component.getNextTrack();
+    shouldComponentUpdate(nextProps, nextState) {
+        if (this.props.currentTrack.title == nextProps.currentTrack.title) {
+            return false
+        } else {
+            return true
         }
     },
     getRelated() {
@@ -97,7 +102,16 @@ let Track = React.createClass({
     render() {
         let track = this.props.track
         return (
-            <div className="item track" id={this.props.track.id} data-title={this.props.track.title} data-thumbnail={this.props.track.thumbnail}>
+            <div className="item track" id={this.props.track.id}
+                data-title={this.props.track.title}
+                data-thumbnail={this.props.track.thumbnail}
+                data-genere={this.props.track.genere}
+                data-url={this.props.track.url}
+                data-type={this.props.track.type}
+                data-platform={this.props.track.platform}
+                data-isSeeking={this.props.track.isSeeking}
+                data-playing={this.props.track.playing}
+                data-played={this.props.track.played}>
                 <a className="ui tiny image">
                     <img src={this.props.track.thumbnail}></img>
                 </a>

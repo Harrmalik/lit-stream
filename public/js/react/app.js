@@ -66,35 +66,35 @@
 
 	var _SidePane2 = _interopRequireDefault(_SidePane);
 
-	var _MediaControls = __webpack_require__(389);
+	var _MediaControls = __webpack_require__(404);
 
 	var _MediaControls2 = _interopRequireDefault(_MediaControls);
 
-	var _HomePage = __webpack_require__(390);
+	var _HomePage = __webpack_require__(405);
 
 	var _HomePage2 = _interopRequireDefault(_HomePage);
 
-	var _SearchPage = __webpack_require__(391);
+	var _SearchPage = __webpack_require__(406);
 
 	var _SearchPage2 = _interopRequireDefault(_SearchPage);
 
-	var _MediaViewPage = __webpack_require__(393);
+	var _MediaViewPage = __webpack_require__(408);
 
 	var _MediaViewPage2 = _interopRequireDefault(_MediaViewPage);
 
-	var _HistoryPage = __webpack_require__(394);
+	var _HistoryPage = __webpack_require__(409);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
-	var _QueuePage = __webpack_require__(395);
+	var _QueuePage = __webpack_require__(410);
 
 	var _QueuePage2 = _interopRequireDefault(_QueuePage);
 
-	var _SettingsPage = __webpack_require__(396);
+	var _SettingsPage = __webpack_require__(411);
 
 	var _SettingsPage2 = _interopRequireDefault(_SettingsPage);
 
-	var _LibraryPage = __webpack_require__(397);
+	var _LibraryPage = __webpack_require__(412);
 
 	var _LibraryPage2 = _interopRequireDefault(_LibraryPage);
 
@@ -45556,7 +45556,7 @@
 
 	var _YouTube2 = _interopRequireDefault(_YouTube);
 
-	var _reactPlayer = __webpack_require__(398);
+	var _reactPlayer = __webpack_require__(389);
 
 	var _reactPlayer2 = _interopRequireDefault(_reactPlayer);
 
@@ -45624,7 +45624,8 @@
 	                playing: nowPlaying.playing,
 	                playbackRate: playbackRate,
 	                volume: volume,
-	                width: '90%',
+	                width: '100%',
+	                height: '300px',
 	                controls: true,
 	                onReady: function onReady() {
 	                    return console.log('onReady');
@@ -52255,989 +52256,6 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var MediaControls = _react2.default.createClass({
-	    displayName: 'MediaControls',
-	    prevTrack: function prevTrack() {
-	        if (this.props.controls.getCurrentTime() > 5) this.props.controls.seekTo(0);
-	        this.props.prevTrack(this.props.nowPlaying);
-	    },
-	    playTrack: function playTrack() {
-	        this.props.playTrack();
-	    },
-	    stopTrack: function stopTrack() {
-	        this.props.stopTrack();
-	    },
-	    nextTrack: function nextTrack() {
-	        if (this.props.options.shuffle) {
-	            var numSongs = this.props.queue.length;
-	            this.props.nowPlaying.nextIndex = Math.floor(Math.random() * numSongs);
-	            this.props.nextTrack(this.props.nowPlaying);
-	        } else {
-	            this.props.nextTrack(this.props.nowPlaying);
-	        }
-	    },
-	    shuffle: function shuffle() {
-	        this.props.shuffle();
-	    },
-	    repeat: function repeat() {
-	        this.props.repeat();
-	    },
-	    onSeekChange: function onSeekChange(e) {
-	        this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds });
-	    },
-	    onSeekMouseUp: function onSeekMouseUp() {
-	        this.props.isSeeking();
-	        this.props.controls.player.seekTo(parseFloat(e.target.value));
-	    },
-	    onSeekMouseDown: function onSeekMouseDown() {
-	        this.props.isSeeking();
-	    },
-	    render: function render() {
-	        var controls = this.props.controls,
-	            options = this.props.options,
-	            nowPlaying = this.props.nowPlaying;
-
-	        if (controls) {
-	            console.log(controls);
-	            var duration = nowPlaying.duration;
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'HUD', className: 'ui raised inverted segment' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'hudcontainer' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { id: 'MediaControls' },
-	                        _react2.default.createElement('i', { className: options.shuffle ? 'step random icon blue' : 'step random icon', onClick: this.shuffle }),
-	                        _react2.default.createElement('i', { className: 'step backward icon', onClick: this.prevTrack }),
-	                        _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }),
-	                        _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
-	                        _react2.default.createElement('i', { className: 'step forward icon', onClick: this.nextTrack }),
-	                        _react2.default.createElement('i', { className: options.repeat ? 'step repeat icon blue' : 'step repeat icon', onClick: this.repeat })
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        'Now Playing: ',
-	                        this.props.nowPlaying.title
-	                    ),
-	                    _react2.default.createElement(
-	                        'p',
-	                        null,
-	                        _react2.default.createElement(
-	                            'span',
-	                            null,
-	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds) : 0
-	                        ),
-	                        _react2.default.createElement('input', {
-	                            type: 'range', min: 0, max: 1, step: 'any',
-	                            value: nowPlaying.played,
-	                            onMouseDown: this.onSeekMouseDown,
-	                            onChange: this.onSeekChange,
-	                            onMouseUp: this.onSeekMouseUp
-	                        }),
-	                        _react2.default.createElement(
-	                            'span',
-	                            null,
-	                            duration ? Math.floor(duration / 60) + '.' + (duration % 60).toFixed(0) : 0
-	                        )
-	                    )
-	                )
-	            );
-	        } else {
-	            return _react2.default.createElement('div', { id: 'HUD', className: 'ui raised inverted segment' });
-	        }
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        options: state.options,
-	        controls: state.controls,
-	        nowPlaying: state.nowPlaying,
-	        queue: state.queue
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch),
-	        prevTrack: (0, _redux.bindActionCreators)(_actions.prevTrack, dispatch),
-	        shuffle: (0, _redux.bindActionCreators)(_actions.shuffle, dispatch),
-	        repeat: (0, _redux.bindActionCreators)(_actions.repeat, dispatch),
-	        playTrack: (0, _redux.bindActionCreators)(_actions.playTrack, dispatch),
-	        stopTrack: (0, _redux.bindActionCreators)(_actions.stopTrack, dispatch),
-	        updateProgess: (0, _redux.bindActionCreators)(_actions.updateProgess, dispatch),
-	        isSeeking: (0, _redux.bindActionCreators)(_actions.isSeeking, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaControls);
-
-/***/ },
-/* 390 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var HomePage = _react2.default.createClass({
-	    displayName: "HomePage",
-	    getInitialState: function getInitialState() {
-	        return {};
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "page" },
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "HomePage"
-	            )
-	        );
-	    }
-	});
-
-	exports.default = HomePage;
-
-/***/ },
-/* 391 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _SearchBox = __webpack_require__(263);
-
-	var _SearchBox2 = _interopRequireDefault(_SearchBox);
-
-	var _Results = __webpack_require__(392);
-
-	var _Results2 = _interopRequireDefault(_Results);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SearchPage = _react2.default.createClass({
-	    displayName: 'SearchPage',
-	    getInitialState: function getInitialState() {
-	        return {
-	            data: []
-	        };
-	    },
-	    updateResults: function updateResults(data) {
-	        this.setState({ data: [data] });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'page' },
-	            _react2.default.createElement(_SearchBox2.default, {
-	                callback: this.updateResults, showEngines: 'true' }),
-	            _react2.default.createElement(_Results2.default, {
-	                data: this.state.data ? this.state.data : null })
-	        );
-	    }
-	});
-
-	exports.default = SearchPage;
-
-/***/ },
-/* 392 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _lodash = __webpack_require__(264);
-
-	var _lodash2 = _interopRequireDefault(_lodash);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Results = _react2.default.createClass({
-	    displayName: 'Results',
-	    updateQueue: function updateQueue(newTrack, upNext) {
-	        newTrack.playing = true;
-	        newTrack.played = 0;
-	        newTrack.isSeeking = false;
-	        this.props.updateQueue(newTrack, upNext);
-	    },
-	    render: function render() {
-	        var data = this.props.data[0];
-	        var component = this;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'ui divided items', id: 'Results' },
-	            _lodash2.default.map(data, function (result) {
-	                return _react2.default.createElement(Result, {
-	                    key: result.id,
-	                    result: result,
-	                    callback: component.updateQueue });
-	            })
-	        );
-	    }
-	});
-
-	var Result = _react2.default.createClass({
-	    displayName: 'Result',
-	    add: function add() {
-	        this.props.callback(this.props.result, false);
-	    },
-	    upNext: function upNext() {
-	        this.props.callback(this.props.result, true);
-	    },
-	    renderPlatform: function renderPlatform() {
-	        var color = void 0,
-	            platform = void 0;
-
-	        switch (this.props.result.platform) {
-	            case 'youtube':
-	                color = 'red';
-	                break;
-	            case 'soundcloud':
-	                color = 'orange';
-	                break;
-
-	        }
-	        return _react2.default.createElement(
-	            'a',
-	            { className: 'ui ' + color + ' label' },
-	            this.props.result.platform
-	        );
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'item' },
-	            _react2.default.createElement(
-	                'a',
-	                { className: 'ui tiny image' },
-	                _react2.default.createElement('img', { src: this.props.result.thumbnail })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'content' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'description' },
-	                    _react2.default.createElement(
-	                        'h3',
-	                        { onClick: this.add },
-	                        this.props.result.title
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'meta' },
-	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
-	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
-	                    _react2.default.createElement('i', { className: 'ellipsis horizontal icon' }),
-	                    this.renderPlatform()
-	                )
-	            )
-	        );
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Results);
-
-/***/ },
-/* 393 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ct = new ColorThief();
-
-	var MediaViewPage = _react2.default.createClass({
-	    displayName: 'MediaViewPage',
-	    componentWillMount: function componentWillMount() {
-	        this.getAlbum();
-	    },
-	    componentDidUpdate: function componentDidUpdate() {
-	        // this.getAlbum()
-	    },
-	    getAlbum: function getAlbum() {
-	        var _this = this;
-
-	        var component = this;
-	        var nowPlaying = component.props.nowPlaying;
-	        if (component.props.nowPlaying) {
-	            $.ajax({
-	                url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
-	            }).done(function (album) {
-	                _this.getColors(album);
-	            });
-	        }
-	    },
-	    getColors: function getColors(album) {
-	        var track = this.props.nowPlaying;
-	        var img = document.getElementById('image');
-	        img.setAttribute('crossOrigin', '*');
-	        var src = album.image ? album.image + '?' + new Date().getTime() : '/imgs/no-img.png';
-
-	        img.setAttribute('src', src);
-	        $('.v').html(track.title.split('-')[1]);
-	        $('.0').html(track.title.split('-')[0] + ' - ' + album.album);
-
-	        img.addEventListener('load', function () {
-	            // Set variables and get colors from images
-	            var vibrant = new Vibrant(img, 64, 5);
-	            var swatches = vibrant.swatches();
-	            var color = ct.getColor(img);
-	            var pal = ct.getPalette(img);
-	            if (swatches['Vibrant']) {
-	                var v = swatches['Vibrant'].getRgb();
-
-	                // Change UI colors based on colors found
-	                $(".v").css("color", swatches['Vibrant'].getHex());
-	                // $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
-	                $('#image').css('boxShadow', '0 0 50px ' + swatches['Vibrant'].getHex());
-	                $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
-	            } else {
-	                // Change UI colors based on colors found
-	                $(".v").css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                // $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
-	                $('#image').css('boxShadow', '0 0 50px rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
-	            }
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { id: 'Viewer', className: 'page' },
-	            _react2.default.createElement(
-	                'div',
-	                { id: 'div1', className: 'ui container' },
-	                _react2.default.createElement('img', { id: 'image', src: '' }),
-	                _react2.default.createElement(
-	                    'h1',
-	                    { className: 'v' },
-	                    'hey'
-	                ),
-	                _react2.default.createElement('h2', { className: '0' })
-	            )
-	        );
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        nowPlaying: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaViewPage);
-
-/***/ },
-/* 394 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var HistoryPage = _react2.default.createClass({
-	    displayName: 'HistoryPage',
-	    componentDidMount: function componentDidMount() {
-	        var component = this;
-	        $('#history').sortable({
-	            update: function update(event, ui) {
-	                var history = component.props.history;
-	                history.splice(history.findIndex(function (track) {
-	                    return track.id == ui.item[0].id;
-	                }), 1);
-	                history.splice($('#history').find('#' + ui.item[0].id).index(), 0, {
-	                    id: ui.item[0].id,
-	                    title: $('#history').find('#' + ui.item[0].id).data("title"),
-	                    thumbnail: $('#history').find('#' + ui.item[0].id).data("thumbnail")
-	                });
-	                component.props.sethistory(history);
-	            }
-	        });
-	    },
-	    remove: function remove(index) {
-	        var component = this;
-	        var history = component.state.history;
-	        history.splice(index, 1);
-	        component.setState({ history: history });
-	        if (index == 0) {
-	            component.getNextTrack();
-	        }
-	    },
-	    render: function render() {
-	        var component = this;
-	        console.log(this.props.history);
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'page' },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'header' },
-	                'History'
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { id: 'history', className: 'ui items' },
-	                _.map(component.props.history, function (track, index) {
-	                    return _react2.default.createElement(Track, {
-	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                        track: track,
-	                        parent: component.props.parent,
-	                        position: index });
-	                })
-	            )
-	        );
-	    }
-	});
-
-	var Track = _react2.default.createClass({
-	    displayName: 'Track',
-	    startThis: function startThis() {
-	        this.props.parent.props.nowPlaying(this.props.track);
-	    },
-	    removeTrack: function removeTrack() {
-	        this.props.parent.props.removeTrack(this.props.track);
-	    },
-	    render: function render() {
-	        var track = this.props.track;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'content' },
-	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	                    'a',
-	                    { className: 'ui blue circular label' },
-	                    this.props.position + 1
-	                ),
-	                _react2.default.createElement(
-	                    'a',
-	                    { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
-	                    this.props.track.title
-	                )
-	            )
-	        );
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        history: state.history,
-	        currentTrack: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
-
-/***/ },
-/* 395 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(266);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var QueuePage = _react2.default.createClass({
-	    displayName: 'QueuePage',
-	    componentDidMount: function componentDidMount() {
-	        var component = this;
-	        $('#queue').sortable({
-	            update: function update(event, ui) {
-	                var queue = component.props.queue;
-	                queue.splice(queue.findIndex(function (track) {
-	                    return track.id == ui.item[0].id;
-	                }), 1);
-	                queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
-	                    id: ui.item[0].id,
-	                    title: $('#queue').find('#' + ui.item[0].id).data("title"),
-	                    thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail")
-	                });
-	                component.props.setQueue(queue);
-	            }
-	        });
-	    },
-	    remove: function remove(index) {
-	        var component = this;
-	        var queue = component.state.queue;
-	        queue.splice(index, 1);
-	        // component.setState({queue})
-	        if (index == 0) {
-	            component.getNextTrack();
-	        }
-	    },
-	    getRelated: function getRelated() {
-	        // TODO: Get related songs when queue is finished
-	        //         $.ajax({
-	        //             url: `/api/getRelated`,
-	        //             data: { query },
-	        //             crossDomain : true,
-	        //             dataType: 'json',
-	        //             success: function(data) {
-	        //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
-	        //                 queue.push({
-	        //                     id: data[0].id.videoId,
-	        //                     title: data[0].snippet.title,
-	        //                     thumbnail: data[0].snippet.thumbnails.default.url
-	        //                 })
-	        //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
-	        //                 component.setState({queue})
-	        //                 component.setState({nowPlaying: queue[0]})
-	        //                 $('#searchBox').val('')
-	        //             }
-	        //         });
-	    },
-	    render: function render() {
-	        var component = this;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'page' },
-	            _react2.default.createElement(
-	                'h2',
-	                { className: 'ui header' },
-	                'Queue'
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { id: 'queue', className: 'ui divided items' },
-	                _.map(component.props.queue, function (track, index) {
-	                    return _react2.default.createElement(Track, {
-	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                        track: track,
-	                        parent: component,
-	                        position: index });
-	                })
-	            )
-	        );
-	    }
-	});
-
-	var Track = _react2.default.createClass({
-	    displayName: 'Track',
-	    startThis: function startThis() {
-	        this.props.parent.props.nowPlaying(this.props.track);
-	    },
-	    removeTrack: function removeTrack() {
-	        this.props.parent.props.removeTrack(this.props.track);
-	    },
-	    renderPlatform: function renderPlatform() {
-	        var color = void 0,
-	            platform = void 0;
-
-	        switch (this.props.track.platform) {
-	            case 'youtube':
-	                color = 'red';
-	                break;
-	            case 'soundcloud':
-	                color = 'orange';
-	                break;
-
-	        }
-	        return _react2.default.createElement(
-	            'a',
-	            { className: 'ui ' + color + ' label' },
-	            this.props.track.platform
-	        );
-	    },
-	    render: function render() {
-	        var track = this.props.track;
-	        return _react2.default.createElement(
-	            'div',
-	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
-	            _react2.default.createElement(
-	                'a',
-	                { className: 'ui tiny image' },
-	                _react2.default.createElement('img', { src: this.props.track.thumbnail })
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'content' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'description' },
-	                    _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                    this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	                        'a',
-	                        { className: 'ui blue circular label' },
-	                        this.props.position + 1
-	                    ),
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui header', onClick: this.startThis },
-	                        this.props.track.title
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'meta' },
-	                    _react2.default.createElement('i', { className: 'empty heart icon' }),
-	                    _react2.default.createElement(
-	                        'span',
-	                        null,
-	                        'Add to playlist'
-	                    ),
-	                    this.renderPlatform()
-	                )
-	            )
-	        );
-	    }
-	});
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue,
-	        currentTrack: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
-
-/***/ },
-/* 396 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var SettingsPage = _react2.default.createClass({
-	    displayName: "SettingsPage",
-	    getInitialState: function getInitialState() {
-	        return {};
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            "div",
-	            { className: "page" },
-	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "SettingsPage"
-	            )
-	        );
-	    }
-	});
-
-	exports.default = SettingsPage;
-
-/***/ },
-/* 397 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Library = _react2.default.createClass({
-	    displayName: 'Library',
-	    getInitialState: function getInitialState() {
-	        return {
-	            playlist: '',
-	            songs: [{
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }]
-	        };
-	    },
-	    getSongs: function getSongs() {
-	        $.ajax({
-	            url: '',
-	            data: {}
-	        }).success(function (songs) {
-	            // TODO: get songs and add them to state
-	        }).fail(function (message) {
-	            // TODO: handle failure to load tracks
-	        });
-	    },
-	    componentDidMount: function componentDidMount() {
-	        this.getSongs();
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'div',
-	            { id: 'libraryContainer' },
-	            _react2.default.createElement(
-	                'table',
-	                { id: 'library', className: 'ui table striped compact' },
-	                _react2.default.createElement(
-	                    'thead',
-	                    null,
-	                    _react2.default.createElement(
-	                        'tr',
-	                        null,
-	                        _react2.default.createElement('th', null),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Title'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Artist'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Liked'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'Date added'
-	                        ),
-	                        _react2.default.createElement(
-	                            'th',
-	                            null,
-	                            'rating'
-	                        )
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'tbody',
-	                    null,
-	                    _.map(this.state.songs, function (song, index) {
-	                        return _react2.default.createElement(
-	                            'tr',
-	                            null,
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'ui checkbox' },
-	                                    _react2.default.createElement('input', { type: 'checkbox' }),
-	                                    _react2.default.createElement('label', null)
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.title
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.artist
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.liked
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.created
-	                            ),
-	                            _react2.default.createElement('td', null)
-	                        );
-	                    })
-	                )
-	            ),
-	            _react2.default.createElement(
-	                'p',
-	                { id: 'libraryHUD' },
-	                this.state.songs.length,
-	                ' songs'
-	            )
-	        );
-	    }
-	});
-
-	exports.default = Library;
-
-/***/ },
-/* 398 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
@@ -53249,45 +52267,45 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(399);
+	var _lodash = __webpack_require__(390);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
-	var _props3 = __webpack_require__(400);
+	var _props3 = __webpack_require__(391);
 
-	var _YouTube = __webpack_require__(401);
+	var _YouTube = __webpack_require__(392);
 
 	var _YouTube2 = _interopRequireDefault(_YouTube);
 
-	var _SoundCloud = __webpack_require__(404);
+	var _SoundCloud = __webpack_require__(395);
 
 	var _SoundCloud2 = _interopRequireDefault(_SoundCloud);
 
-	var _Vimeo = __webpack_require__(407);
+	var _Vimeo = __webpack_require__(398);
 
 	var _Vimeo2 = _interopRequireDefault(_Vimeo);
 
-	var _Facebook = __webpack_require__(408);
+	var _Facebook = __webpack_require__(399);
 
 	var _Facebook2 = _interopRequireDefault(_Facebook);
 
-	var _FilePlayer = __webpack_require__(406);
+	var _FilePlayer = __webpack_require__(397);
 
 	var _FilePlayer2 = _interopRequireDefault(_FilePlayer);
 
-	var _Streamable = __webpack_require__(409);
+	var _Streamable = __webpack_require__(400);
 
 	var _Streamable2 = _interopRequireDefault(_Streamable);
 
-	var _Vidme = __webpack_require__(410);
+	var _Vidme = __webpack_require__(401);
 
 	var _Vidme2 = _interopRequireDefault(_Vidme);
 
-	var _Wistia = __webpack_require__(411);
+	var _Wistia = __webpack_require__(402);
 
 	var _Wistia2 = _interopRequireDefault(_Wistia);
 
-	var _DailyMotion = __webpack_require__(412);
+	var _DailyMotion = __webpack_require__(403);
 
 	var _DailyMotion2 = _interopRequireDefault(_DailyMotion);
 
@@ -53464,7 +52482,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 399 */
+/* 390 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/**
@@ -54959,7 +53977,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 400 */
+/* 391 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55085,7 +54103,7 @@
 	};
 
 /***/ },
-/* 401 */
+/* 392 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55108,11 +54126,11 @@
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(403);
+	var _utils = __webpack_require__(394);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -55340,7 +54358,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 402 */
+/* 393 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55353,7 +54371,7 @@
 
 	var _react = __webpack_require__(1);
 
-	var _props2 = __webpack_require__(400);
+	var _props2 = __webpack_require__(391);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -55499,7 +54517,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 403 */
+/* 394 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -55549,7 +54567,7 @@
 	}
 
 /***/ },
-/* 404 */
+/* 395 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55566,15 +54584,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _fetchJsonp = __webpack_require__(405);
+	var _fetchJsonp = __webpack_require__(396);
 
 	var _fetchJsonp2 = _interopRequireDefault(_fetchJsonp);
 
-	var _FilePlayer2 = __webpack_require__(406);
+	var _FilePlayer2 = __webpack_require__(397);
 
 	var _FilePlayer3 = _interopRequireDefault(_FilePlayer2);
 
-	var _props3 = __webpack_require__(400);
+	var _props3 = __webpack_require__(391);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -55701,7 +54719,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 405 */
+/* 396 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
@@ -55826,7 +54844,7 @@
 	});
 
 /***/ },
-/* 406 */
+/* 397 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -55845,7 +54863,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
@@ -56078,7 +55096,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 407 */
+/* 398 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56103,7 +55121,7 @@
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
@@ -56294,7 +55312,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 408 */
+/* 399 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56315,7 +55333,7 @@
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
@@ -56496,7 +55514,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 409 */
+/* 400 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56507,7 +55525,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _FilePlayer2 = __webpack_require__(406);
+	var _FilePlayer2 = __webpack_require__(397);
 
 	var _FilePlayer3 = _interopRequireDefault(_FilePlayer2);
 
@@ -56579,7 +55597,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 410 */
+/* 401 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56590,7 +55608,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _FilePlayer2 = __webpack_require__(406);
+	var _FilePlayer2 = __webpack_require__(397);
 
 	var _FilePlayer3 = _interopRequireDefault(_FilePlayer2);
 
@@ -56680,7 +55698,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 411 */
+/* 402 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56701,7 +55719,7 @@
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
@@ -56862,7 +55880,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 412 */
+/* 403 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -56885,11 +55903,11 @@
 
 	var _loadScript2 = _interopRequireDefault(_loadScript);
 
-	var _Base2 = __webpack_require__(402);
+	var _Base2 = __webpack_require__(393);
 
 	var _Base3 = _interopRequireDefault(_Base2);
 
-	var _utils = __webpack_require__(403);
+	var _utils = __webpack_require__(394);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
@@ -57115,6 +56133,1007 @@
 	DailyMotion.displayName = 'DailyMotion';
 	exports['default'] = DailyMotion;
 	module.exports = exports['default'];
+
+/***/ },
+/* 404 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var MediaControls = _react2.default.createClass({
+	    displayName: 'MediaControls',
+	    prevTrack: function prevTrack() {
+	        if (this.props.controls.getCurrentTime() > 5) this.props.controls.seekTo(0);
+	        this.props.prevTrack(this.props.nowPlaying);
+	    },
+	    playTrack: function playTrack() {
+	        this.props.playTrack();
+	    },
+	    stopTrack: function stopTrack() {
+	        this.props.stopTrack();
+	    },
+	    nextTrack: function nextTrack() {
+	        if (this.props.options.shuffle) {
+	            var numSongs = this.props.queue.length;
+	            this.props.nowPlaying.nextIndex = Math.floor(Math.random() * numSongs);
+	            this.props.nextTrack(this.props.nowPlaying);
+	        } else {
+	            this.props.nextTrack(this.props.nowPlaying);
+	        }
+	    },
+	    shuffle: function shuffle() {
+	        this.props.shuffle();
+	    },
+	    repeat: function repeat() {
+	        this.props.repeat();
+	    },
+	    onSeekChange: function onSeekChange(e) {
+	        this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds });
+	    },
+	    onSeekMouseUp: function onSeekMouseUp() {
+	        this.props.isSeeking();
+	        this.props.controls.player.seekTo(parseFloat(e.target.value));
+	    },
+	    onSeekMouseDown: function onSeekMouseDown() {
+	        this.props.isSeeking();
+	    },
+	    render: function render() {
+	        var controls = this.props.controls,
+	            options = this.props.options,
+	            nowPlaying = this.props.nowPlaying;
+
+	        if (controls) {
+	            var duration = nowPlaying.duration;
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'HUD', className: 'ui raised inverted segment' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'hudcontainer' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { id: 'MediaControls' },
+	                        _react2.default.createElement('i', { className: options.shuffle ? 'step random icon blue' : 'step random icon', onClick: this.shuffle }),
+	                        _react2.default.createElement('i', { className: 'step backward icon', onClick: this.prevTrack }),
+	                        _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }),
+	                        _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
+	                        _react2.default.createElement('i', { className: 'step forward icon', onClick: this.nextTrack }),
+	                        _react2.default.createElement('i', { className: options.repeat ? 'step repeat icon blue' : 'step repeat icon', onClick: this.repeat })
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        'Now Playing: ',
+	                        this.props.nowPlaying.title
+	                    ),
+	                    _react2.default.createElement(
+	                        'p',
+	                        null,
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds) : 0
+	                        ),
+	                        _react2.default.createElement('input', {
+	                            type: 'range', min: 0, max: 1, step: 'any',
+	                            value: nowPlaying.played,
+	                            onMouseDown: this.onSeekMouseDown,
+	                            onChange: this.onSeekChange,
+	                            onMouseUp: this.onSeekMouseUp
+	                        }),
+	                        _react2.default.createElement(
+	                            'span',
+	                            null,
+	                            duration ? Math.floor(duration / 60) + '.' + (duration % 60).toFixed(0) : 0
+	                        )
+	                    )
+	                )
+	            );
+	        } else {
+	            return _react2.default.createElement('div', { id: 'HUD', className: 'ui raised inverted segment' });
+	        }
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        options: state.options,
+	        controls: state.controls,
+	        nowPlaying: state.nowPlaying,
+	        queue: state.queue
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        nextTrack: (0, _redux.bindActionCreators)(_actions.nextTrack, dispatch),
+	        prevTrack: (0, _redux.bindActionCreators)(_actions.prevTrack, dispatch),
+	        shuffle: (0, _redux.bindActionCreators)(_actions.shuffle, dispatch),
+	        repeat: (0, _redux.bindActionCreators)(_actions.repeat, dispatch),
+	        playTrack: (0, _redux.bindActionCreators)(_actions.playTrack, dispatch),
+	        stopTrack: (0, _redux.bindActionCreators)(_actions.stopTrack, dispatch),
+	        updateProgess: (0, _redux.bindActionCreators)(_actions.updateProgess, dispatch),
+	        isSeeking: (0, _redux.bindActionCreators)(_actions.isSeeking, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaControls);
+
+/***/ },
+/* 405 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var HomePage = _react2.default.createClass({
+	    displayName: "HomePage",
+	    getInitialState: function getInitialState() {
+	        return {};
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "page" },
+	            _react2.default.createElement(
+	                "p",
+	                null,
+	                "HomePage"
+	            )
+	        );
+	    }
+	});
+
+	exports.default = HomePage;
+
+/***/ },
+/* 406 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _SearchBox = __webpack_require__(263);
+
+	var _SearchBox2 = _interopRequireDefault(_SearchBox);
+
+	var _Results = __webpack_require__(407);
+
+	var _Results2 = _interopRequireDefault(_Results);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SearchPage = _react2.default.createClass({
+	    displayName: 'SearchPage',
+	    getInitialState: function getInitialState() {
+	        return {
+	            data: []
+	        };
+	    },
+	    updateResults: function updateResults(data) {
+	        this.setState({ data: [data] });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'page' },
+	            _react2.default.createElement(_SearchBox2.default, {
+	                callback: this.updateResults, showEngines: 'true' }),
+	            _react2.default.createElement(_Results2.default, {
+	                data: this.state.data ? this.state.data : null })
+	        );
+	    }
+	});
+
+	exports.default = SearchPage;
+
+/***/ },
+/* 407 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lodash = __webpack_require__(264);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Results = _react2.default.createClass({
+	    displayName: 'Results',
+	    updateQueue: function updateQueue(newTrack, upNext) {
+	        newTrack.playing = true;
+	        newTrack.played = 0;
+	        newTrack.isSeeking = false;
+	        this.props.updateQueue(newTrack, upNext);
+	    },
+	    render: function render() {
+	        var data = this.props.data[0];
+	        var component = this;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'ui divided items', id: 'Results' },
+	            _lodash2.default.map(data, function (result) {
+	                return _react2.default.createElement(Result, {
+	                    key: result.id,
+	                    result: result,
+	                    callback: component.updateQueue });
+	            })
+	        );
+	    }
+	});
+
+	var Result = _react2.default.createClass({
+	    displayName: 'Result',
+	    add: function add() {
+	        this.props.callback(this.props.result, false);
+	    },
+	    upNext: function upNext() {
+	        this.props.callback(this.props.result, true);
+	    },
+	    renderPlatform: function renderPlatform() {
+	        var color = void 0,
+	            platform = void 0;
+
+	        switch (this.props.result.platform) {
+	            case 'youtube':
+	                color = 'red';
+	                break;
+	            case 'soundcloud':
+	                color = 'orange';
+	                break;
+
+	        }
+	        return _react2.default.createElement(
+	            'a',
+	            { className: 'ui ' + color + ' label' },
+	            this.props.result.platform
+	        );
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item' },
+	            _react2.default.createElement(
+	                'a',
+	                { className: 'ui tiny image' },
+	                _react2.default.createElement('img', { src: this.props.result.thumbnail })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description' },
+	                    _react2.default.createElement(
+	                        'h3',
+	                        { onClick: this.add },
+	                        this.props.result.title
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'meta' },
+	                    _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
+	                    _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
+	                    _react2.default.createElement('i', { className: 'ellipsis horizontal icon' }),
+	                    this.renderPlatform()
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Results);
+
+/***/ },
+/* 408 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ct = new ColorThief();
+
+	var MediaViewPage = _react2.default.createClass({
+	    displayName: 'MediaViewPage',
+	    getInitialState: function getInitialState() {
+	        return {
+	            track: null
+	        };
+	    },
+	    componentDidUpdate: function componentDidUpdate() {
+	        if (this.state.track !== this.props.nowPlaying.title) {
+	            this.setState({ track: this.props.nowPlaying.title });
+	            this.getAlbum();
+	        }
+	    },
+	    getAlbum: function getAlbum() {
+	        var _this = this;
+
+	        var component = this;
+	        var nowPlaying = component.props.nowPlaying;
+	        if (component.props.nowPlaying) {
+	            $.ajax({
+	                url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
+	            }).done(function (album) {
+	                _this.getColors(album);
+	            });
+	        }
+	    },
+	    getColors: function getColors(album) {
+	        var track = this.props.nowPlaying;
+	        var img = document.getElementById('image');
+	        img.setAttribute('crossOrigin', '*');
+	        var src = album.image ? album.image + '?' + new Date().getTime() : '/imgs/no-img.png';
+
+	        img.setAttribute('src', src);
+	        $('.v').html(track.title.split('-')[1]);
+	        $('.0').html(track.title.split('-')[0] + ' - ' + album.album);
+
+	        img.addEventListener('load', function () {
+	            // Set variables and get colors from images
+	            var vibrant = new Vibrant(img, 64, 5);
+	            var swatches = vibrant.swatches();
+	            var color = ct.getColor(img);
+	            var pal = ct.getPalette(img);
+	            if (swatches['Vibrant']) {
+	                var v = swatches['Vibrant'].getRgb();
+
+	                // Change UI colors based on colors found
+	                $(".v").css("color", swatches['Vibrant'].getHex());
+	                // $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+	                $('#image').css('boxShadow', '0 0 50px ' + swatches['Vibrant'].getHex());
+	                $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
+	            } else {
+	                // Change UI colors based on colors found
+	                $(".v").css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                // $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+	                $('#image').css('boxShadow', '0 0 50px rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
+	            }
+	        });
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { id: 'Viewer', className: 'page' },
+	            _react2.default.createElement(
+	                'div',
+	                { id: 'div1', className: 'ui container' },
+	                _react2.default.createElement('img', { id: 'image', src: '' }),
+	                _react2.default.createElement(
+	                    'h1',
+	                    { className: 'v' },
+	                    'hey'
+	                ),
+	                _react2.default.createElement('h2', { className: '0' })
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        nowPlaying: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaViewPage);
+
+/***/ },
+/* 409 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var HistoryPage = _react2.default.createClass({
+	    displayName: 'HistoryPage',
+	    componentDidMount: function componentDidMount() {
+	        var component = this;
+	        $('#history').sortable({
+	            update: function update(event, ui) {
+	                var history = component.props.history;
+	                history.splice(history.findIndex(function (track) {
+	                    return track.id == ui.item[0].id;
+	                }), 1);
+	                history.splice($('#history').find('#' + ui.item[0].id).index(), 0, {
+	                    id: ui.item[0].id,
+	                    title: $('#history').find('#' + ui.item[0].id).data("title"),
+	                    thumbnail: $('#history').find('#' + ui.item[0].id).data("thumbnail")
+	                });
+	                component.props.sethistory(history);
+	            }
+	        });
+	    },
+	    remove: function remove(index) {
+	        var component = this;
+	        var history = component.state.history;
+	        history.splice(index, 1);
+	        component.setState({ history: history });
+	        if (index == 0) {
+	            component.getNextTrack();
+	        }
+	    },
+	    render: function render() {
+	        var component = this;
+	        console.log(this.props.history);
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'page' },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'header' },
+	                'History'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { id: 'history', className: 'ui items' },
+	                _.map(component.props.history, function (track, index) {
+	                    return _react2.default.createElement(Track, {
+	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                        track: track,
+	                        parent: component.props.parent,
+	                        position: index });
+	                })
+	            )
+	        );
+	    }
+	});
+
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    startThis: function startThis() {
+	        this.props.parent.props.nowPlaying(this.props.track);
+	    },
+	    removeTrack: function removeTrack() {
+	        this.props.parent.props.removeTrack(this.props.track);
+	    },
+	    render: function render() {
+	        var track = this.props.track;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	                    'a',
+	                    { className: 'ui blue circular label' },
+	                    this.props.position + 1
+	                ),
+	                _react2.default.createElement(
+	                    'a',
+	                    { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
+	                    this.props.track.title
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        history: state.history,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
+
+/***/ },
+/* 410 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var QueuePage = _react2.default.createClass({
+	    displayName: 'QueuePage',
+	    componentDidMount: function componentDidMount() {
+	        var component = this;
+	        $('#queue').sortable({
+	            update: function update(event, ui) {
+	                var queue = component.props.queue;
+	                queue.splice(queue.findIndex(function (track) {
+	                    return track.id == ui.item[0].id;
+	                }), 1);
+	                queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
+	                    id: ui.item[0].id,
+	                    title: $('#queue').find('#' + ui.item[0].id).data("title"),
+	                    thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail"),
+	                    genre: $('#queue').find('#' + ui.item[0].id).data("genre"),
+	                    url: $('#queue').find('#' + ui.item[0].id).data("url"),
+	                    type: $('#queue').find('#' + ui.item[0].id).data("type"),
+	                    platform: $('#queue').find('#' + ui.item[0].id).data("platform"),
+	                    isSeeking: $('#queue').find('#' + ui.item[0].id).data("isSeeking"),
+	                    played: $('#queue').find('#' + ui.item[0].id).data("played"),
+	                    playing: $('#queue').find('#' + ui.item[0].id).data("playing")
+	                });
+	                component.props.setQueue(queue);
+	            }
+	        });
+	    },
+	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
+	        if (this.props.currentTrack.title == nextProps.currentTrack.title) {
+	            return false;
+	        } else {
+	            return true;
+	        }
+	    },
+	    getRelated: function getRelated() {
+	        // TODO: Get related songs when queue is finished
+	        //         $.ajax({
+	        //             url: `/api/getRelated`,
+	        //             data: { query },
+	        //             crossDomain : true,
+	        //             dataType: 'json',
+	        //             success: function(data) {
+	        //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
+	        //                 queue.push({
+	        //                     id: data[0].id.videoId,
+	        //                     title: data[0].snippet.title,
+	        //                     thumbnail: data[0].snippet.thumbnails.default.url
+	        //                 })
+	        //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
+	        //                 component.setState({queue})
+	        //                 component.setState({nowPlaying: queue[0]})
+	        //                 $('#searchBox').val('')
+	        //             }
+	        //         });
+	    },
+	    render: function render() {
+	        var component = this;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'page' },
+	            _react2.default.createElement(
+	                'h2',
+	                { className: 'ui header' },
+	                'Queue'
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { id: 'queue', className: 'ui divided items' },
+	                _.map(component.props.queue, function (track, index) {
+	                    return _react2.default.createElement(Track, {
+	                        key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                        track: track,
+	                        parent: component,
+	                        position: index });
+	                })
+	            )
+	        );
+	    }
+	});
+
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    startThis: function startThis() {
+	        this.props.parent.props.nowPlaying(this.props.track);
+	    },
+	    removeTrack: function removeTrack() {
+	        this.props.parent.props.removeTrack(this.props.track);
+	    },
+	    renderPlatform: function renderPlatform() {
+	        var color = void 0,
+	            platform = void 0;
+
+	        switch (this.props.track.platform) {
+	            case 'youtube':
+	                color = 'red';
+	                break;
+	            case 'soundcloud':
+	                color = 'orange';
+	                break;
+
+	        }
+	        return _react2.default.createElement(
+	            'a',
+	            { className: 'ui ' + color + ' label' },
+	            this.props.track.platform
+	        );
+	    },
+	    render: function render() {
+	        var track = this.props.track;
+	        return _react2.default.createElement(
+	            'div',
+	            { className: 'item track', id: this.props.track.id,
+	                'data-title': this.props.track.title,
+	                'data-thumbnail': this.props.track.thumbnail,
+	                'data-genere': this.props.track.genere,
+	                'data-url': this.props.track.url,
+	                'data-type': this.props.track.type,
+	                'data-platform': this.props.track.platform,
+	                'data-isSeeking': this.props.track.isSeeking,
+	                'data-playing': this.props.track.playing,
+	                'data-played': this.props.track.played },
+	            _react2.default.createElement(
+	                'a',
+	                { className: 'ui tiny image' },
+	                _react2.default.createElement('img', { src: this.props.track.thumbnail })
+	            ),
+	            _react2.default.createElement(
+	                'div',
+	                { className: 'content' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'description' },
+	                    _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                    this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	                        'a',
+	                        { className: 'ui blue circular label' },
+	                        this.props.position + 1
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui header', onClick: this.startThis },
+	                        this.props.track.title
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'meta' },
+	                    _react2.default.createElement('i', { className: 'empty heart icon' }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        null,
+	                        'Add to playlist'
+	                    ),
+	                    this.renderPlatform()
+	                )
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
+
+/***/ },
+/* 411 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SettingsPage = _react2.default.createClass({
+	    displayName: "SettingsPage",
+	    getInitialState: function getInitialState() {
+	        return {};
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            "div",
+	            { className: "page" },
+	            _react2.default.createElement(
+	                "p",
+	                null,
+	                "SettingsPage"
+	            )
+	        );
+	    }
+	});
+
+	exports.default = SettingsPage;
+
+/***/ },
+/* 412 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Library = _react2.default.createClass({
+	    displayName: 'Library',
+	    getInitialState: function getInitialState() {
+	        return {
+	            playlist: '',
+	            songs: [{
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }, {
+	                title: 'ride',
+	                artist: 'twenty one pilots',
+	                liked: false,
+	                created: 'nwn'
+	            }]
+	        };
+	    },
+	    getSongs: function getSongs() {
+	        $.ajax({
+	            url: '',
+	            data: {}
+	        }).success(function (songs) {
+	            // TODO: get songs and add them to state
+	        }).fail(function (message) {
+	            // TODO: handle failure to load tracks
+	        });
+	    },
+	    componentDidMount: function componentDidMount() {
+	        this.getSongs();
+	    },
+	    render: function render() {
+	        return _react2.default.createElement(
+	            'div',
+	            { id: 'libraryContainer' },
+	            _react2.default.createElement(
+	                'table',
+	                { id: 'library', className: 'ui table striped compact' },
+	                _react2.default.createElement(
+	                    'thead',
+	                    null,
+	                    _react2.default.createElement(
+	                        'tr',
+	                        null,
+	                        _react2.default.createElement('th', null),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Title'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Artist'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Liked'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'Date added'
+	                        ),
+	                        _react2.default.createElement(
+	                            'th',
+	                            null,
+	                            'rating'
+	                        )
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'tbody',
+	                    null,
+	                    _.map(this.state.songs, function (song, index) {
+	                        return _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'div',
+	                                    { className: 'ui checkbox' },
+	                                    _react2.default.createElement('input', { type: 'checkbox' }),
+	                                    _react2.default.createElement('label', null)
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.title
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.artist
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.liked
+	                            ),
+	                            _react2.default.createElement(
+	                                'td',
+	                                null,
+	                                song.created
+	                            ),
+	                            _react2.default.createElement('td', null)
+	                        );
+	                    })
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'p',
+	                { id: 'libraryHUD' },
+	                this.state.songs.length,
+	                ' songs'
+	            )
+	        );
+	    }
+	});
+
+	exports.default = Library;
 
 /***/ }
 /******/ ]);

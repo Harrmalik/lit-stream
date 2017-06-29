@@ -61,7 +61,8 @@ var MediaPlayer = React.createClass({
                     playing={nowPlaying.playing}
                     playbackRate={playbackRate}
                     volume={volume}
-                    width='90%'
+                    width='100%'
+                    height='300px'
                     controls
                     onReady={() => console.log('onReady')}
                     onStart={() => console.log('onStart')}
