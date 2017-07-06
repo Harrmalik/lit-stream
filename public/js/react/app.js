@@ -28263,6 +28263,8 @@
 
 	var _reactRouterDom = __webpack_require__(178);
 
+	var _reactRedux = __webpack_require__(224);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var formStyle = {
@@ -28338,10 +28340,13 @@
 	        var type = void 0;
 	        if (e == 'getRelated') {
 	            type = e;
-	            query = $('iframe').attr('id');
+	            query = this.props.nowPlaying.id;
 	        } else {
 	            type = 'findSong';
 	        }
+
+	        console.log(query);
+	        console.log(type);
 
 	        component.setState({ query: query });
 	        switch (component.state.engine) {
@@ -28360,10 +28365,10 @@
 	        );
 	    },
 	    liveSearch: function liveSearch() {
-	        if ($(this.SearchBox).val()) {
+	        if ($(this.SearchBox).val().length > 1) {
 	            this.searchQuery();
 	        } else {
-	            if ($('iframe')) {
+	            if ($('iframe') && this.props.nowPlaying.platform == 'youtube') {
 	                this.searchQuery('getRelated');
 	            }
 	        }
@@ -28439,7 +28444,13 @@
 	    }
 	});
 
-	exports.default = SearchBox;
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        nowPlaying: state.nowPlaying
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(SearchBox);
 
 /***/ },
 /* 264 */
@@ -45603,6 +45614,7 @@
 	            this.props.startPlayer(this.props.queue[0]);
 
 	            if (this.props.controls == null) {
+	                console.log('yo');
 	                this.props.setControls({
 	                    player: 'hey'
 	                });
@@ -56804,6 +56816,17 @@
 	        //             }
 	        //         });
 	    },
+	    addToLibrary: function addToLibrary(track) {
+	        var library = void 0;
+	        if (localStorage.getItem('library')) {
+	            library = JSON.parse(localStorage.getItem('library'));
+	            library.push(track);
+	        } else {
+	            library = [track];
+	        }
+
+	        localStorage.setItem('library', JSON.stringify(library));
+	    },
 	    render: function render() {
 	        var component = this;
 	        return _react2.default.createElement(
@@ -56856,6 +56879,9 @@
 	            this.props.track.platform
 	        );
 	    },
+	    addToLibrary: function addToLibrary() {
+	        this.props.parent.addToLibrary(this.props.track);
+	    },
 	    render: function render() {
 	        var track = this.props.track;
 	        return _react2.default.createElement(
@@ -56899,8 +56925,8 @@
 	                    _react2.default.createElement('i', { className: 'empty heart icon' }),
 	                    _react2.default.createElement(
 	                        'span',
-	                        null,
-	                        'Add to playlist'
+	                        { onClick: this.addToLibrary },
+	                        'Add to library'
 	                    ),
 	                    this.renderPlatform()
 	                )
@@ -56918,7 +56944,6 @@
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
 	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
 	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
 	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
@@ -56977,55 +57002,25 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Library = _react2.default.createClass({
 	    displayName: 'Library',
 	    getInitialState: function getInitialState() {
 	        return {
-	            playlist: '',
-	            songs: [{
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }, {
-	                title: 'ride',
-	                artist: 'twenty one pilots',
-	                liked: false,
-	                created: 'nwn'
-	            }]
+	            library: []
 	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        if (localStorage.getItem('library')) {
+	            this.setState({ library: JSON.parse(localStorage.getItem('library')) });
+	        }
 	    },
 	    getSongs: function getSongs() {
 	        $.ajax({
@@ -57040,7 +57035,12 @@
 	    componentDidMount: function componentDidMount() {
 	        this.getSongs();
 	    },
+	    playAll: function playAll() {
+	        this.props.setQueue(this.state.library);
+	    },
 	    render: function render() {
+	        var _this = this;
+
 	        return _react2.default.createElement(
 	            'div',
 	            { id: 'libraryContainer' },
@@ -57077,63 +57077,105 @@
 	                        _react2.default.createElement(
 	                            'th',
 	                            null,
-	                            'rating'
+	                            'Platform'
 	                        )
 	                    )
 	                ),
 	                _react2.default.createElement(
 	                    'tbody',
 	                    null,
-	                    _.map(this.state.songs, function (song, index) {
-	                        return _react2.default.createElement(
-	                            'tr',
-	                            null,
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                _react2.default.createElement(
-	                                    'div',
-	                                    { className: 'ui checkbox' },
-	                                    _react2.default.createElement('input', { type: 'checkbox' }),
-	                                    _react2.default.createElement('label', null)
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.title
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.artist
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.liked
-	                            ),
-	                            _react2.default.createElement(
-	                                'td',
-	                                null,
-	                                song.created
-	                            ),
-	                            _react2.default.createElement('td', null)
-	                        );
+	                    _.map(this.state.library, function (song, index) {
+	                        return _react2.default.createElement(Track, {
+	                            key: song.url,
+	                            track: song,
+	                            parent: _this });
 	                    })
 	                )
 	            ),
 	            _react2.default.createElement(
+	                'button',
+	                { className: 'ui button basic', onClick: this.playAll },
+	                'Play All songs'
+	            ),
+	            _react2.default.createElement(
 	                'p',
 	                { id: 'libraryHUD' },
-	                this.state.songs.length,
+	                this.state.library.length,
 	                ' songs'
 	            )
 	        );
 	    }
 	});
 
-	exports.default = Library;
+	var Track = _react2.default.createClass({
+	    displayName: 'Track',
+	    startThis: function startThis() {
+	        var parent = this.props.parent.props;
+	        parent.updateQueue(this.props.track, false);
+	        if (parent.queue.length > 0) {
+	            parent.nowPlaying(this.props.track);
+	        }
+	    },
+	    render: function render() {
+	        var track = this.props.track;
+	        return _react2.default.createElement(
+	            'tr',
+	            { key: track.url, onClick: this.startThis },
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'ui checkbox' },
+	                    _react2.default.createElement('input', { type: 'checkbox' }),
+	                    _react2.default.createElement('label', null)
+	                )
+	            ),
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                track.title
+	            ),
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                track.url
+	            ),
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                track.liked ? _react2.default.createElement('i', { className: 'heart icon' }) : _react2.default.createElement('i', { className: 'empty heart icon' })
+	            ),
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                'July 4th'
+	            ),
+	            _react2.default.createElement(
+	                'td',
+	                null,
+	                track.platform
+	            )
+	        );
+	    }
+	});
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        currentTrack: state.nowPlaying,
+	        queue: state.queue
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Library);
 
 /***/ }
 /******/ ]);

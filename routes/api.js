@@ -42,6 +42,7 @@ router.get('/findSong', function(req, res, next) {
 
 router.get('/getPlaylist', function(req, res, next) {
     console.log(req.query.query)
+    console.log('called');
     Youtube.playlistItems.list({
         part: "snippet",
         playlistId: req.query.query,
@@ -59,6 +60,8 @@ router.get('/getPlaylist', function(req, res, next) {
 });
 
 router.get('/getRelated', function(req, res, next) {
+    console.log(req.query.query)
+    console.log('called');
     Youtube.search.list({
         part: "snippet",
         relatedToVideoId: req.query.query,

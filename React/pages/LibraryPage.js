@@ -1,57 +1,18 @@
 import React from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
 
 let Library = React.createClass({
     getInitialState() {
         return {
-            playlist: '',
-            songs: [{
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            },
-            {
-                title: 'ride',
-                artist: 'twenty one pilots',
-                liked: false,
-                created: 'nwn'
-            }]
+            library: []
+        }
+
+    },
+    componentWillMount() {
+        if (localStorage.getItem('library')) {
+            this.setState({ library: JSON.parse(localStorage.getItem('library')) })
         }
     },
     getSongs() {
@@ -69,6 +30,9 @@ let Library = React.createClass({
     componentDidMount() {
         this.getSongs()
     },
+    playAll() {
+        this.props.setQueue(this.state.library)
+    },
     render() {
         return (
             <div id="libraryContainer">
@@ -80,34 +44,69 @@ let Library = React.createClass({
                             <th>Artist</th>
                             <th>Liked</th>
                             <th>Date added</th>
-                            <th>rating</th>
+                            <th>Platform</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                    {_.map(this.state.songs, (song, index) => {
+                    {_.map(this.state.library, (song, index) => {
                         return (
-                            <tr>
-                                <td>
-                                    <div className="ui checkbox">
-                                        <input type="checkbox"></input>
-                                        <label></label>
-                                    </div>
-                                </td>
-                                <td>{song.title}</td>
-                                <td>{song.artist}</td>
-                                <td>{song.liked}</td>
-                                <td>{song.created}</td>
-                                <td></td>
-                            </tr>
+                            <Track
+                                key={song.url}
+                                track={song}
+                                parent={this}></Track>
                         )
                     })}
                     </tbody>
                 </table>
-                <p id="libraryHUD">{this.state.songs.length} songs</p>
+                <button className="ui button basic" onClick={this.playAll}>Play All songs</button>
+                <p id="libraryHUD">{this.state.library.length} songs</p>
             </div>
         )
     }
 })
 
-export default Library
+let Track = React.createClass({
+    startThis() {
+        let parent = this.props.parent.props
+        parent.updateQueue(this.props.track, false)
+        if (parent.queue.length > 0) {
+            parent.nowPlaying(this.props.track)
+        }
+    },
+    render() {
+        let track = this.props.track
+        return (
+            <tr key={track.url} onClick={this.startThis}>
+                <td>
+                    <div className="ui checkbox">
+                        <input type="checkbox"></input>
+                        <label></label>
+                    </div>
+                </td>
+                <td>{track.title}</td>
+                <td>{track.url}</td>
+                <td>{track.liked ? <i className="heart icon"></i> : <i className="empty heart icon"></i>}</td>
+                <td>July 4th</td>
+                <td>{track.platform}</td>
+            </tr>
+        )
+    }
+})
+
+
+const mapStateToProps = state => ({
+  currentTrack: state.nowPlaying,
+  queue: state.queue
+})
+
+const mapDispatchToProps = dispatch => ({
+    nowPlaying: bindActionCreators(nowPlaying, dispatch),
+    updateQueue: bindActionCreators(updateQueue, dispatch),
+    setQueue: bindActionCreators(setQueue, dispatch)
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Library)

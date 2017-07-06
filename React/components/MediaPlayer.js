@@ -41,6 +41,7 @@ var MediaPlayer = React.createClass({
             this.props.startPlayer(this.props.queue[0])
 
             if (this.props.controls == null)  {
+                console.log('yo');
                 this.props.setControls({
                     player: 'hey'
                 })

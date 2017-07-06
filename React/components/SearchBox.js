@@ -1,6 +1,7 @@
 import React from 'react'
 import _ from 'lodash'
 import {Link, Redirect, BrowserRouter as Router} from 'react-router-dom'
+import { connect } from 'react-redux'
 
 var formStyle = {
     width: "100%",
@@ -74,10 +75,13 @@ var SearchBox = React.createClass({
         let type;
         if (e == 'getRelated') {
             type = e
-            query = $('iframe').attr('id')
+            query = this.props.nowPlaying.id
         } else {
             type = 'findSong'
         }
+
+        console.log(query);
+        console.log(type);
 
         component.setState({query})
         switch (component.state.engine) {
@@ -96,10 +100,10 @@ var SearchBox = React.createClass({
         )
     },
     liveSearch() {
-        if ($(this.SearchBox).val()) {
+        if ($(this.SearchBox).val().length > 1) {
             this.searchQuery();
         } else {
-            if ($('iframe')) {
+            if ($('iframe') && this.props.nowPlaying.platform == 'youtube') {
                 this.searchQuery('getRelated')
             }
         }
@@ -157,4 +161,10 @@ var SearchEngine = React.createClass({
     }
 })
 
-export default SearchBox
+const mapStateToProps = state => ({
+  nowPlaying: state.nowPlaying,
+ })
+
+export default connect(
+  mapStateToProps
+)(SearchBox)

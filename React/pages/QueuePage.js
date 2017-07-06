@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
+import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 
 let QueuePage = React.createClass({
     componentDidMount() {
@@ -54,6 +54,17 @@ let QueuePage = React.createClass({
         //             }
         //         });
     },
+    addToLibrary(track) {
+        let library
+        if (localStorage.getItem('library')) {
+            library = JSON.parse(localStorage.getItem('library'))
+            library.push(track)
+        } else {
+            library = [track]
+        }
+
+        localStorage.setItem('library', JSON.stringify(library));
+    },
     render() {
         let component = this
         return (
@@ -99,6 +110,9 @@ let Track = React.createClass({
              <a className={`ui ${color} label`}>{this.props.track.platform}</a>
         )
     },
+    addToLibrary() {
+        this.props.parent.addToLibrary(this.props.track)
+    },
     render() {
         let track = this.props.track
         return (
@@ -126,7 +140,7 @@ let Track = React.createClass({
                 </div>
                 <div className="meta">
                     <i className="empty heart icon"></i>
-                    <span>Add to playlist</span>
+                    <span onClick={this.addToLibrary}>Add to library</span>
                     {this.renderPlatform()}
                 </div>
               </div>
@@ -141,7 +155,6 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateQueue: bindActionCreators(updateQueue, dispatch),
     setQueue: bindActionCreators(setQueue, dispatch),
     nowPlaying: bindActionCreators(nowPlaying, dispatch),
     removeTrack: bindActionCreators(removeTrack, dispatch)
