@@ -28127,7 +28127,7 @@
 
 	    switch (action.type) {
 	        case 'SET_CONTROLS':
-	            return action.controls;
+	            return action.controls.player;
 
 	        default:
 	            return state;
@@ -28151,7 +28151,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -28171,74 +28171,83 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var SidePane = _react2.default.createClass({
-	    displayName: 'SidePane',
-	    componentDidMount: function componentDidMount() {
-	        $('#SidePane a').on('click', function (e) {
-	            $('#SidePane h3').removeClass('active');
-	            $(e.target).parent().addClass('active');
-	        });
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
-	            'section',
-	            { id: 'SidePane' },
-	            _react2.default.createElement(
-	                _reactRouterDom.Link,
-	                { to: '/search' },
-	                _react2.default.createElement(_SearchBox2.default, null)
-	            ),
-	            _react2.default.createElement(
-	                'div',
-	                { className: 'ui secondary vertical pointing menu', style: { width: "100%" } },
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'item ui' },
-	                    _react2.default.createElement(
-	                        _reactRouterDom.Link,
-	                        { to: '/search' },
-	                        'Search'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'item ui' },
-	                    _react2.default.createElement(
-	                        _reactRouterDom.Link,
-	                        { to: '/player' },
-	                        'Player'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'item ui' },
-	                    _react2.default.createElement(
-	                        _reactRouterDom.Link,
-	                        { to: '/library' },
-	                        'Library'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'item ui' },
-	                    _react2.default.createElement(
-	                        _reactRouterDom.Link,
-	                        { to: '/queue' },
-	                        'Queue'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'h3',
-	                    { className: 'item ui' },
-	                    _react2.default.createElement(
-	                        _reactRouterDom.Link,
-	                        { to: '/history' },
-	                        'History'
-	                    )
-	                )
-	            ),
-	            _react2.default.createElement(_MediaPlayer2.default, null)
-	        );
-	    }
+	  displayName: 'SidePane',
+	  componentDidMount: function componentDidMount() {
+	    $('#SidePane a').on('click', function (e) {
+	      $('#SidePane h3').removeClass('active');
+	      $(e.target).parent().addClass('active');
+	    });
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'section',
+	      { id: 'SidePane' },
+	      _react2.default.createElement(
+	        _reactRouterDom.Link,
+	        { to: '/search' },
+	        _react2.default.createElement(_SearchBox2.default, null)
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'ui secondary vertical pointing menu', style: { width: "100%" } },
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/' },
+	            'Home'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/search' },
+	            'Search'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/player' },
+	            'Player'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/library' },
+	            'Library'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/queue' },
+	            'Queue'
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'item ui' },
+	          _react2.default.createElement(
+	            _reactRouterDom.Link,
+	            { to: '/history' },
+	            'History'
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(_MediaPlayer2.default, null)
+	    );
+	  }
 	});
 
 	exports.default = SidePane;
@@ -28344,9 +28353,6 @@
 	        } else {
 	            type = 'findSong';
 	        }
-
-	        console.log(query);
-	        console.log(type);
 
 	        component.setState({ query: query });
 	        switch (component.state.engine) {
@@ -45579,6 +45585,19 @@
 	};
 	var MediaPlayer = _react2.default.createClass({
 	    displayName: 'MediaPlayer',
+	    componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	        var nowPlaying = this.props.nowPlaying;
+	        if (nextProps.queue.length == 1 && nextProps.nowPlaying == null) this.props.startPlayer(nextProps.queue[0]);
+
+	        if (this.props.controls == null && this.player) {
+	            this.props.setControls({
+	                player: this.player
+	            });
+	            $('iframe').on('click', function (e) {
+	                e.preventDefault();
+	            });
+	        }
+	    },
 	    getNextTrack: function getNextTrack(event) {
 	        if (this.props.options.repeat) {
 	            event.target.playVideo();
@@ -45610,19 +45629,6 @@
 
 
 	        var nowPlaying = this.props.nowPlaying;
-	        if (this.props.queue.length > 0 && this.props.nowPlaying == null) {
-	            this.props.startPlayer(this.props.queue[0]);
-
-	            if (this.props.controls == null) {
-	                console.log('yo');
-	                this.props.setControls({
-	                    player: 'hey'
-	                });
-	                $('iframe').on('click', function (e) {
-	                    e.preventDefault();
-	                });
-	            }
-	        }
 
 	        if (nowPlaying) {
 	            var played = this.props.nowPlaying.played;
@@ -56198,7 +56204,7 @@
 	    onSeekChange: function onSeekChange(e) {
 	        this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds });
 	    },
-	    onSeekMouseUp: function onSeekMouseUp() {
+	    onSeekMouseUp: function onSeekMouseUp(e) {
 	        this.props.isSeeking();
 	        this.props.controls.player.seekTo(parseFloat(e.target.value));
 	    },
@@ -56240,7 +56246,7 @@
 	                        _react2.default.createElement(
 	                            'span',
 	                            null,
-	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds) : 0
+	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds % 60).toFixed(0) : 0
 	                        ),
 	                        _react2.default.createElement('input', {
 	                            type: 'range', min: 0, max: 1, step: 'any',
@@ -57111,6 +57117,8 @@
 	    displayName: 'Track',
 	    startThis: function startThis() {
 	        var parent = this.props.parent.props;
+	        var track = this.props.track;
+	        track.no;
 	        parent.updateQueue(this.props.track, false);
 	        if (parent.queue.length > 0) {
 	            parent.nowPlaying(this.props.track);

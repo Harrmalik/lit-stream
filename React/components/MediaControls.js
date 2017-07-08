@@ -33,7 +33,7 @@ var MediaControls = React.createClass({
     onSeekChange(e) {
         this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds })
     },
-    onSeekMouseUp() {
+    onSeekMouseUp(e) {
         this.props.isSeeking()
         this.props.controls.player.seekTo(parseFloat(e.target.value))
     },
@@ -63,7 +63,7 @@ var MediaControls = React.createClass({
                             Now Playing: {this.props.nowPlaying.title}
                         </p>
                         <p>
-                            <span>{nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds) : 0}</span>
+                            <span>{nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds %60).toFixed(0) : 0}</span>
                         <input
                           type='range' min={0} max={1} step='any'
                           value={nowPlaying.played}

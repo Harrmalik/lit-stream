@@ -11,6 +11,20 @@ var soundcloudConfig = {
     showArtwork: true
 }
 var MediaPlayer = React.createClass({
+    componentWillReceiveProps(nextProps) {
+        let nowPlaying = this.props.nowPlaying
+        if (nextProps.queue.length == 1 && nextProps.nowPlaying == null)
+            this.props.startPlayer(nextProps.queue[0])
+
+        if (this.props.controls == null && this.player) {
+            this.props.setControls({
+                player: this.player
+            })
+            $('iframe').on('click', (e)=> {
+                e.preventDefault()
+            })
+        }
+    },
     getNextTrack(event) {
         if (this.props.options.repeat) {
             event.target.playVideo()
@@ -37,19 +51,6 @@ var MediaPlayer = React.createClass({
       } = this.props.options
 
         let nowPlaying = this.props.nowPlaying
-        if (this.props.queue.length > 0 && this.props.nowPlaying == null) {
-            this.props.startPlayer(this.props.queue[0])
-
-            if (this.props.controls == null)  {
-                console.log('yo');
-                this.props.setControls({
-                    player: 'hey'
-                })
-                $('iframe').on('click', (e)=> {
-                    e.preventDefault()
-                })
-            }
-        }
 
         if (nowPlaying) {
             const played = this.props.nowPlaying.played

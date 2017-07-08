@@ -127,7 +127,7 @@ function nowPlaying (state = null, action) {
 function controls (state = null, action) {
     switch (action.type) {
         case 'SET_CONTROLS':
-            return action.controls
+            return action.controls.player
 
         default:
             return state

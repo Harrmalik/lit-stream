@@ -27,7 +27,7 @@ router.get('/findSong', function(req, res, next) {
             });
             break;
         case 'soundcloud':
-            request.get(`http://api.soundcloud.com/tracks?client_id=ac896ad5490da37d6c8064572d06d7bb&q=${req.query.query}`, function(error, response, body) {
+            request.get(`http://api.soundcloud.com/tracks?client_id=ac896ad5490da37d6c8064572d06d7bb&q=${req.query.query}&limit=50`, function(error, response, body) {
                 if (body) {
                     body = JSON.parse(body);
                     res.json(body);

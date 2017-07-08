@@ -69,6 +69,8 @@ let Library = React.createClass({
 let Track = React.createClass({
     startThis() {
         let parent = this.props.parent.props
+        let track = this.props.track
+        track.no
         parent.updateQueue(this.props.track, false)
         if (parent.queue.length > 0) {
             parent.nowPlaying(this.props.track)

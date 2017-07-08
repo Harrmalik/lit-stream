@@ -15,6 +15,9 @@ let SidePane = React.createClass({
             <section id="SidePane">
                 <Link to="/search"><SearchBox></SearchBox></Link>
                 <div className="ui secondary vertical pointing menu" style={{width: "100%"}}>
+                    <h3 className="item ui">
+                      <Link to="/">Home</Link>
+                    </h3>
                   <h3 className="item ui">
                     <Link to="/search">Search</Link>
                   </h3>

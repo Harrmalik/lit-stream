@@ -80,9 +80,6 @@ var SearchBox = React.createClass({
             type = 'findSong'
         }
 
-        console.log(query);
-        console.log(type);
-
         component.setState({query})
         switch (component.state.engine) {
             case 'soundcloud':
