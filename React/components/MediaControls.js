@@ -5,9 +5,11 @@ import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProg
 
 var MediaControls = React.createClass({
     prevTrack() {
-        if (this.props.controls.getCurrentTime() > 5)
-            this.props.controls.seekTo(0)
-        this.props.prevTrack(this.props.nowPlaying)
+        if (this.props.controls.getCurrentTime() > 5) {
+                this.props.controls.seekTo(0)
+        } else {
+            this.props.prevTrack(this.props.nowPlaying)
+        }
     },
     playTrack() {
         this.props.playTrack()

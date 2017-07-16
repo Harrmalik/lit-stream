@@ -56177,8 +56177,11 @@
 	var MediaControls = _react2.default.createClass({
 	    displayName: 'MediaControls',
 	    prevTrack: function prevTrack() {
-	        if (this.props.controls.getCurrentTime() > 5) this.props.controls.seekTo(0);
-	        this.props.prevTrack(this.props.nowPlaying);
+	        if (this.props.controls.getCurrentTime() > 5) {
+	            this.props.controls.seekTo(0);
+	        } else {
+	            this.props.prevTrack(this.props.nowPlaying);
+	        }
 	    },
 	    playTrack: function playTrack() {
 	        this.props.playTrack();
@@ -56300,7 +56303,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _react = __webpack_require__(1);
@@ -56310,21 +56313,91 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var HomePage = _react2.default.createClass({
-	    displayName: "HomePage",
-	    getInitialState: function getInitialState() {
-	        return {};
-	    },
-	    render: function render() {
-	        return _react2.default.createElement(
+	  displayName: "HomePage",
+	  getInitialState: function getInitialState() {
+	    return {};
+	  },
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "page" },
+	      _react2.default.createElement(
+	        "h2",
+	        { className: "ui header" },
+	        "Queue"
+	      ),
+	      _react2.default.createElement(
+	        "div",
+	        { className: "ui three column grid" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "column" },
+	          _react2.default.createElement(
 	            "div",
-	            { className: "page" },
+	            { className: "ui fluid card" },
 	            _react2.default.createElement(
-	                "p",
-	                null,
-	                "HomePage"
+	              "div",
+	              { className: "image" },
+	              _react2.default.createElement("img", { src: "/images/avatar/large/daniel.jpg" })
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "content" },
+	              _react2.default.createElement(
+	                "a",
+	                { className: "header" },
+	                "EDM"
+	              )
 	            )
-	        );
-	    }
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "column" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "ui fluid card" },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "image" },
+	              _react2.default.createElement("img", { src: "/images/avatar/large/helen.jpg" })
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "content" },
+	              _react2.default.createElement(
+	                "a",
+	                { className: "header" },
+	                "Trap"
+	              )
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          "div",
+	          { className: "column" },
+	          _react2.default.createElement(
+	            "div",
+	            { className: "ui fluid card" },
+	            _react2.default.createElement(
+	              "div",
+	              { className: "image" },
+	              _react2.default.createElement("img", { src: "/images/avatar/large/elliot.jpg" })
+	            ),
+	            _react2.default.createElement(
+	              "div",
+	              { className: "content" },
+	              _react2.default.createElement(
+	                "a",
+	                { className: "header" },
+	                "Indie"
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
 	});
 
 	exports.default = HomePage;
