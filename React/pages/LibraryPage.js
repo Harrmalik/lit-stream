@@ -32,6 +32,7 @@ let Library = React.createClass({
     },
     playAll() {
         this.props.setQueue(this.state.library)
+        this.props.nowPlaying(this.state.library[0])
     },
     render() {
         return (
@@ -71,7 +72,7 @@ let Track = React.createClass({
         let parent = this.props.parent.props
         let track = this.props.track
         track.no
-        parent.updateQueue(this.props.track, false)
+        parent.updateQueue(this.props.track, false, this.props.parent.currentTrack)
         if (parent.queue.length > 0) {
             parent.nowPlaying(this.props.track)
         }

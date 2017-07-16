@@ -5,11 +5,11 @@ import { connect } from 'react-redux'
 import { updateQueue } from '../actions'
 
 var Results = React.createClass({
-    updateQueue(newTrack, upNext) {
+    updateQueue(newTrack, upNext, nowPlaying) {
         newTrack.playing = true
         newTrack.played = 0
         newTrack.isSeeking = false
-        this.props.updateQueue(newTrack, upNext)
+        this.props.updateQueue(newTrack, upNext, nowPlaying)
     },
     render() {
         let data = this.props.data[0]
@@ -21,7 +21,8 @@ var Results = React.createClass({
                         <Result
                             key={result.id}
                             result={result}
-                            callback={component.updateQueue}></Result>
+                            callback={component.updateQueue}
+                            nowPlaying={component.props.nowPlaying}></Result>
                     )
                 })}
             </div>
@@ -31,10 +32,10 @@ var Results = React.createClass({
 
 var Result = React.createClass({
     add() {
-        this.props.callback(this.props.result, false)
+        this.props.callback(this.props.result, false, this.props.nowPlaying)
     },
     upNext() {
-        this.props.callback(this.props.result, true)
+        this.props.callback(this.props.result, true, this.props.nowPlaying)
     },
     renderPlatform() {
         let color,platform
@@ -76,7 +77,8 @@ var Result = React.createClass({
 })
 
 const mapStateToProps = state => ({
-  queue: state.queue
+  queue: state.queue,
+  nowPlaying: state.nowPlaying
 })
 
 const mapDispatchToProps = dispatch => ({

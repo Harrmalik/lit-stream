@@ -8,10 +8,11 @@ export const nowPlaying = (track) => ({
     track
 })
 
-export const updateQueue = (track, upNext) => ({
+export const updateQueue = (track, upNext, nowPlaying) => ({
     type: 'UPDATE_QUEUE',
     track,
-    upNext
+    upNext,
+    nowPlaying
 })
 
 export const setQueue = (queue) => ({

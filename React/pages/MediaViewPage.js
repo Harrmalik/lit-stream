@@ -10,6 +10,12 @@ let MediaViewPage = React.createClass({
                 track: null
             }
     },
+    componentWillMount() {
+        if (this.props.nowPlaying) {
+            this.setState({track: this.props.nowPlaying.title})
+            this.getAlbum()
+        }
+    },
     componentDidUpdate() {
         if (this.state.track !== this.props.nowPlaying.title) {
             this.setState({track: this.props.nowPlaying.title})
@@ -67,7 +73,7 @@ let MediaViewPage = React.createClass({
             <div id="Viewer" className="page">
                 <div id="div1" className="ui container">
                     <img id="image" src=""></img>
-                    <h1 className='v'>hey</h1>
+                    <h1 className='v'></h1>
                     <h2 className='0'></h2>
                 </div>
             </div>

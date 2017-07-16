@@ -28020,14 +28020,17 @@
 	    theQueue = [].concat(_toConsumableArray(state));
 	    var index = 0;
 	    if (action.track) {
-	        index = theQueue.findIndex(function (track) {
-	            return track.id == action.track.id;
-	        });
+	        (function () {
+	            var nowPlaying = action.nowPlaying ? action.nowPlaying.id : action.track.id;
+	            index = theQueue.findIndex(function (track) {
+	                return track.id == nowPlaying;
+	            });
+	        })();
 	    }
 
 	    switch (action.type) {
 	        case 'UPDATE_QUEUE':
-	            action.upNext ? theQueue.splice(index, 0, action.track) : theQueue.push(action.track);
+	            action.upNext ? theQueue.splice(index + 1, 0, action.track) : theQueue.push(action.track);
 	            return theQueue;
 
 	        case 'SET_QUEUE':
@@ -28291,6 +28294,13 @@
 	    },
 	    componentDidMount: function componentDidMount() {
 	        this.SearchBox.focus();
+	        var nowPlaying = this.props.nowPlaying,
+	            component = this;
+	        if (nowPlaying && nowPlaying.playing && nowPlaying.platform == 'youtube') {
+	            var query = this.props.nowPlaying.id;
+	            component.setState({ query: query });
+	            component.youtubeSearch(query, 'getRelated');
+	        }
 	    },
 	    soundcloudSearch: function soundcloudSearch(query, type) {
 	        var component = this;
@@ -45717,11 +45727,12 @@
 	    };
 	};
 
-	var updateQueue = exports.updateQueue = function updateQueue(track, upNext) {
+	var updateQueue = exports.updateQueue = function updateQueue(track, upNext, nowPlaying) {
 	    return {
 	        type: 'UPDATE_QUEUE',
 	        track: track,
-	        upNext: upNext
+	        upNext: upNext,
+	        nowPlaying: nowPlaying
 	    };
 	};
 
@@ -56232,8 +56243,7 @@
 	                        { id: 'MediaControls' },
 	                        _react2.default.createElement('i', { className: options.shuffle ? 'step random icon blue' : 'step random icon', onClick: this.shuffle }),
 	                        _react2.default.createElement('i', { className: 'step backward icon', onClick: this.prevTrack }),
-	                        _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }),
-	                        _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
+	                        nowPlaying.playing == false ? _react2.default.createElement('i', { className: 'big play icon', onClick: this.playTrack }) : _react2.default.createElement('i', { className: 'big stop icon', onClick: this.stopTrack }),
 	                        _react2.default.createElement('i', { className: 'step forward icon', onClick: this.nextTrack }),
 	                        _react2.default.createElement('i', { className: options.repeat ? 'step repeat icon blue' : 'step repeat icon', onClick: this.repeat })
 	                    ),
@@ -56249,7 +56259,8 @@
 	                        _react2.default.createElement(
 	                            'span',
 	                            null,
-	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds % 60).toFixed(0) : 0
+	                            nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds % 60).toFixed(0) : 0,
+	                            ' '
 	                        ),
 	                        _react2.default.createElement('input', {
 	                            type: 'range', min: 0, max: 1, step: 'any',
@@ -56261,6 +56272,7 @@
 	                        _react2.default.createElement(
 	                            'span',
 	                            null,
+	                            ' ',
 	                            duration ? Math.floor(duration / 60) + '.' + (duration % 60).toFixed(0) : 0
 	                        )
 	                    )
@@ -56478,11 +56490,11 @@
 
 	var Results = _react2.default.createClass({
 	    displayName: 'Results',
-	    updateQueue: function updateQueue(newTrack, upNext) {
+	    updateQueue: function updateQueue(newTrack, upNext, nowPlaying) {
 	        newTrack.playing = true;
 	        newTrack.played = 0;
 	        newTrack.isSeeking = false;
-	        this.props.updateQueue(newTrack, upNext);
+	        this.props.updateQueue(newTrack, upNext, nowPlaying);
 	    },
 	    render: function render() {
 	        var data = this.props.data[0];
@@ -56494,7 +56506,8 @@
 	                return _react2.default.createElement(Result, {
 	                    key: result.id,
 	                    result: result,
-	                    callback: component.updateQueue });
+	                    callback: component.updateQueue,
+	                    nowPlaying: component.props.nowPlaying });
 	            })
 	        );
 	    }
@@ -56503,10 +56516,10 @@
 	var Result = _react2.default.createClass({
 	    displayName: 'Result',
 	    add: function add() {
-	        this.props.callback(this.props.result, false);
+	        this.props.callback(this.props.result, false, this.props.nowPlaying);
 	    },
 	    upNext: function upNext() {
-	        this.props.callback(this.props.result, true);
+	        this.props.callback(this.props.result, true, this.props.nowPlaying);
 	    },
 	    renderPlatform: function renderPlatform() {
 	        var color = void 0,
@@ -56563,7 +56576,8 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
-	        queue: state.queue
+	        queue: state.queue,
+	        nowPlaying: state.nowPlaying
 	    };
 	};
 
@@ -56605,6 +56619,12 @@
 	        return {
 	            track: null
 	        };
+	    },
+	    componentWillMount: function componentWillMount() {
+	        if (this.props.nowPlaying) {
+	            this.setState({ track: this.props.nowPlaying.title });
+	            this.getAlbum();
+	        }
 	    },
 	    componentDidUpdate: function componentDidUpdate() {
 	        if (this.state.track !== this.props.nowPlaying.title) {
@@ -56668,11 +56688,7 @@
 	                'div',
 	                { id: 'div1', className: 'ui container' },
 	                _react2.default.createElement('img', { id: 'image', src: '' }),
-	                _react2.default.createElement(
-	                    'h1',
-	                    { className: 'v' },
-	                    'hey'
-	                ),
+	                _react2.default.createElement('h1', { className: 'v' }),
 	                _react2.default.createElement('h2', { className: '0' })
 	            )
 	        );
@@ -56868,7 +56884,9 @@
 	        });
 	    },
 	    shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-	        if (this.props.currentTrack.title == nextProps.currentTrack.title) {
+	        if (this.props.queue.length != nextProps.queue.length) {
+	            return true;
+	        } else if (this.props.currentTrack.title == nextProps.currentTrack.title) {
 	            return false;
 	        } else {
 	            return true;
@@ -57116,6 +57134,7 @@
 	    },
 	    playAll: function playAll() {
 	        this.props.setQueue(this.state.library);
+	        this.props.nowPlaying(this.state.library[0]);
 	    },
 	    render: function render() {
 	        var _this = this;
@@ -57192,7 +57211,7 @@
 	        var parent = this.props.parent.props;
 	        var track = this.props.track;
 	        track.no;
-	        parent.updateQueue(this.props.track, false);
+	        parent.updateQueue(this.props.track, false, this.props.parent.currentTrack);
 	        if (parent.queue.length > 0) {
 	            parent.nowPlaying(this.props.track);
 	        }

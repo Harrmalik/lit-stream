@@ -35,13 +35,14 @@ function queue (state = [], action) {
     theQueue = [...state]
     let index = 0
     if (action.track) {
-        index = theQueue.findIndex(track => track.id == action.track.id)
+        let nowPlaying = action.nowPlaying ? action.nowPlaying.id : action.track.id
+        index = theQueue.findIndex(track => track.id == nowPlaying)
     }
 
     switch (action.type) {
         case 'UPDATE_QUEUE':
             action.upNext ?
-                theQueue.splice(index,0, action.track) :
+                theQueue.splice(index + 1, 0, action.track) :
                 theQueue.push(action.track)
                 return theQueue
 

@@ -17,6 +17,13 @@ var SearchBox = React.createClass({
     },
     componentDidMount() {
       this.SearchBox.focus()
+      let nowPlaying = this.props.nowPlaying, component = this
+      if (nowPlaying && nowPlaying.playing && nowPlaying.platform == 'youtube') {
+          let query = this.props.nowPlaying.id
+          component.setState({query})
+          component.youtubeSearch(query, 'getRelated')
+      }
+
     },
     soundcloudSearch(query, type) {
         let component = this

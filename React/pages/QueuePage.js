@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
+import { setQueue, nowPlaying, removeTrack } from '../actions'
 
 let QueuePage = React.createClass({
     componentDidMount() {
@@ -27,7 +27,9 @@ let QueuePage = React.createClass({
         });
     },
     shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.currentTrack.title == nextProps.currentTrack.title) {
+        if (this.props.queue.length != nextProps.queue.length) {
+            return true
+        } else if (this.props.currentTrack.title == nextProps.currentTrack.title) {
             return false
         } else {
             return true

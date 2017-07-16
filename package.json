@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "pm2 start npm --name litstream -- run dev",
+    "restart": "pm2 restart litstream",
+    "logs": "pm2 logs litstream",
     "dev": "webpack -w & \n sass -w ./public/css & \n nodemon ./bin/www"
   },
   "dependencies": {
