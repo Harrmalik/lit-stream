@@ -22,8 +22,10 @@ module.exports = {
                 "query": {
                     "presets": [
                         "es2015",
-                        "react"
-                    ]
+                        "react",
+                        'stage-2'
+                    ],
+                    "plugins": ["transform-es2015-destructuring", "transform-object-rest-spread"]
                 }
             }
         ]

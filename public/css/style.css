@@ -1,33 +1,74 @@
 body {
-  padding: 50px;
   height: 100%;
   overflow: hidden;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
 
+#react-app {
+  height: 100%; }
+
 a {
   color: #00B7FF; }
 
+.fullHeight {
+  height: 100%; }
+
+#SidePane {
+  width: 25%;
+  background-color: white;
+  height: 100%;
+  padding: 1em;
+  position: absolute;
+  top: 0; }
+
+#Search {
+  width: 75%;
+  margin-left: 25%;
+  height: 90%; }
+
 #Results {
-  height: 800px;
-  overflow: scroll; }
+  height: 100%;
+  overflow: scroll;
+  margin: 0;
+  padding-bottom: 3em; }
   #Results .description:hover {
     cursor: pointer; }
   #Results .meta i {
     cursor: pointer; }
 
-#MediaTray {
+#libraryContainer {
   position: absolute;
+  overflow: scroll;
+  height: 90%;
   top: 0;
   right: 0;
-  height: 100%;
-  margin: 0;
-  width: 30%; }
+  margin-left: 25%;
+  background-color: white;
+  width: 75%; }
+  #libraryContainer #libraryHUD {
+    position: absolute;
+    bottom: 0; }
+
+.page {
+  position: absolute;
+  padding: 1em;
+  top: 0;
+  right: 0;
+  height: 80%;
+  margin-left: 25%;
+  background-color: white;
+  width: 75%; }
+
+#queue {
+  height: 90%;
+  overflow: scroll; }
+
+#Viewer {
+  text-align: center; }
 
 #HUD {
   position: absolute;
   bottom: 0;
-  left: 0;
-  height: 5em;
+  height: 10%;
   width: 100%;
   margin: 0; }
 
@@ -38,7 +79,12 @@ a {
   margin: auto; }
 
 iframe {
-  width: 100%; }
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 30%; }
 
 .track:hover .remove.icon {
   opacity: 1; }

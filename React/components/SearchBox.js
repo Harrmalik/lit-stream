@@ -1,12 +1,11 @@
 import React from 'react'
 import _ from 'lodash'
+import {Link, Redirect, BrowserRouter as Router} from 'react-router-dom'
+import { connect } from 'react-redux'
 
 var formStyle = {
-    position: "absolute",
-    top: "45%",
     width: "100%",
-    padding: "1em",
-    left: "0"
+    padding: "0"
 }
 
 var SearchBox = React.createClass({
@@ -18,10 +17,32 @@ var SearchBox = React.createClass({
     },
     componentDidMount() {
       this.SearchBox.focus()
-
     },
-    soundcloudSearch(query) {
-        console.log('soundcloud')
+    soundcloudSearch(query, type) {
+        let component = this
+        let tracks;
+
+        $.ajax({
+            url: `/api/${type}`,
+            data: { query, platform: 'soundcloud' },
+            crossDomain : true,
+            dataType: 'json',
+            success: function(data) {
+                tracks = _.map(data, function(result) {
+                    return {
+                        id: result.id,
+                        genre: result.genere,
+                        url: result.permalink_url,
+                        title: result.title,
+                        thumbnail: result.artwork_url,
+                        type: result.kind == 'track' ? 'video' : 'playlist',
+                        platform: 'soundcloud'
+                    }
+                })
+                component.setState({tracks});
+                component.props.callback(tracks);
+            }
+        });
     },
     youtubeSearch(query, type) {
         let component = this
@@ -29,15 +50,18 @@ var SearchBox = React.createClass({
 
         $.ajax({
             url: `/api/${type}`,
-            data: { query },
+            data: { query, platform: 'youtube' },
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
                 tracks = _.map(data, function(result) {
                     return {
-                        id: result.id.videoId,
+                        id: result.id.videoId ? result.id.videoId : result.id.playlistId,
+                        url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
                         title: result.snippet.title,
-                        thumbnail: result.snippet.thumbnails.default.url
+                        thumbnail: result.snippet.thumbnails.default.url,
+                        type: result.id.videoId ? 'video' : 'playlist',
+                        platform: 'youtube'
                     }
                 })
                 component.setState({tracks});
@@ -51,9 +75,8 @@ var SearchBox = React.createClass({
         let type;
         if (e == 'getRelated') {
             type = e
-            query = $('iframe').attr('id')
+            query = this.props.nowPlaying.id
         } else {
-            e.preventDefault()
             type = 'findSong'
         }
 
@@ -66,14 +89,18 @@ var SearchBox = React.createClass({
                 component.youtubeSearch(query, type)
                 break
         }
+
+        return (
+            <Router>
+            <Redirect push to="/search"/>
+            </Router>
+        )
     },
     liveSearch() {
-        if ($(this.SearchBox).val()) {
-            // TODO: Live search
-            //this.searchQuery();
+        if ($(this.SearchBox).val().length > 1) {
+            this.searchQuery();
         } else {
-            // TODO: get related tracks
-            if ($('iframe')) {
+            if ($('iframe') && this.props.nowPlaying.platform == 'youtube') {
                 this.searchQuery('getRelated')
             }
         }
@@ -81,7 +108,7 @@ var SearchBox = React.createClass({
     render() {
         let query = this.state.query;
         return (
-            <form onSubmit={this.searchQuery} style={ query ? {} : formStyle} className="ui form">
+            <div style={ query ? {} : formStyle} className="ui form">
                 <div className="field">
                     <div className="ui icon big input">
                         <input id="searchBox"
@@ -89,12 +116,12 @@ var SearchBox = React.createClass({
                         type="text" placeholder="Search for a song..."
                         onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
-
-                        <SearchEngine
-                            parent={this}></SearchEngine>
+                        { this.props.showEngines ?
+                            <SearchEngine parent={this} />
+                        : null}
                     </div>
                 </div>
-            </form>
+            </div>
         )
     }
 })
@@ -131,4 +158,10 @@ var SearchEngine = React.createClass({
     }
 })
 
-export default SearchBox
+const mapStateToProps = state => ({
+  nowPlaying: state.nowPlaying,
+ })
+
+export default connect(
+  mapStateToProps
+)(SearchBox)

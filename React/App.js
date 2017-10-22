@@ -1,52 +1,43 @@
+// Dependencies
 import React from 'react'
 import ReactDom from 'react-dom'
-import SearchBox from './components/SearchBox'
-import Results from './components/Results'
-import MediaTray from './components/MediaTray'
+import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import store from './Store.js'
 
-let containerStyle = {
-    width: "70%"
-}
+// Components
+import SidePane from './components/SidePane'
+import MediaControls from './components/MediaControls'
+
+// Pages
+import HomePage from './pages/HomePage'
+import SearchPage from './pages/SearchPage'
+import MediaViewPage from './pages/MediaViewPage'
+import HistoryPage from './pages/HistoryPage'
+import QueuePage from './pages/QueuePage'
+import SettingsPage from './pages/SettingsPage'
+import LibraryPage from './pages/LibraryPage'
 
 let App = React.createClass({
-    getInitialState() {
-        return {
-            data: []
-        }
-    },
-    componentDidMount() {
-        $('.ui.sidebar')
-          .sidebar('toggle')
-        ;
-    },
-    updateResults(data) {
-        this.setState({data: [data]})
-    },
-    addToQueue(newTrack, upNext) {
-        this._child.updateQueue(newTrack, upNext)
-    },
     render() {
         return (
-            <div className="main" style={ !this.state.data ? {} : containerStyle}>
-                <section className="ui">
-                    <SearchBox
-                        callback={this.updateResults}></SearchBox>
+            <Provider store={store}>
+                <Router>
+                    <div className="main">
+                        <SidePane parent={this}></SidePane>
 
-                    <Results
-                        data={this.state.data ? this.state.data : null}
-                        addToQueue={this.addToQueue}></Results>
-                </section>
+                        <Route exact path="/" component={HomePage}/>
+                        <Route path="/search" component={SearchPage}/>
+                        <Route path="/player" component={MediaViewPage}/>
+                        <Route path="/queue" component={QueuePage}/>
+                        <Route path="/history" component={HistoryPage}/>
+                        <Route path="/library" component={LibraryPage}/>
+                        <Route path="/settings" component={SettingsPage}/>
 
-                <section className="pusher">
-                    <MediaTray
-                        ref={(child) => {this._child = child;}}
-                        parent={this}></MediaTray>
-                </section>
-
-                <footer>
-
-                </footer>
-            </div>
+                        <MediaControls></MediaControls>
+                    </div>
+                </Router>
+            </Provider>
         )
     }
 })
