@@ -1,3 +1,6 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -10,7 +13,8 @@ var soundcloudConfig = {
     clientId: 'ac896ad5490da37d6c8064572d06d7bb',
     showArtwork: true
 }
-var MediaPlayer = React.createClass({
+
+class MediaPlayer extends React.Component {
     componentWillReceiveProps(nextProps) {
         let nowPlaying = this.props.nowPlaying
         if (nextProps.queue.length == 1 && nextProps.nowPlaying == null)
@@ -24,7 +28,8 @@ var MediaPlayer = React.createClass({
                 e.preventDefault()
             })
         }
-    },
+    }
+
     getNextTrack(event) {
         if (this.props.options.repeat) {
             event.target.playVideo()
@@ -37,13 +42,15 @@ var MediaPlayer = React.createClass({
                 this.props.nextTrack(this.props.nowPlaying)
             }
         }
-    },
+    }
+
     onProgress(progress) {
       // We only want to update time slider if we are not currently seeking
       if (!this.props.nowPlaying.isSeeking) {
         this.props.updateProgess(progress)
       }
-    },
+    }
+    
     render() {
         const {
           url, volume, loaded, duration,
@@ -80,7 +87,7 @@ var MediaPlayer = React.createClass({
             )
         }
     }
-})
+}
 
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,

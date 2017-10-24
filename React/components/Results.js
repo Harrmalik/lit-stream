@@ -1,16 +1,20 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { updateQueue } from '../actions'
 
-var Results = React.createClass({
+class Results extends React.Component {
     updateQueue(newTrack, upNext) {
         newTrack.playing = true
         newTrack.played = 0
         newTrack.isSeeking = false
         this.props.updateQueue(newTrack, upNext)
-    },
+    }
+
     render() {
         let data = this.props.data[0]
         let component = this
@@ -27,15 +31,17 @@ var Results = React.createClass({
             </div>
         )
     }
-});
+}
 
-var Result = React.createClass({
+class Result extends React.Component {
     add() {
         this.props.callback(this.props.result, false)
-    },
+    }
+
     upNext() {
         this.props.callback(this.props.result, true)
-    },
+    }
+
     renderPlatform() {
         let color,platform
 
@@ -52,7 +58,8 @@ var Result = React.createClass({
 
              <a className={`ui ${color} label`}>{this.props.result.platform}</a>
         )
-    },
+    }
+
     render() {
         return (
             <div className="item">
@@ -73,7 +80,7 @@ var Result = React.createClass({
             </div>
         )
     }
-})
+}
 
 const mapStateToProps = state => ({
   queue: state.queue

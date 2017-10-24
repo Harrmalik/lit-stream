@@ -1,15 +1,19 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import {Link} from 'react-router-dom'
 import SearchBox from './SearchBox'
 import MediaPlayer from '../components/MediaPlayer'
 
-let SidePane = React.createClass({
+class SidePane extends React.Component {
     componentDidMount() {
         $('#SidePane a').on('click', (e) =>{
             $('#SidePane h3').removeClass('active')
             $(e.target).parent().addClass('active')
         })
-    },
+    }
+
     render() {
         return (
             <section id="SidePane">
@@ -38,6 +42,6 @@ let SidePane = React.createClass({
             </section>
         )
     }
-})
+}
 
 export default SidePane

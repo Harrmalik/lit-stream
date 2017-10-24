@@ -1,9 +1,9 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 
-let HomePage = React.createClass({
-    getInitialState() {
-        return {}
-    },
+class HomePage extends React.Component{
     render() {
         return (
             <div className="page">
@@ -43,6 +43,6 @@ let HomePage = React.createClass({
             </div>
         )
     }
-})
+}
 
 export default HomePage

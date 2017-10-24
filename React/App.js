@@ -1,3 +1,5 @@
+'use strict'
+
 // Dependencies
 import React from 'react'
 import ReactDom from 'react-dom'
@@ -18,29 +20,30 @@ import QueuePage from './pages/QueuePage'
 import SettingsPage from './pages/SettingsPage'
 import LibraryPage from './pages/LibraryPage'
 
-let App = React.createClass({
-    render() {
-        return (
-            <Provider store={store}>
-                <Router>
-                    <div className="main">
-                        <SidePane parent={this}></SidePane>
+console.log(store.getState())
+let unsubscribe = store.subscribe(() =>
+  console.log(store.getState())
+)
 
-                        <Route exact path="/" component={HomePage}/>
-                        <Route path="/search" component={SearchPage}/>
-                        <Route path="/player" component={MediaViewPage}/>
-                        <Route path="/queue" component={QueuePage}/>
-                        <Route path="/history" component={HistoryPage}/>
-                        <Route path="/library" component={LibraryPage}/>
-                        <Route path="/settings" component={SettingsPage}/>
+const App = () => (
+      <Provider store={store}>
+          <Router>
+              <div className="main">
+                  <SidePane parent={this}></SidePane>
 
-                        <MediaControls></MediaControls>
-                    </div>
-                </Router>
-            </Provider>
-        )
-    }
-})
+                  <Route exact path="/" component={HomePage}/>
+                  <Route path="/search" component={SearchPage}/>
+                  <Route path="/player" component={MediaViewPage}/>
+                  <Route path="/queue" component={QueuePage}/>
+                  <Route path="/history" component={HistoryPage}/>
+                  <Route path="/library" component={LibraryPage}/>
+                  <Route path="/settings" component={SettingsPage}/>
+
+                  <MediaControls></MediaControls>
+              </div>
+          </Router>
+      </Provider>
+)
 
 ReactDom.render(<App />,
 document.getElementById('react-app'))

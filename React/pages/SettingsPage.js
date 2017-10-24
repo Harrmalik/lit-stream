@@ -1,9 +1,9 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 
-let SettingsPage = React.createClass({
-    getInitialState() {
-        return {}
-    },
+class SettingsPage extends React.Component {
     render() {
         return (
             <div className="page">
@@ -11,6 +11,6 @@ let SettingsPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 export default SettingsPage

@@ -1,9 +1,12 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
 
-let HistoryPage = React.createClass({
+class HistoryPage extends React.Component {
     componentDidMount() {
         let component = this
         $('#history').sortable({
@@ -18,7 +21,8 @@ let HistoryPage = React.createClass({
               component.props.sethistory(history)
           }
         });
-    },
+    }
+
     remove(index) {
         let component = this
         let history = component.state.history
@@ -27,7 +31,8 @@ let HistoryPage = React.createClass({
         if (index == 0) {
             component.getNextTrack();
         }
-    },
+    }
+
     render() {
         let component = this
         console.log(this.props.history);
@@ -48,15 +53,17 @@ let HistoryPage = React.createClass({
             </div>
         )
     }
-})
+}
 
-let Track = React.createClass({
+class Track extends React.Component {
     startThis() {
         this.props.parent.props.nowPlaying(this.props.track)
-    },
+    }
+
     removeTrack() {
         this.props.parent.props.removeTrack(this.props.track)
-    },
+    }
+    
     render() {
         let track = this.props.track
         return (
@@ -72,7 +79,7 @@ let Track = React.createClass({
             </div>
         )
     }
-})
+}
 
 const mapStateToProps = state => ({
   history: state.history,

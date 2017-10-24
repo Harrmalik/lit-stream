@@ -1,20 +1,26 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
 
-let Library = React.createClass({
-    getInitialState() {
-        return {
-            library: []
-        }
+class Library extends React.Component {
+    constructor(props) {
+      super(props)
 
-    },
+      this.state = {
+        library: []
+      }
+    }
+
     componentWillMount() {
         if (localStorage.getItem('library')) {
             this.setState({ library: JSON.parse(localStorage.getItem('library')) })
         }
-    },
+    }
+
     getSongs() {
         $.ajax({
             url: '',
@@ -26,13 +32,16 @@ let Library = React.createClass({
         }).fail((message) => {
             // TODO: handle failure to load tracks
         })
-    },
+    }
+
     componentDidMount() {
         this.getSongs()
-    },
+    }
+
     playAll() {
         this.props.setQueue(this.state.library)
-    },
+    }
+
     render() {
         return (
             <div id="libraryContainer">
@@ -64,9 +73,9 @@ let Library = React.createClass({
             </div>
         )
     }
-})
+}
 
-let Track = React.createClass({
+class Track extends React.Component {
     startThis() {
         let parent = this.props.parent.props
         let track = this.props.track
@@ -75,7 +84,8 @@ let Track = React.createClass({
         if (parent.queue.length > 0) {
             parent.nowPlaying(this.props.track)
         }
-    },
+    }
+
     render() {
         let track = this.props.track
         return (
@@ -94,7 +104,7 @@ let Track = React.createClass({
             </tr>
         )
     }
-})
+}
 
 
 const mapStateToProps = state => ({

@@ -1,3 +1,6 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import _ from 'lodash'
 import {Link, Redirect, BrowserRouter as Router} from 'react-router-dom'
@@ -8,16 +11,20 @@ var formStyle = {
     padding: "0"
 }
 
-var SearchBox = React.createClass({
-    getInitialState() {
-        return {
-            query: null,
-            engine: 'youtube'
-        }
-    },
+class SearchBox extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        query: null,
+        engine: 'youtube'
+      }
+    }
+
     componentDidMount() {
       this.SearchBox.focus()
-    },
+    }
+
     soundcloudSearch(query, type) {
         let component = this
         let tracks;
@@ -43,7 +50,8 @@ var SearchBox = React.createClass({
                 component.props.callback(tracks);
             }
         });
-    },
+    }
+
     youtubeSearch(query, type) {
         let component = this
         let tracks;
@@ -68,7 +76,8 @@ var SearchBox = React.createClass({
                 component.props.callback(tracks);
             }
         });
-    },
+    }
+
     searchQuery(e) {
         let component = this
         let query = $(this.SearchBox).val()
@@ -95,7 +104,8 @@ var SearchBox = React.createClass({
             <Redirect push to="/search"/>
             </Router>
         )
-    },
+    }
+
     liveSearch() {
         if ($(this.SearchBox).val().length > 1) {
             this.searchQuery();
@@ -104,9 +114,11 @@ var SearchBox = React.createClass({
                 this.searchQuery('getRelated')
             }
         }
-    },
+    }
+
     render() {
         let query = this.state.query;
+
         return (
             <div style={ query ? {} : formStyle} className="ui form">
                 <div className="field">
@@ -117,37 +129,39 @@ var SearchBox = React.createClass({
                         onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
                         { this.props.showEngines ?
-                            <SearchEngine parent={this} />
+                            <SearchEngine engine={this.state.engine} />
                         : null}
                     </div>
                 </div>
             </div>
         )
     }
-})
+}
 
-var SearchEngine = React.createClass({
-    getInitialState() {
-        return {
-            engine: this.props.parent.state.engine
-        }
-    },
+class SearchEngine extends React.Component {
+    constructor(props) {
+      super(props)
+
+    }
+
     componentDidMount() {
         $('.selection.dropdown')
           .dropdown()
         ;
-    },
+    }
+
     changeSearchEngine(e) {
         this.props.parent.setState({
             engine: $(e.target).text().toLowerCase()
         })
-    },
+    }
+
     render() {
         return (
             <div className="ui selection dropdown">
-                <input type="hidden" name={this.state.engine}></input>
+                <input type="hidden" name={this.props.engine}></input>
                 <i className="dropdown icon"></i>
-                <div className="default text">{this.state.engine}</div>
+                <div className="default text">{this.props.engine}</div>
 
                 <div className="menu">
                     <div className="item" data-value="1" onClick={this.changeSearchEngine}>Soundcloud</div>
@@ -156,7 +170,7 @@ var SearchEngine = React.createClass({
             </div>
         )
     }
-})
+}
 
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,

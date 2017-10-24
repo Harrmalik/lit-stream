@@ -1,22 +1,28 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking } from '../actions'
 
-var MediaControls = React.createClass({
+class MediaControls extends React.Component {
     prevTrack() {
         if (this.props.controls.getCurrentTime() > 5) {
                 this.props.controls.seekTo(0)
         } else {
             this.props.prevTrack(this.props.nowPlaying)
         }
-    },
+    }
+
     playTrack() {
         this.props.playTrack()
-    },
+    }
+
     stopTrack() {
         this.props.stopTrack()
-    },
+    }
+
     nextTrack() {
         if (this.props.options.shuffle) {
             let numSongs = this.props.queue.length
@@ -25,23 +31,29 @@ var MediaControls = React.createClass({
         } else {
             this.props.nextTrack(this.props.nowPlaying)
         }
-    },
+    }
+
     shuffle() {
         this.props.shuffle()
-    },
+    }
+
     repeat() {
         this.props.repeat()
-    },
+    }
+
     onSeekChange(e) {
         this.props.updateProgess({ played: parseFloat(e.target.value), playedSeconds: this.props.nowPlaying.playedSeconds })
-    },
+    }
+
     onSeekMouseUp(e) {
         this.props.isSeeking()
         this.props.controls.player.seekTo(parseFloat(e.target.value))
-    },
+    }
+
     onSeekMouseDown() {
         this.props.isSeeking()
-    },
+    }
+    
     render() {
         let controls = this.props.controls,
             options = this.props.options,
@@ -88,7 +100,7 @@ var MediaControls = React.createClass({
         }
 
     }
-})
+}
 
 const mapStateToProps = state => ({
     options: state.options,

@@ -1,9 +1,12 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 
-let QueuePage = React.createClass({
+class QueuePage extends React.Component {
     componentDidMount() {
         let component = this
         $('#queue').sortable({
@@ -25,14 +28,16 @@ let QueuePage = React.createClass({
               component.props.setQueue(queue)
           }
         });
-    },
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         if (this.props.currentTrack.title == nextProps.currentTrack.title) {
             return false
         } else {
             return true
         }
-    },
+    }
+
     getRelated() {
         // TODO: Get related songs when queue is finished
         //         $.ajax({
@@ -53,7 +58,8 @@ let QueuePage = React.createClass({
         //                 $('#searchBox').val('')
         //             }
         //         });
-    },
+    }
+
     addToLibrary(track) {
         let library
         if (localStorage.getItem('library')) {
@@ -64,7 +70,8 @@ let QueuePage = React.createClass({
         }
 
         localStorage.setItem('library', JSON.stringify(library));
-    },
+    }
+
     render() {
         let component = this
         return (
@@ -84,15 +91,17 @@ let QueuePage = React.createClass({
             </div>
         )
     }
-})
+}
 
-let Track = React.createClass({
+class Track extends React.Component {
     startThis() {
         this.props.parent.props.nowPlaying(this.props.track)
-    },
+    }
+
     removeTrack() {
         this.props.parent.props.removeTrack(this.props.track)
-    },
+    }
+
     renderPlatform() {
         let color,platform
 
@@ -109,10 +118,12 @@ let Track = React.createClass({
 
              <a className={`ui ${color} label`}>{this.props.track.platform}</a>
         )
-    },
+    }
+
     addToLibrary() {
         this.props.parent.addToLibrary(this.props.track)
-    },
+    }
+    
     render() {
         let track = this.props.track
         return (
@@ -147,7 +158,7 @@ let Track = React.createClass({
             </div>
         )
     }
-})
+}
 
 const mapStateToProps = state => ({
   queue: state.queue,
