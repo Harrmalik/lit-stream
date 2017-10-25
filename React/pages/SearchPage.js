@@ -12,10 +12,12 @@ class SearchPage extends React.Component {
       this.state = {
         data: []
       }
+
+      this.updateResults = this.updateResults.bind(this)
     }
 
     updateResults(data) {
-        this.setState({data: [data]})
+        this.setState({ data })
     }
 
     render() {

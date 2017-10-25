@@ -28109,6 +28109,12 @@
 	            query: null,
 	            engine: 'youtube'
 	        };
+
+	        _this.switchEngine = _this.switchEngine.bind(_this);
+	        _this.liveSearch = _this.liveSearch.bind(_this);
+	        _this.searchQuery = _this.searchQuery.bind(_this);
+	        _this.soundcloudSearch = _this.soundcloudSearch.bind(_this);
+	        _this.youtubeSearch = _this.youtubeSearch.bind(_this);
 	        return _this;
 	    }
 
@@ -28116,6 +28122,51 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            this.SearchBox.focus();
+	        }
+	    }, {
+	        key: 'switchEngine',
+	        value: function switchEngine(engine) {
+	            this.setState({ engine: engine });
+	        }
+	    }, {
+	        key: 'liveSearch',
+	        value: function liveSearch() {
+	            if ($(this.SearchBox).val().length > 1) {
+	                this.searchQuery();
+	            } else {
+	                if ($('iframe') && this.props.nowPlaying && this.props.nowPlaying.platform == 'youtube') {
+	                    this.searchQuery('getRelated');
+	                }
+	            }
+	        }
+	    }, {
+	        key: 'searchQuery',
+	        value: function searchQuery(e) {
+	            var component = this;
+	            var query = $(this.SearchBox).val();
+	            var type = void 0;
+	            if (e == 'getRelated') {
+	                type = e;
+	                query = this.props.nowPlaying.id;
+	            } else {
+	                type = 'findSong';
+	            }
+
+	            component.setState({ query: query });
+	            switch (component.state.engine) {
+	                case 'soundcloud':
+	                    component.soundcloudSearch(query, type);
+	                    break;
+	                case 'youtube':
+	                    component.youtubeSearch(query, type);
+	                    break;
+	            }
+
+	            return _react2.default.createElement(
+	                _reactRouterDom.BrowserRouter,
+	                null,
+	                _react2.default.createElement(_reactRouterDom.Redirect, { push: true, to: '/search' })
+	            );
 	        }
 	    }, {
 	        key: 'soundcloudSearch',
@@ -28173,46 +28224,6 @@
 	            });
 	        }
 	    }, {
-	        key: 'searchQuery',
-	        value: function searchQuery(e) {
-	            var component = this;
-	            var query = $(this.SearchBox).val();
-	            var type = void 0;
-	            if (e == 'getRelated') {
-	                type = e;
-	                query = this.props.nowPlaying.id;
-	            } else {
-	                type = 'findSong';
-	            }
-
-	            component.setState({ query: query });
-	            switch (component.state.engine) {
-	                case 'soundcloud':
-	                    component.soundcloudSearch(query, type);
-	                    break;
-	                case 'youtube':
-	                    component.youtubeSearch(query, type);
-	                    break;
-	            }
-
-	            return _react2.default.createElement(
-	                _reactRouterDom.BrowserRouter,
-	                null,
-	                _react2.default.createElement(_reactRouterDom.Redirect, { push: true, to: '/search' })
-	            );
-	        }
-	    }, {
-	        key: 'liveSearch',
-	        value: function liveSearch() {
-	            if ($(this.SearchBox).val().length > 1) {
-	                this.searchQuery();
-	            } else {
-	                if ($('iframe') && this.props.nowPlaying.platform == 'youtube') {
-	                    this.searchQuery('getRelated');
-	                }
-	            }
-	        }
-	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
@@ -28235,7 +28246,7 @@
 	                            type: 'text', placeholder: 'Search for a song...',
 	                            onChange: this.liveSearch }),
 	                        _react2.default.createElement('i', { className: 'search icon' }),
-	                        this.props.showEngines ? _react2.default.createElement(SearchEngine, { engine: this.state.engine }) : null
+	                        this.props.showEngines ? _react2.default.createElement(SearchEngine, { engine: this.state.engine, switchEngine: this.switchEngine }) : null
 	                    )
 	                )
 	            );
@@ -28251,7 +28262,10 @@
 	    function SearchEngine(props) {
 	        _classCallCheck(this, SearchEngine);
 
-	        return _possibleConstructorReturn(this, (SearchEngine.__proto__ || Object.getPrototypeOf(SearchEngine)).call(this, props));
+	        var _this3 = _possibleConstructorReturn(this, (SearchEngine.__proto__ || Object.getPrototypeOf(SearchEngine)).call(this, props));
+
+	        _this3.changeSearchEngine = _this3.changeSearchEngine.bind(_this3);
+	        return _this3;
 	    }
 
 	    _createClass(SearchEngine, [{
@@ -28262,9 +28276,7 @@
 	    }, {
 	        key: 'changeSearchEngine',
 	        value: function changeSearchEngine(e) {
-	            this.props.parent.setState({
-	                engine: $(e.target).text().toLowerCase()
-	            });
+	            this.props.switchEngine(e.target.id);
 	        }
 	    }, {
 	        key: 'render',
@@ -28284,12 +28296,12 @@
 	                    { className: 'menu' },
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'item', 'data-value': '1', onClick: this.changeSearchEngine },
+	                        { id: 'soundcloud', className: 'item', 'data-value': '1', onClick: this.changeSearchEngine },
 	                        'Soundcloud'
 	                    ),
 	                    _react2.default.createElement(
 	                        'div',
-	                        { className: 'item', 'data-value': '0', onClick: this.changeSearchEngine },
+	                        { id: 'youtube', className: 'item', 'data-value': '0', onClick: this.changeSearchEngine },
 	                        'Youtube'
 	                    )
 	                )
@@ -54056,13 +54068,15 @@
 	        _this.state = {
 	            data: []
 	        };
+
+	        _this.updateResults = _this.updateResults.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(SearchPage, [{
 	        key: 'updateResults',
 	        value: function updateResults(data) {
-	            this.setState({ data: [data] });
+	            this.setState({ data: data });
 	        }
 	    }, {
 	        key: 'render',
@@ -54122,10 +54136,13 @@
 	var Results = function (_React$Component) {
 	    _inherits(Results, _React$Component);
 
-	    function Results() {
+	    function Results(props) {
 	        _classCallCheck(this, Results);
 
-	        return _possibleConstructorReturn(this, (Results.__proto__ || Object.getPrototypeOf(Results)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (Results.__proto__ || Object.getPrototypeOf(Results)).call(this, props));
+
+	        _this.updateQueue = _this.updateQueue.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(Results, [{
@@ -54139,8 +54156,9 @@
 	    }, {
 	        key: 'render',
 	        value: function render() {
-	            var data = this.props.data[0];
-	            var component = this;
+	            var data = this.props.data,
+	                component = this;
+
 	            return _react2.default.createElement(
 	                'div',
 	                { className: 'ui divided items', id: 'Results' },
@@ -54160,10 +54178,15 @@
 	var Result = function (_React$Component2) {
 	    _inherits(Result, _React$Component2);
 
-	    function Result() {
+	    function Result(props) {
 	        _classCallCheck(this, Result);
 
-	        return _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).apply(this, arguments));
+	        var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+
+	        _this2.add = _this2.add.bind(_this2);
+	        _this2.upNext = _this2.add.bind(_this2);
+	        _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
+	        return _this2;
 	    }
 
 	    _createClass(Result, [{

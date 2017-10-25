@@ -8,78 +8,92 @@ import { connect } from 'react-redux'
 import { updateQueue } from '../actions'
 
 class Results extends React.Component {
-    updateQueue(newTrack, upNext) {
-        newTrack.playing = true
-        newTrack.played = 0
-        newTrack.isSeeking = false
-        this.props.updateQueue(newTrack, upNext)
-    }
+  constructor(props) {
+    super(props)
 
-    render() {
-        let data = this.props.data[0]
-        let component = this
-        return (
-            <div className="ui divided items" id="Results">
-                {_.map(data, function(result) {
-                    return (
-                        <Result
-                            key={result.id}
-                            result={result}
-                            callback={component.updateQueue}></Result>
-                    )
-                })}
-            </div>
-        )
-    }
+    this.updateQueue = this.updateQueue.bind(this)
+  }
+  updateQueue(newTrack, upNext) {
+      newTrack.playing = true
+      newTrack.played = 0
+      newTrack.isSeeking = false
+      this.props.updateQueue(newTrack, upNext)
+  }
+
+  render() {
+      let data = this.props.data,
+        component = this
+
+      return (
+          <div className="ui divided items" id="Results">
+              {_.map(data, (result) => {
+                  return (
+                      <Result
+                          key={result.id}
+                          result={result}
+                          callback={component.updateQueue}></Result>
+                  )
+              })}
+          </div>
+      )
+  }
 }
 
 class Result extends React.Component {
-    add() {
-        this.props.callback(this.props.result, false)
-    }
+  constructor(props) {
+    super(props)
 
-    upNext() {
-        this.props.callback(this.props.result, true)
-    }
+    this.add = this.add.bind(this)
+    this.upNext = this.add.bind(this)
+    this.renderPlatform = this.renderPlatform.bind(this)
+  }
 
-    renderPlatform() {
-        let color,platform
+  add() {
+      this.props.callback(this.props.result, false)
+  }
 
-        switch (this.props.result.platform) {
-            case 'youtube':
-                color = 'red'
-                break;
-            case 'soundcloud':
-                color = 'orange'
-                break;
+  upNext() {
+      this.props.callback(this.props.result, true)
+  }
 
-        }
-        return (
+  renderPlatform() {
+      let color,platform
 
-             <a className={`ui ${color} label`}>{this.props.result.platform}</a>
-        )
-    }
+      switch (this.props.result.platform) {
+          case 'youtube':
+              color = 'red'
+              break;
+          case 'soundcloud':
+              color = 'orange'
+              break;
 
-    render() {
-        return (
-            <div className="item">
-                <a className="ui tiny image">
-                    <img src={this.props.result.thumbnail}></img>
-                </a>
-              <div className="content">
-                <div className="description">
-                    <h3 onClick={this.add}>{this.props.result.title}</h3>
-                </div>
-                <div className="meta">
-                    <i className="plus icon" onClick={this.add}></i>
-                    <i className="forward icon" onClick={this.upNext}></i>
-                    <i className="ellipsis horizontal icon"></i>
-                    {this.renderPlatform()}
-                </div>
+      }
+      return (
+
+           <a className={`ui ${color} label`}>{this.props.result.platform}</a>
+      )
+  }
+
+  render() {
+      return (
+          <div className="item">
+              <a className="ui tiny image">
+                  <img src={this.props.result.thumbnail}></img>
+              </a>
+            <div className="content">
+              <div className="description">
+                  <h3 onClick={this.add}>{this.props.result.title}</h3>
+              </div>
+              <div className="meta">
+                  <i className="plus icon" onClick={this.add}></i>
+                  <i className="forward icon" onClick={this.upNext}></i>
+                  <i className="ellipsis horizontal icon"></i>
+                  {this.renderPlatform()}
               </div>
             </div>
-        )
-    }
+          </div>
+      )
+  }
 }
 
 const mapStateToProps = state => ({
@@ -87,7 +101,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    updateQueue: bindActionCreators(updateQueue, dispatch)
+  updateQueue: bindActionCreators(updateQueue, dispatch)
 })
 
 export default connect(

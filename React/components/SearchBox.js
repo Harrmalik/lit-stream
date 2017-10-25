@@ -19,10 +19,58 @@ class SearchBox extends React.Component {
         query: null,
         engine: 'youtube'
       }
+
+      this.switchEngine = this.switchEngine.bind(this)
+      this.liveSearch = this.liveSearch.bind(this)
+      this.searchQuery = this.searchQuery.bind(this)
+      this.soundcloudSearch = this.soundcloudSearch.bind(this)
+      this.youtubeSearch = this.youtubeSearch.bind(this)
     }
 
     componentDidMount() {
       this.SearchBox.focus()
+    }
+
+    switchEngine(engine) {
+      this.setState({ engine })
+    }
+
+    liveSearch() {
+        if ($(this.SearchBox).val().length > 1) {
+            this.searchQuery();
+        } else {
+            if ($('iframe') && this.props.nowPlaying && this.props.nowPlaying.platform == 'youtube') {
+                this.searchQuery('getRelated')
+            }
+        }
+    }
+
+    searchQuery(e) {
+        let component = this
+        let query = $(this.SearchBox).val()
+        let type;
+        if (e == 'getRelated') {
+            type = e
+            query = this.props.nowPlaying.id
+        } else {
+            type = 'findSong'
+        }
+
+        component.setState({query})
+        switch (component.state.engine) {
+            case 'soundcloud':
+                component.soundcloudSearch(query, type)
+                break
+            case 'youtube':
+                component.youtubeSearch(query, type)
+                break
+        }
+
+        return (
+            <Router>
+            <Redirect push to="/search"/>
+            </Router>
+        )
     }
 
     soundcloudSearch(query, type) {
@@ -78,44 +126,6 @@ class SearchBox extends React.Component {
         });
     }
 
-    searchQuery(e) {
-        let component = this
-        let query = $(this.SearchBox).val()
-        let type;
-        if (e == 'getRelated') {
-            type = e
-            query = this.props.nowPlaying.id
-        } else {
-            type = 'findSong'
-        }
-
-        component.setState({query})
-        switch (component.state.engine) {
-            case 'soundcloud':
-                component.soundcloudSearch(query, type)
-                break
-            case 'youtube':
-                component.youtubeSearch(query, type)
-                break
-        }
-
-        return (
-            <Router>
-            <Redirect push to="/search"/>
-            </Router>
-        )
-    }
-
-    liveSearch() {
-        if ($(this.SearchBox).val().length > 1) {
-            this.searchQuery();
-        } else {
-            if ($('iframe') && this.props.nowPlaying.platform == 'youtube') {
-                this.searchQuery('getRelated')
-            }
-        }
-    }
-
     render() {
         let query = this.state.query;
 
@@ -129,7 +139,7 @@ class SearchBox extends React.Component {
                         onChange={this.liveSearch}></input>
                         <i className="search icon"></i>
                         { this.props.showEngines ?
-                            <SearchEngine engine={this.state.engine} />
+                            <SearchEngine engine={this.state.engine} switchEngine={this.switchEngine} />
                         : null}
                     </div>
                 </div>
@@ -142,6 +152,7 @@ class SearchEngine extends React.Component {
     constructor(props) {
       super(props)
 
+      this.changeSearchEngine = this.changeSearchEngine.bind(this)
     }
 
     componentDidMount() {
@@ -151,9 +162,7 @@ class SearchEngine extends React.Component {
     }
 
     changeSearchEngine(e) {
-        this.props.parent.setState({
-            engine: $(e.target).text().toLowerCase()
-        })
+        this.props.switchEngine(e.target.id)
     }
 
     render() {
@@ -164,8 +173,8 @@ class SearchEngine extends React.Component {
                 <div className="default text">{this.props.engine}</div>
 
                 <div className="menu">
-                    <div className="item" data-value="1" onClick={this.changeSearchEngine}>Soundcloud</div>
-                    <div className="item" data-value="0" onClick={this.changeSearchEngine}>Youtube</div>
+                    <div id="soundcloud" className="item" data-value="1" onClick={this.changeSearchEngine}>Soundcloud</div>
+                    <div id="youtube" className="item" data-value="0" onClick={this.changeSearchEngine}>Youtube</div>
                 </div>
             </div>
         )
