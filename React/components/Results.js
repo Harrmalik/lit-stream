@@ -48,6 +48,10 @@ class Result extends React.Component {
     this.renderPlatform = this.renderPlatform.bind(this)
   }
 
+  componentDidMount() {
+    $('.ui.dropdown').dropdown()
+  }
+
   add() {
       this.props.callback(this.props.result, false)
   }
@@ -87,7 +91,34 @@ class Result extends React.Component {
               <div className="meta">
                   <i className="plus icon" onClick={this.add}></i>
                   <i className="forward icon" onClick={this.upNext}></i>
-                  <i className="ellipsis horizontal icon"></i>
+                  <div className="ui dropdown">
+                    <i className="ellipsis horizontal icon"></i>
+                    <i className="dropdown icon"></i>
+                    <div className="menu">
+                      <div className="item"><i className="heart pink icon"></i></div>
+                      <div className="item">
+                        Download
+                      </div>
+                      <div className="item">
+                        More like this
+                      </div>
+                      <div className="divider"></div>
+                      <div className="item">Add to Playlist</div>
+                      <div className="item">
+                        <i className="dropdown icon"></i>
+                        Playlists
+                        <div className="menu">
+                          <div className="item">Trap</div>
+                          <div className="item">Hip Hop</div>
+                          <div className="item">Chillstep</div>
+                          <div className="item">Livesets</div>
+                          <div className="item">Beatbox</div>
+                          <div className="item">Indie/Pop</div>
+                        </div>
+                      </div>
+                      <div className="item">New Playlists</div>
+                    </div>
+                  </div>
                   {this.renderPlatform()}
               </div>
             </div>

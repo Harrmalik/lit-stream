@@ -123,7 +123,8 @@
 	            _react2.default.createElement(
 	                'div',
 	                { className: 'main' },
-	                _react2.default.createElement(_SidePane2.default, { parent: undefined }),
+	                _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _SidePane2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/:page', component: _SidePane2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { exact: true, path: '/', component: _HomePage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/search', component: _SearchPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/player', component: _MediaViewPage2.default }),
@@ -27944,6 +27945,12 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(266);
+
 	var _reactRouterDom = __webpack_require__(184);
 
 	var _SearchBox = __webpack_require__(263);
@@ -27978,13 +27985,20 @@
 	        $('#SidePane h3').removeClass('active');
 	        $(e.target).parent().addClass('active');
 	      });
+
+	      $(".droppable").droppable({
+	        drop: function drop(event, ui) {
+	          console.log('yoooo');
+	        }
+	      });
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var currentPage = this.props.match.params.page;
 	      return _react2.default.createElement(
 	        'section',
-	        { id: 'SidePane' },
+	        { id: 'SidePane', className: 'droppable' },
 	        _react2.default.createElement(
 	          _reactRouterDom.Link,
 	          { to: '/search' },
@@ -28020,6 +28034,7 @@
 	              'Player'
 	            )
 	          ),
+	          _react2.default.createElement('div', { className: 'ui divider' }),
 	          _react2.default.createElement(
 	            'h3',
 	            { className: 'item ui' },
@@ -28046,6 +28061,16 @@
 	              { to: '/history' },
 	              'History'
 	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'item' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui button fluid green' },
+	              _react2.default.createElement('i', { className: 'plus icon' }),
+	              ' New Playlist'
+	            )
 	          )
 	        ),
 	        _react2.default.createElement(_MediaPlayer2.default, null)
@@ -28056,7 +28081,22 @@
 	  return SidePane;
 	}(_react2.default.Component);
 
-	exports.default = SidePane;
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    queue: state.queue,
+	    currentTrack: state.nowPlaying
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	    nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	    removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SidePane);
 
 /***/ }),
 /* 263 */
@@ -45459,10 +45499,14 @@
 	var MediaPlayer = function (_React$Component) {
 	    _inherits(MediaPlayer, _React$Component);
 
-	    function MediaPlayer() {
+	    function MediaPlayer(props) {
 	        _classCallCheck(this, MediaPlayer);
 
-	        return _possibleConstructorReturn(this, (MediaPlayer.__proto__ || Object.getPrototypeOf(MediaPlayer)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (MediaPlayer.__proto__ || Object.getPrototypeOf(MediaPlayer)).call(this, props));
+
+	        _this.getNextTrack = _this.getNextTrack.bind(_this);
+	        _this.onProgress = _this.onProgress.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(MediaPlayer, [{
@@ -53749,10 +53793,21 @@
 	var MediaControls = function (_React$Component) {
 	    _inherits(MediaControls, _React$Component);
 
-	    function MediaControls() {
+	    function MediaControls(props) {
 	        _classCallCheck(this, MediaControls);
 
-	        return _possibleConstructorReturn(this, (MediaControls.__proto__ || Object.getPrototypeOf(MediaControls)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (MediaControls.__proto__ || Object.getPrototypeOf(MediaControls)).call(this, props));
+
+	        _this.prevTrack = _this.prevTrack.bind(_this);
+	        _this.playTrack = _this.playTrack.bind(_this);
+	        _this.stopTrack = _this.stopTrack.bind(_this);
+	        _this.nextTrack = _this.nextTrack.bind(_this);
+	        _this.shuffle = _this.shuffle.bind(_this);
+	        _this.repeat = _this.repeat.bind(_this);
+	        _this.onSeekChange = _this.onSeekChange.bind(_this);
+	        _this.onSeekMouseUp = _this.onSeekMouseUp.bind(_this);
+	        _this.onSeekMouseDown = _this.onSeekMouseDown.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(MediaControls, [{
@@ -54106,7 +54161,7 @@
 	// Dependencies
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -54134,141 +54189,221 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Results = function (_React$Component) {
-	    _inherits(Results, _React$Component);
+	  _inherits(Results, _React$Component);
 
-	    function Results(props) {
-	        _classCallCheck(this, Results);
+	  function Results(props) {
+	    _classCallCheck(this, Results);
 
-	        var _this = _possibleConstructorReturn(this, (Results.__proto__ || Object.getPrototypeOf(Results)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Results.__proto__ || Object.getPrototypeOf(Results)).call(this, props));
 
-	        _this.updateQueue = _this.updateQueue.bind(_this);
-	        return _this;
+	    _this.updateQueue = _this.updateQueue.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Results, [{
+	    key: 'updateQueue',
+	    value: function updateQueue(newTrack, upNext) {
+	      newTrack.playing = true;
+	      newTrack.played = 0;
+	      newTrack.isSeeking = false;
+	      this.props.updateQueue(newTrack, upNext);
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var data = this.props.data,
+	          component = this;
 
-	    _createClass(Results, [{
-	        key: 'updateQueue',
-	        value: function updateQueue(newTrack, upNext) {
-	            newTrack.playing = true;
-	            newTrack.played = 0;
-	            newTrack.isSeeking = false;
-	            this.props.updateQueue(newTrack, upNext);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var data = this.props.data,
-	                component = this;
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'ui divided items', id: 'Results' },
+	        _lodash2.default.map(data, function (result) {
+	          return _react2.default.createElement(Result, {
+	            key: result.id,
+	            result: result,
+	            callback: component.updateQueue });
+	        })
+	      );
+	    }
+	  }]);
 
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'ui divided items', id: 'Results' },
-	                _lodash2.default.map(data, function (result) {
-	                    return _react2.default.createElement(Result, {
-	                        key: result.id,
-	                        result: result,
-	                        callback: component.updateQueue });
-	                })
-	            );
-	        }
-	    }]);
-
-	    return Results;
+	  return Results;
 	}(_react2.default.Component);
 
 	var Result = function (_React$Component2) {
-	    _inherits(Result, _React$Component2);
+	  _inherits(Result, _React$Component2);
 
-	    function Result(props) {
-	        _classCallCheck(this, Result);
+	  function Result(props) {
+	    _classCallCheck(this, Result);
 
-	        var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+	    var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
 
-	        _this2.add = _this2.add.bind(_this2);
-	        _this2.upNext = _this2.add.bind(_this2);
-	        _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
-	        return _this2;
+	    _this2.add = _this2.add.bind(_this2);
+	    _this2.upNext = _this2.add.bind(_this2);
+	    _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
+	    return _this2;
+	  }
+
+	  _createClass(Result, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      $('.ui.dropdown').dropdown();
 	    }
+	  }, {
+	    key: 'add',
+	    value: function add() {
+	      this.props.callback(this.props.result, false);
+	    }
+	  }, {
+	    key: 'upNext',
+	    value: function upNext() {
+	      this.props.callback(this.props.result, true);
+	    }
+	  }, {
+	    key: 'renderPlatform',
+	    value: function renderPlatform() {
+	      var color = void 0,
+	          platform = void 0;
 
-	    _createClass(Result, [{
-	        key: 'add',
-	        value: function add() {
-	            this.props.callback(this.props.result, false);
-	        }
-	    }, {
-	        key: 'upNext',
-	        value: function upNext() {
-	            this.props.callback(this.props.result, true);
-	        }
-	    }, {
-	        key: 'renderPlatform',
-	        value: function renderPlatform() {
-	            var color = void 0,
-	                platform = void 0;
+	      switch (this.props.result.platform) {
+	        case 'youtube':
+	          color = 'red';
+	          break;
+	        case 'soundcloud':
+	          color = 'orange';
+	          break;
 
-	            switch (this.props.result.platform) {
-	                case 'youtube':
-	                    color = 'red';
-	                    break;
-	                case 'soundcloud':
-	                    color = 'orange';
-	                    break;
-
-	            }
-	            return _react2.default.createElement(
-	                'a',
-	                { className: 'ui ' + color + ' label' },
-	                this.props.result.platform
-	            );
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
+	      }
+	      return _react2.default.createElement(
+	        'a',
+	        { className: 'ui ' + color + ' label' },
+	        this.props.result.platform
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'item' },
+	        _react2.default.createElement(
+	          'a',
+	          { className: 'ui tiny image' },
+	          _react2.default.createElement('img', { src: this.props.result.thumbnail })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'content' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'description' },
+	            _react2.default.createElement(
+	              'h3',
+	              { onClick: this.add },
+	              this.props.result.title
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'meta' },
+	            _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
+	            _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui dropdown' },
+	              _react2.default.createElement('i', { className: 'ellipsis horizontal icon' }),
+	              _react2.default.createElement('i', { className: 'dropdown icon' }),
+	              _react2.default.createElement(
 	                'div',
-	                { className: 'item' },
+	                { className: 'menu' },
 	                _react2.default.createElement(
-	                    'a',
-	                    { className: 'ui tiny image' },
-	                    _react2.default.createElement('img', { src: this.props.result.thumbnail })
+	                  'div',
+	                  { className: 'item' },
+	                  _react2.default.createElement('i', { className: 'heart pink icon' })
 	                ),
 	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'Download'
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'More like this'
+	                ),
+	                _react2.default.createElement('div', { className: 'divider' }),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'Add to Playlist'
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  _react2.default.createElement('i', { className: 'dropdown icon' }),
+	                  'Playlists',
+	                  _react2.default.createElement(
 	                    'div',
-	                    { className: 'content' },
+	                    { className: 'menu' },
 	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'description' },
-	                        _react2.default.createElement(
-	                            'h3',
-	                            { onClick: this.add },
-	                            this.props.result.title
-	                        )
+	                      'div',
+	                      { className: 'item' },
+	                      'Trap'
 	                    ),
 	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'meta' },
-	                        _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
-	                        _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
-	                        _react2.default.createElement('i', { className: 'ellipsis horizontal icon' }),
-	                        this.renderPlatform()
+	                      'div',
+	                      { className: 'item' },
+	                      'Hip Hop'
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { className: 'item' },
+	                      'Chillstep'
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { className: 'item' },
+	                      'Livesets'
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { className: 'item' },
+	                      'Beatbox'
+	                    ),
+	                    _react2.default.createElement(
+	                      'div',
+	                      { className: 'item' },
+	                      'Indie/Pop'
 	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'New Playlists'
 	                )
-	            );
-	        }
-	    }]);
+	              )
+	            ),
+	            this.renderPlatform()
+	          )
+	        )
+	      );
+	    }
+	  }]);
 
-	    return Result;
+	  return Result;
 	}(_react2.default.Component);
 
 	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue
-	    };
+	  return {
+	    queue: state.queue
+	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
-	    };
+	  return {
+	    updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
+	  };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Results);
@@ -54318,6 +54453,9 @@
 	        _this.state = {
 	            track: null
 	        };
+
+	        _this.getAlbum = _this.getAlbum.bind(_this);
+	        _this.getColors = _this.getColors.bind(_this);
 	        return _this;
 	    }
 
@@ -54622,16 +54760,20 @@
 	var QueuePage = function (_React$Component) {
 	    _inherits(QueuePage, _React$Component);
 
-	    function QueuePage() {
+	    function QueuePage(props) {
 	        _classCallCheck(this, QueuePage);
 
-	        return _possibleConstructorReturn(this, (QueuePage.__proto__ || Object.getPrototypeOf(QueuePage)).apply(this, arguments));
+	        var _this = _possibleConstructorReturn(this, (QueuePage.__proto__ || Object.getPrototypeOf(QueuePage)).call(this, props));
+
+	        _this.addToLibrary = _this.addToLibrary.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(QueuePage, [{
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var component = this;
+	            $('#queue .track').draggable();
 	            $('#queue').sortable({
 	                update: function update(event, ui) {
 	                    var queue = component.props.queue;
@@ -54732,21 +54874,32 @@
 	var Track = function (_React$Component2) {
 	    _inherits(Track, _React$Component2);
 
-	    function Track() {
+	    function Track(props) {
 	        _classCallCheck(this, Track);
 
-	        return _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).apply(this, arguments));
+	        var _this2 = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
+
+	        _this2.startTrack = _this2.startTrack.bind(_this2);
+	        _this2.removeTrack = _this2.removeTrack.bind(_this2);
+	        _this2.addToLibrary = _this2.addToLibrary.bind(_this2);
+	        _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
+	        return _this2;
 	    }
 
 	    _createClass(Track, [{
-	        key: 'startThis',
-	        value: function startThis() {
+	        key: 'startTrack',
+	        value: function startTrack() {
 	            this.props.parent.props.nowPlaying(this.props.track);
 	        }
 	    }, {
 	        key: 'removeTrack',
 	        value: function removeTrack() {
 	            this.props.parent.props.removeTrack(this.props.track);
+	        }
+	    }, {
+	        key: 'addToLibrary',
+	        value: function addToLibrary() {
+	            this.props.parent.addToLibrary(this.props.track);
 	        }
 	    }, {
 	        key: 'renderPlatform',
@@ -54768,11 +54921,6 @@
 	                { className: 'ui ' + color + ' label' },
 	                this.props.track.platform
 	            );
-	        }
-	    }, {
-	        key: 'addToLibrary',
-	        value: function addToLibrary() {
-	            this.props.parent.addToLibrary(this.props.track);
 	        }
 	    }, {
 	        key: 'render',
@@ -54809,7 +54957,7 @@
 	                        ),
 	                        _react2.default.createElement(
 	                            'a',
-	                            { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui header', onClick: this.startThis },
+	                            { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui header', onClick: this.startTrack },
 	                            this.props.track.title
 	                        )
 	                    ),
@@ -54947,6 +55095,9 @@
 	        _this.state = {
 	            library: []
 	        };
+
+	        _this.getSongs = _this.getSongs.bind(_this);
+	        _this.playAll = _this.playAll.bind(_this);
 	        return _this;
 	    }
 
@@ -55056,15 +55207,18 @@
 	var Track = function (_React$Component2) {
 	    _inherits(Track, _React$Component2);
 
-	    function Track() {
+	    function Track(props) {
 	        _classCallCheck(this, Track);
 
-	        return _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).apply(this, arguments));
+	        var _this3 = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
+
+	        _this3.startTrack = _this3.startTrack.bind(_this3);
+	        return _this3;
 	    }
 
 	    _createClass(Track, [{
-	        key: 'startThis',
-	        value: function startThis() {
+	        key: 'startTrack',
+	        value: function startTrack() {
 	            var parent = this.props.parent.props;
 	            var track = this.props.track;
 	            track.no;
@@ -55079,7 +55233,7 @@
 	            var track = this.props.track;
 	            return _react2.default.createElement(
 	                'tr',
-	                { key: track.url, onClick: this.startThis },
+	                { key: track.url, onClick: this.startTrack },
 	                _react2.default.createElement(
 	                    'td',
 	                    null,

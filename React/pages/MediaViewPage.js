@@ -14,6 +14,9 @@ class MediaViewPage extends React.Component {
       this.state = {
         track: null
       }
+
+      this.getAlbum = this.getAlbum.bind(this)
+      this.getColors = this.getColors.bind(this)
     }
 
     componentDidUpdate() {

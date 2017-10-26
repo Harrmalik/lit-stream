@@ -7,6 +7,20 @@ import { connect } from 'react-redux'
 import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking } from '../actions'
 
 class MediaControls extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.prevTrack = this.prevTrack.bind(this)
+        this.playTrack = this.playTrack.bind(this)
+        this.stopTrack = this.stopTrack.bind(this)
+        this.nextTrack = this.nextTrack.bind(this)
+        this.shuffle = this.shuffle.bind(this)
+        this.repeat = this.repeat.bind(this)
+        this.onSeekChange = this.onSeekChange.bind(this)
+        this.onSeekMouseUp = this.onSeekMouseUp.bind(this)
+        this.onSeekMouseDown = this.onSeekMouseDown.bind(this)
+    }
+
     prevTrack() {
         if (this.props.controls.getCurrentTime() > 5) {
                 this.props.controls.seekTo(0)
@@ -53,7 +67,7 @@ class MediaControls extends React.Component {
     onSeekMouseDown() {
         this.props.isSeeking()
     }
-    
+
     render() {
         let controls = this.props.controls,
             options = this.props.options,

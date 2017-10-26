@@ -13,6 +13,9 @@ class Library extends React.Component {
       this.state = {
         library: []
       }
+
+      this.getSongs = this.getSongs.bind(this)
+      this.playAll = this.playAll.bind(this)
     }
 
     componentWillMount() {
@@ -76,7 +79,13 @@ class Library extends React.Component {
 }
 
 class Track extends React.Component {
-    startThis() {
+    constructor(props) {
+      super(props)
+
+      this.startTrack = this.startTrack.bind(this)
+    }
+    
+    startTrack() {
         let parent = this.props.parent.props
         let track = this.props.track
         track.no
@@ -89,7 +98,7 @@ class Track extends React.Component {
     render() {
         let track = this.props.track
         return (
-            <tr key={track.url} onClick={this.startThis}>
+            <tr key={track.url} onClick={this.startTrack}>
                 <td>
                     <div className="ui checkbox">
                         <input type="checkbox"></input>

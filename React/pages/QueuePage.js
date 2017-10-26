@@ -7,8 +7,15 @@ import { connect } from 'react-redux'
 import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 
 class QueuePage extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.addToLibrary = this.addToLibrary.bind(this)
+    }
+
     componentDidMount() {
         let component = this
+        $('#queue .track').draggable();
         $('#queue').sortable({
           update: function( event, ui ) {
               let queue = component.props.queue
@@ -94,12 +101,25 @@ class QueuePage extends React.Component {
 }
 
 class Track extends React.Component {
-    startThis() {
+    constructor(props) {
+      super(props)
+
+      this.startTrack = this.startTrack.bind(this)
+      this.removeTrack = this.removeTrack.bind(this)
+      this.addToLibrary = this.addToLibrary.bind(this)
+      this.renderPlatform = this.renderPlatform.bind(this)
+    }
+
+    startTrack() {
         this.props.parent.props.nowPlaying(this.props.track)
     }
 
     removeTrack() {
         this.props.parent.props.removeTrack(this.props.track)
+    }
+
+    addToLibrary() {
+        this.props.parent.addToLibrary(this.props.track)
     }
 
     renderPlatform() {
@@ -115,15 +135,10 @@ class Track extends React.Component {
 
         }
         return (
-
              <a className={`ui ${color} label`}>{this.props.track.platform}</a>
         )
     }
 
-    addToLibrary() {
-        this.props.parent.addToLibrary(this.props.track)
-    }
-    
     render() {
         let track = this.props.track
         return (
@@ -147,7 +162,7 @@ class Track extends React.Component {
                         <i className="volume up icon"></i>
                     : <a className="ui blue circular label">{this.props.position + 1}</a>}
                     <a className={this.props.parent.props.currentTrack.id == this.props.track.id ?
-                    'ui blue header' : 'ui header'} onClick={this.startThis}>{this.props.track.title}</a>
+                    'ui blue header' : 'ui header'} onClick={this.startTrack}>{this.props.track.title}</a>
                 </div>
                 <div className="meta">
                     <i className="empty heart icon"></i>

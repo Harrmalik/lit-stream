@@ -15,6 +15,13 @@ var soundcloudConfig = {
 }
 
 class MediaPlayer extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.getNextTrack = this.getNextTrack.bind(this)
+        this.onProgress = this.onProgress.bind(this)
+    }
+
     componentWillReceiveProps(nextProps) {
         let nowPlaying = this.props.nowPlaying
         if (nextProps.queue.length == 1 && nextProps.nowPlaying == null)
@@ -50,7 +57,7 @@ class MediaPlayer extends React.Component {
         this.props.updateProgess(progress)
       }
     }
-    
+
     render() {
         const {
           url, volume, loaded, duration,
