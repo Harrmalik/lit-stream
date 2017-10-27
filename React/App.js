@@ -15,6 +15,7 @@ import MediaControls from './components/MediaControls'
 import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import MediaViewPage from './pages/MediaViewPage'
+import PlaylistPage from './pages/PlaylistPage'
 import HistoryPage from './pages/HistoryPage'
 import QueuePage from './pages/QueuePage'
 import SettingsPage from './pages/SettingsPage'
@@ -35,6 +36,7 @@ const App = () => (
                   <Route exact path="/" component={HomePage}/>
                   <Route path="/search" component={SearchPage}/>
                   <Route path="/player" component={MediaViewPage}/>
+                  <Route path="/playlist/:playlist" component={PlaylistPage}/>
                   <Route path="/queue" component={QueuePage}/>
                   <Route path="/history" component={HistoryPage}/>
                   <Route path="/library" component={LibraryPage}/>

@@ -8,6 +8,42 @@ import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 import {Link} from 'react-router-dom'
 import SearchBox from './SearchBox'
 import MediaPlayer from '../components/MediaPlayer'
+import { Dropdown, Input } from 'semantic-ui-react'
+
+class DropdownExampleInput extends React.Component {
+  constructor(props){
+    super()
+
+    this.addPlaylist = this.addPlaylist.bind(this)
+  }
+
+  addPlaylist() {
+    let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : []
+    // TODO: make sure playlist doesn't already exist
+    // TODO: make sure playlistname is included else throw error
+    playlists.push({
+      name: this.playlistName.inputRef.value,
+      description: this.description.inputRef.value
+    })
+    localStorage.setItem('playlists', JSON.stringify(playlists))
+  }
+
+  render() {
+    return (
+      <Dropdown text='Add Playlist' search icon='add' floating labeled button className='icon green'>
+        <Dropdown.Menu>
+          <Dropdown.Header content='Plalist Name' />
+          <Input name='playlistName' ref={input =>  this.playlistName = input} />
+          <Dropdown.Header content='Description' />
+          <Input name='description' ref={input =>  this.description = input} />
+          <div className="item">
+            <div className="ui button fluid" onClick={this.addPlaylist}>Add</div>
+          </div>
+        </Dropdown.Menu>
+      </Dropdown>
+    )
+  }
+}
 
 class SidePane extends React.Component {
     componentDidMount() {
@@ -15,16 +51,12 @@ class SidePane extends React.Component {
             $('#SidePane h3').removeClass('active')
             $(e.target).parent().addClass('active')
         })
-
-        $( ".droppable" ).droppable({
-          drop: function( event, ui ) {
-            console.log('yoooo');
-          }
-        });
     }
 
     render() {
-      let currentPage = this.props.match.params.page
+      let currentPage = this.props.match.params.page,
+          playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : []
+
         return (
             <section id="SidePane" className="droppable">
                 <Link to="/search"><SearchBox></SearchBox></Link>
@@ -48,10 +80,17 @@ class SidePane extends React.Component {
                   <h3 className="item ui">
                     <Link to="/history">History</Link>
                   </h3>
+                  <div className="ui divider"></div>
+                  <h3 className="item">Playlists</h3>
+                  { _.map(playlists, (playlist) => {
+                    return (
+                      <h3 className="item ui">
+                        <Link to={`/playlist/${playlist.name.toLowerCase().replace(/\s/g, '')}`}>{playlist.name}</Link>
+                      </h3>
+                    )
+                  }) }
+                  <DropdownExampleInput/>
 
-                  <div className="item">
-                    <div className="ui button fluid green"><i className="plus icon"></i> New Playlist</div>
-                  </div>
                 </div>
                 <MediaPlayer></MediaPlayer>
             </section>
