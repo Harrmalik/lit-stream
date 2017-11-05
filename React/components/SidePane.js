@@ -4,13 +4,13 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
+import { cc, setQueue, nowPlaying, removeTrack, addPlaylist } from '../actions'
 import {Link} from 'react-router-dom'
 import SearchBox from './SearchBox'
 import MediaPlayer from '../components/MediaPlayer'
 import { Dropdown, Input } from 'semantic-ui-react'
 
-class DropdownExampleInput extends React.Component {
+class AddPlaylistModal extends React.Component {
   constructor(props){
     super()
 
@@ -18,13 +18,21 @@ class DropdownExampleInput extends React.Component {
   }
 
   addPlaylist() {
-    let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : []
+    let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [],
+        playlist = {
+            name: this.playlistName.inputRef.value,
+            description: this.description.inputRef.value,
+            tracks: []
+        }
     // TODO: make sure playlist doesn't already exist
     // TODO: make sure playlistname is included else throw error
-    playlists.push({
-      name: this.playlistName.inputRef.value,
-      description: this.description.inputRef.value
-    })
+
+    this.props.addPlaylist(playlist)
+    playlists.push(playlist)
+
+    this.playlistName.inputRef.value = ' '
+    this.description.inputRef.value = ' '
+
     localStorage.setItem('playlists', JSON.stringify(playlists))
   }
 
@@ -55,7 +63,7 @@ class SidePane extends React.Component {
 
     render() {
       let currentPage = this.props.match.params.page,
-          playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : []
+          playlists = this.props.playlists
 
         return (
             <section id="SidePane" className="droppable">
@@ -82,14 +90,14 @@ class SidePane extends React.Component {
                   </h3>
                   <div className="ui divider"></div>
                   <h3 className="item">Playlists</h3>
-                  { _.map(playlists, (playlist) => {
+                  { _.map(playlists, playlist => {
                     return (
-                      <h3 className="item ui">
+                      <h3  key={playlist.name} className="item ui">
                         <Link to={`/playlist/${playlist.name.toLowerCase().replace(/\s/g, '')}`}>{playlist.name}</Link>
                       </h3>
                     )
                   }) }
-                  <DropdownExampleInput/>
+                  <AddPlaylistModal addPlaylist={this.props.addPlaylist}/>
 
                 </div>
                 <MediaPlayer></MediaPlayer>
@@ -100,13 +108,15 @@ class SidePane extends React.Component {
 
 const mapStateToProps = state => ({
   queue: state.queue,
-  currentTrack: state.nowPlaying
+  currentTrack: state.nowPlaying,
+  playlists: state.playlists
 })
 
 const mapDispatchToProps = dispatch => ({
     setQueue: bindActionCreators(setQueue, dispatch),
     nowPlaying: bindActionCreators(nowPlaying, dispatch),
-    removeTrack: bindActionCreators(removeTrack, dispatch)
+    removeTrack: bindActionCreators(removeTrack, dispatch),
+    addPlaylist: bindActionCreators(addPlaylist, dispatch)
 })
 
 export default connect(

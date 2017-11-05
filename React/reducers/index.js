@@ -134,12 +134,36 @@ function controls (state = null, action) {
     }
 }
 
+function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [], action) {
+  let thePlaylists = [...state],
+      index = 0
+  if (action.playlist) {
+      index = thePlaylists.findIndex(playlist => playlist.name == action.playlist.name)
+  }
+  switch (action.type) {
+      case 'ADD_PLAYLIST':
+          return [...state, action.playlist]
+
+      // case 'SET_QUEUE':
+      //     theQueue = action.queue
+      //     return theQueue
+      //
+      case 'REMOVE_PLAYLIST':
+          thePlaylists.splice(index,1)
+          return thePlaylists
+
+      default:
+          return state
+  }
+}
+
 const rootReducer = combineReducers({
     options,
     history,
     queue,
     nowPlaying,
-    controls
+    controls,
+    playlists
 })
 
 export default rootReducer

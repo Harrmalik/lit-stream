@@ -4,24 +4,23 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
+import { removePlaylist, editPlaylist, setPlaylistTracks, setQueue, nowPlaying } from '../actions'
+
+// Components
+import Track from '../components/Track'
 
 class PlaylistPage extends React.Component {
     constructor(props) {
       super(props)
 
       this.state = {
-        library: []
+        playlist: {
+          tracks: []
+        }
       }
 
       this.getSongs = this.getSongs.bind(this)
       this.playAll = this.playAll.bind(this)
-    }
-
-    componentWillMount() {
-        if (localStorage.getItem('library')) {
-            this.setState({ library: JSON.parse(localStorage.getItem('library')) })
-        }
     }
 
     getSongs() {
@@ -39,21 +38,37 @@ class PlaylistPage extends React.Component {
 
     componentDidMount() {
         this.getSongs()
+
+        let playlists = this.props.playlists,
+            playlistName = this.props.match.params.playlist,
+            playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
+
+            this.setState({ playlist })
     }
 
     playAll() {
-        this.props.setQueue(this.state.library)
+        this.props.nowPlaying(this.state.playlist.tracks[0])
+        this.props.setQueue(this.state.playlist.tracks)
+    }
+
+    removePlaylist() {
+      // TODO: save change to local storage or database
     }
 
     render() {
-      let playlist = this.props.match.params.playlist
+        let playlist = this.state.playlist
+
         return (
             <div id="libraryContainer">
-              <div className="ui inverted blue segment">
-                <h2 className="ui header">
-                {playlist}
-                <div className="sub header">Music Im listening too now</div>
+              <div id="playlistHeader" className="ui segment">
+                <h2 className="ui inverted header">
+                  { playlist.tracks.length > 0 ? <img className="ui image" src={playlist.tracks[0].thumbnail}/> : null }
+                  {playlist.name}
+                  <div className="sub header">{playlist.description}</div>
                 </h2>
+
+                <button className="ui inverted active button" onClick={this.playAll}>Play All songs</button>
+                <button className="ui inverted active button" onClick={() => { this.props.removePlaylist(playlist) }}>Delete Playlist</button>
               </div>
               <table id="library" className="ui table striped compact">
                   <thead>
@@ -68,70 +83,34 @@ class PlaylistPage extends React.Component {
                   </thead>
 
                   <tbody>
-                  {_.map(this.state.library, (song, index) => {
+                  {_.map(playlist.tracks, (song, index) => {
                       return (
                           <Track
-                              key={song.url}
+                              key={song.id}
                               track={song}
-                              parent={this}></Track>
+                              view={'playlist'}></Track>
                       )
                   })}
                   </tbody>
               </table>
-              <button className="ui button basic" onClick={this.playAll}>Play All songs</button>
-              <p id="libraryHUD">{this.state.library.length} songs</p>
+              <p id="libraryHUD">{playlist.tracks.length} songs</p>
             </div>
         )
     }
 }
 
-class Track extends React.Component {
-    constructor(props) {
-      super(props)
-
-      this.startTrack = this.startTrack.bind(this)
-    }
-
-    startTrack() {
-        let parent = this.props.parent.props
-        let track = this.props.track
-        track.no
-        parent.updateQueue(this.props.track, false)
-        if (parent.queue.length > 0) {
-            parent.nowPlaying(this.props.track)
-        }
-    }
-
-    render() {
-        let track = this.props.track
-        return (
-            <tr key={track.url} onClick={this.startTrack}>
-                <td>
-                    <div className="ui checkbox">
-                        <input type="checkbox"></input>
-                        <label></label>
-                    </div>
-                </td>
-                <td>{track.title}</td>
-                <td>{track.url}</td>
-                <td>{track.liked ? <i className="heart icon"></i> : <i className="empty heart icon"></i>}</td>
-                <td>July 4th</td>
-                <td>{track.platform}</td>
-            </tr>
-        )
-    }
-}
-
-
 const mapStateToProps = state => ({
   currentTrack: state.nowPlaying,
-  queue: state.queue
+  queue: state.queue,
+  playlists: state.playlists
 })
 
 const mapDispatchToProps = dispatch => ({
-    nowPlaying: bindActionCreators(nowPlaying, dispatch),
-    updateQueue: bindActionCreators(updateQueue, dispatch),
-    setQueue: bindActionCreators(setQueue, dispatch)
+    removePlaylist: bindActionCreators(removePlaylist, dispatch),
+    editPlaylist: bindActionCreators(editPlaylist, dispatch),
+    setPlaylistTracks: bindActionCreators(setPlaylistTracks, dispatch),
+    setQueue: bindActionCreators(setQueue, dispatch),
+    nowPlaying: bindActionCreators(nowPlaying, dispatch)
 })
 
 export default connect(

@@ -30,8 +30,7 @@ const App = () => (
       <Provider store={store}>
           <Router>
               <div className="main">
-                  <Route exact path="/" component={SidePane}/>
-                  <Route path="/:page" component={SidePane}/>
+                  <Route path="/" component={SidePane}/>
 
                   <Route exact path="/" component={HomePage}/>
                   <Route path="/search" component={SearchPage}/>

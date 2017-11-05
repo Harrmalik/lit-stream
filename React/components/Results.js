@@ -11,6 +11,10 @@ class Results extends React.Component {
   constructor(props) {
     super(props)
 
+    this.state = {
+      showMenu: false
+    }
+
     this.updateQueue = this.updateQueue.bind(this)
   }
   updateQueue(newTrack, upNext) {
@@ -31,6 +35,7 @@ class Results extends React.Component {
                       <Result
                           key={result.id}
                           result={result}
+                          playlists={this.props.playlists}
                           callback={component.updateQueue}></Result>
                   )
               })}
@@ -49,7 +54,7 @@ class Result extends React.Component {
   }
 
   componentDidMount() {
-    $('.ui.dropdown').dropdown()
+    //$('.ui.dropdown').dropdown()
   }
 
   add() {
@@ -73,12 +78,14 @@ class Result extends React.Component {
 
       }
       return (
-
            <a className={`ui ${color} label`}>{this.props.result.platform}</a>
       )
   }
 
   render() {
+      let component = this,
+          playlists = this.props.playlists
+
       return (
           <div className="item">
               <a className="ui tiny image">
@@ -92,28 +99,23 @@ class Result extends React.Component {
                   <i className="plus icon" onClick={this.add}></i>
                   <i className="forward icon" onClick={this.upNext}></i>
                   <div className="ui dropdown">
-                    <i className="ellipsis horizontal icon"></i>
-                    <i className="dropdown icon"></i>
+                    <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">
-                      <div className="item"><i className="heart pink icon"></i></div>
-                      <div className="item">
+                      <div className="item"><i className="heart empty icon"></i></div>
+                      <a className="item" href={`http://www.flvto.biz/downloads/mp3/yt_${this.props.result.id}/`} target='_blank'>
                         Download
-                      </div>
+                      </a>
                       <div className="item">
                         More like this
                       </div>
                       <div className="divider"></div>
-                      <div className="item">Add to Playlist</div>
                       <div className="item">
                         <i className="dropdown icon"></i>
-                        Playlists
-                        <div className="menu">
-                          <div className="item">Trap</div>
-                          <div className="item">Hip Hop</div>
-                          <div className="item">Chillstep</div>
-                          <div className="item">Livesets</div>
-                          <div className="item">Beatbox</div>
-                          <div className="item">Indie/Pop</div>
+                        Add to Playlist
+                        <div className="menu" >
+                          { _.map(playlists, (playlist, index) => {
+                            return <PlaylistItem key={playlist.name} playlists={playlists} playlist={playlist} index={index} track={this.props.result}/>
+                          })}
                         </div>
                       </div>
                       <div className="item">New Playlists</div>
@@ -127,8 +129,37 @@ class Result extends React.Component {
   }
 }
 
+class PlaylistItem extends React.Component {
+  constructor(props) {
+    super()
+
+    this.addTrackToPlaylist = this.addTrackToPlaylist.bind(this)
+  }
+
+  addTrackToPlaylist() {
+    let playlist = this.props.playlist,
+        playlists = this.props.playlists
+
+    playlist.tracks.push({
+      ...this.props.track,
+      isSeeking: false,
+      played: 0,
+      playing: true
+    })
+    playlists[this.props.index] = playlist
+    localStorage.setItem('playlists', JSON.stringify(playlists))
+  }
+
+  render() {
+    return (
+      <div className="item" onClick={this.addTrackToPlaylist}>{this.props.playlist.name}</div>
+    )
+  }
+}
+
 const mapStateToProps = state => ({
-  queue: state.queue
+  queue: state.queue,
+  playlists: state.playlists
 })
 
 const mapDispatchToProps = dispatch => ({

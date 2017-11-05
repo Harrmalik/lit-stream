@@ -70,6 +70,7 @@ class MediaPlayer extends React.Component {
             const played = this.props.nowPlaying.played
             let component = this
             return (
+              <div id="media-player">
                 <ReactPlayer
                     soundcloudConfig={soundcloudConfig}
                     url={this.props.nowPlaying.url}
@@ -87,6 +88,7 @@ class MediaPlayer extends React.Component {
                     onError={e => console.log('onError', e)}
                     onProgress={this.onProgress}
                     onDuration={duration => this.props.setDuration( duration )} />
+                </div>
             )
         } else {
             return (

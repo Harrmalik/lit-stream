@@ -86,10 +86,18 @@ iframe {
   left: 0;
   margin-bottom: 30%; }
 
+#media-player {
+  display: none; }
+
 .track:hover .remove.icon {
   opacity: 1; }
 
 .remove.icon {
   opacity: 0; }
+
+#playlistHeader {
+  background: linear-gradient(141deg, #2cb5e8 0%, #146DBA 75%);
+  margin: 0 0 -1em;
+  height: 150px; }
 
 /*# sourceMappingURL=style.css.map */

@@ -4,7 +4,10 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
+import { setQueue, nowPlaying } from '../actions'
+
+// Components
+import Track from '../components/Track'
 
 class Library extends React.Component {
     constructor(props) {
@@ -42,10 +45,12 @@ class Library extends React.Component {
     }
 
     playAll() {
+        this.props.nowPlaying(this.state.library[0])
         this.props.setQueue(this.state.library)
     }
 
     render() {
+      console.log(this.state.library);
         return (
             <div id="libraryContainer">
                 <table id="library" className="ui table striped compact">
@@ -66,7 +71,7 @@ class Library extends React.Component {
                             <Track
                                 key={song.url}
                                 track={song}
-                                parent={this}></Track>
+                                view={'library'}></Track>
                         )
                     })}
                     </tbody>
@@ -78,44 +83,6 @@ class Library extends React.Component {
     }
 }
 
-class Track extends React.Component {
-    constructor(props) {
-      super(props)
-
-      this.startTrack = this.startTrack.bind(this)
-    }
-    
-    startTrack() {
-        let parent = this.props.parent.props
-        let track = this.props.track
-        track.no
-        parent.updateQueue(this.props.track, false)
-        if (parent.queue.length > 0) {
-            parent.nowPlaying(this.props.track)
-        }
-    }
-
-    render() {
-        let track = this.props.track
-        return (
-            <tr key={track.url} onClick={this.startTrack}>
-                <td>
-                    <div className="ui checkbox">
-                        <input type="checkbox"></input>
-                        <label></label>
-                    </div>
-                </td>
-                <td>{track.title}</td>
-                <td>{track.url}</td>
-                <td>{track.liked ? <i className="heart icon"></i> : <i className="empty heart icon"></i>}</td>
-                <td>July 4th</td>
-                <td>{track.platform}</td>
-            </tr>
-        )
-    }
-}
-
-
 const mapStateToProps = state => ({
   currentTrack: state.nowPlaying,
   queue: state.queue
@@ -123,7 +90,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     nowPlaying: bindActionCreators(nowPlaying, dispatch),
-    updateQueue: bindActionCreators(updateQueue, dispatch),
     setQueue: bindActionCreators(setQueue, dispatch)
 })
 

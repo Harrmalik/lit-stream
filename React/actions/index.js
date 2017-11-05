@@ -63,6 +63,27 @@ export const isSeeking = () => ({
     type: 'IS_SEEKING'
 })
 
+// Playlists actions
+export const addPlaylist = (playlist) => ({
+    type: 'ADD_PLAYLIST',
+    playlist
+})
+
+export const editPlaylist = (playlist) => ({
+    type: 'EDIT_PLAYLIST',
+    playlist
+})
+
+export const removePlaylist = (playlist) => ({
+    type: 'REMOVE_PLAYLIST',
+    playlist
+})
+
+export const setPlaylistTracks = (playlist) => ({
+    type: 'SET_PLAYLIST_TRACKS',
+    playlist
+})
+
 // Options actions
 export const shuffle = () => ({
     type: 'SHUFFLE'
