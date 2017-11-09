@@ -36,11 +36,10 @@ const App = () => (
                   <Route path="/search" component={SearchPage}/>
                   <Route path="/player" component={MediaViewPage}/>
                   <Route path="/playlist/:playlist" component={PlaylistPage}/>
-                  <Route path="/queue" component={QueuePage}/>
-                  <Route path="/history" component={HistoryPage}/>
                   <Route path="/library" component={LibraryPage}/>
                   <Route path="/settings" component={SettingsPage}/>
 
+                  <QueuePage/>
                   <MediaControls></MediaControls>
               </div>
           </Router>

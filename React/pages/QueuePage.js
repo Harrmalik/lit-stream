@@ -73,9 +73,17 @@ class QueuePage extends React.Component {
     render() {
         let component = this
         return (
-            <div className="page">
-                <h2 className="ui header">Queue</h2>
-                <div id="queue" className="ui divided items">
+            <div id="queuePage" className="page" style={{display: 'none'}}>
+                <div className="ui menu fluid two item">
+                  <a className="active item">
+                    Up Next
+                  </a>
+                  <a className="item">
+                    History
+                  </a>
+                </div>
+                <div className="ui divider"></div>
+                <div id="queue" className="ui divided feed">
                     {_.map(component.props.queue, function(track, index) {
                         return (
                             <Track
@@ -114,26 +122,26 @@ class Track extends React.Component {
     }
 
     renderPlatform() {
-        let color,platform
+        let icon,platform
 
         switch (this.props.track.platform) {
             case 'youtube':
-                color = 'red'
+                icon = 'red youtube'
                 break;
             case 'soundcloud':
-                color = 'orange'
+                icon = 'orange soundcloud'
                 break;
 
         }
         return (
-             <a className={`ui ${color} label`}>{this.props.track.platform}</a>
+             <i className={`ui big ${icon} icon`}></i>
         )
     }
 
     render() {
         let track = this.props.track
         return (
-            <div className="item track" id={this.props.track.id}
+            <div className="event track" id={this.props.track.id}
                 data-title={this.props.track.title}
                 data-thumbnail={this.props.track.thumbnail}
                 data-genere={this.props.track.genere}
@@ -143,28 +151,28 @@ class Track extends React.Component {
                 data-isSeeking={this.props.track.isSeeking}
                 data-playing={this.props.track.playing}
                 data-played={this.props.track.played}>
-                <a className="ui tiny image">
-                    <img src={this.props.track.thumbnail}></img>
-                </a>
+              <div className="label">
+                <img className="ui tiny image" src={this.props.track.thumbnail}></img>
+              </div>
               <div className="content">
-                <div className="description">
-                    <i className="remove icon" onClick={this.removeTrack}></i>
-                    {this.props.parent.props.currentTrack.id == this.props.track.id ?
-                        <i className="volume up icon"></i>
-                    : <a className="ui blue circular label">{this.props.position + 1}</a>}
-                    <a className={this.props.parent.props.currentTrack.id == this.props.track.id ?
-                    'ui blue header' : 'ui header'} onClick={this.startTrack}>{this.props.track.title}</a>
+                <div className="date">
+                  {this.props.track.artist}
                 </div>
-                <div className="meta">
-                    <i className="empty heart icon"></i>
-                    <span onClick={this.addToLibrary}>Add to library</span>
-                    {this.renderPlatform()}
+                <div className="summary">
+                  <i className="remove icon" onClick={this.removeTrack}></i>
+                  {this.props.parent.props.currentTrack.id == this.props.track.id ?
+                      <i className="volume up icon"></i>
+                  : null }
+                  <span className={this.props.parent.props.currentTrack.id == this.props.track.id ?
+                  'ui blue header' : 'ui'} onClick={this.startTrack}>{this.props.track.track}</span>
                 </div>
               </div>
             </div>
         )
     }
 }
+
+//<a className="ui blue tiny circular label">{this.props.position + 1}</a>
 
 const mapStateToProps = state => ({
   queue: state.queue,

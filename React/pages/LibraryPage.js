@@ -50,7 +50,6 @@ class Library extends React.Component {
     }
 
     render() {
-      console.log(this.state.library);
         return (
             <div id="libraryContainer">
                 <table id="library" className="ui table striped compact">

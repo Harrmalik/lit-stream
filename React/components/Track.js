@@ -5,6 +5,7 @@ import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { nowPlaying, updateQueue } from '../actions'
+import moment from 'moment'
 
 class Track extends React.Component {
     constructor(props) {
@@ -37,6 +38,7 @@ class Track extends React.Component {
     render() {
         let track = this.props.track,
             props = this.props
+
         if (this.props.view.match(/library|playlist/)) {
           return (
             <tr key={props.track.url} onClick={this.startTrack}>
@@ -46,11 +48,11 @@ class Track extends React.Component {
                         <label></label>
                     </div>
                 </td>
-                <td>{props.track.title}</td>
-                <td>{props.track.url}</td>
-                <td>{props.track.liked ? <i className="heart icon"></i> : <i className="empty heart icon"></i>}</td>
-                <td>July 4th</td>
-                <td>{props.track.platform}</td>
+                <td>{props.track.track}</td>
+                <td>{props.track.artist}</td>
+                <td>{!props.track.liked ? <i className="pink heart icon"></i> : <i className="empty heart icon"></i>}</td>
+                <td>{moment(props.track.created).format('MMMM Do')}</td>
+                <td><i className="red big youtube icon"></i></td>
             </tr>
           )
         } else {
@@ -125,19 +127,19 @@ class Result extends React.Component {
   }
 
   renderPlatform() {
-      let color,platform
+      let icon,platform
 
       switch (this.props.result.platform) {
           case 'youtube':
-              color = 'red'
+              icon = 'red youtube'
               break;
           case 'soundcloud':
-              color = 'orange'
+              icon = 'orange soundcloud'
               break;
 
       }
       return (
-           <a className={`ui ${color} label`}>{this.props.result.platform}</a>
+           <i className={`ui big ${icon} icon`}></i>
       )
   }
 

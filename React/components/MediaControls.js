@@ -77,32 +77,32 @@ class MediaControls extends React.Component {
             let duration = nowPlaying.duration
             return (
                 <div id="HUD" className="ui raised inverted segment">
-                        <div id="hudcontainer">
+                    <div id="hudcontainer">
                         <div id="MediaControls">
                             <i className={options.shuffle ? 'step random icon blue' : 'step random icon'} onClick={this.shuffle}></i>
                             <i className="step backward icon" onClick={this.prevTrack}></i>
-                            <i className="big play icon" onClick={this.playTrack}></i>
-                            <i className="big stop icon" onClick={this.stopTrack}></i>
+                            { !nowPlaying.playing ?
+                              <i className="big play icon" onClick={this.playTrack}></i> :
+                              <i className="big stop icon" onClick={this.stopTrack}></i>
+                            }
                             <i className="step forward icon" onClick={this.nextTrack}></i>
                             <i className={options.repeat ? 'step repeat icon blue' : 'step repeat icon'} onClick={this.repeat}></i>
+                            <i className="list icon" onClick={ () => { $('#queuePage').transition('slide left') } }></i>
                         </div>
 
+                        <marquee>{this.props.nowPlaying.title}</marquee>
+
                         <p>
-                            Now Playing: {this.props.nowPlaying.title}
-                        </p>
-                        <p>
-                            <span>{nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds %60).toFixed(0) : 0}</span>
-                        <input
-                          type='range' min={0} max={1} step='any'
-                          value={nowPlaying.played}
-                          onMouseDown={this.onSeekMouseDown}
-                          onChange={this.onSeekChange}
-                          onMouseUp={this.onSeekMouseUp}
-                        ></input>
+                          <span>{nowPlaying.playedSeconds ? Math.floor(nowPlaying.playedSeconds / 60) + '.' + (nowPlaying.playedSeconds %60).toFixed(0) : 0}</span>
+                          <input
+                            type='range' min={0} max={1} step='any'
+                            value={nowPlaying.played}
+                            onMouseDown={this.onSeekMouseDown}
+                            onChange={this.onSeekChange}
+                            onMouseUp={this.onSeekMouseUp}></input>
                             <span>{duration ? Math.floor(duration / 60) + '.' + (duration %60).toFixed(0) : 0}</span>
                         </p>
-                        </div>
-
+                    </div>
                 </div>
             )
         } else {

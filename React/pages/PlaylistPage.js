@@ -21,6 +21,7 @@ class PlaylistPage extends React.Component {
 
       this.getSongs = this.getSongs.bind(this)
       this.playAll = this.playAll.bind(this)
+      this.addToUpNext = this.addToUpNext.bind(this)
     }
 
     getSongs() {
@@ -43,7 +44,7 @@ class PlaylistPage extends React.Component {
             playlistName = this.props.match.params.playlist,
             playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
 
-            this.setState({ playlist })
+        this.setState({ playlist })
     }
 
     playAll() {
@@ -51,12 +52,22 @@ class PlaylistPage extends React.Component {
         this.props.setQueue(this.state.playlist.tracks)
     }
 
+    addToUpNext() {
+      let queue = [...this.props.queue, ...this.state.playlist.tracks]
+      this.props.setQueue(queue)
+    }
+
     removePlaylist() {
       // TODO: save change to local storage or database
+      // Change page
     }
 
     render() {
-        let playlist = this.state.playlist
+        // let playlist = this.state.playlist
+
+        let playlists = this.props.playlists,
+            playlistName = this.props.match.params.playlist,
+            playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
 
         return (
             <div id="libraryContainer">
@@ -69,6 +80,7 @@ class PlaylistPage extends React.Component {
 
                 <button className="ui inverted active button" onClick={this.playAll}>Play All songs</button>
                 <button className="ui inverted active button" onClick={() => { this.props.removePlaylist(playlist) }}>Delete Playlist</button>
+                <button className="ui inverted active button" onClick={this.addToUpNext}>Add to Queue</button>
               </div>
               <table id="library" className="ui table striped compact">
                   <thead>

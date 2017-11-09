@@ -18,7 +18,16 @@ a {
   height: 100%;
   padding: 1em;
   position: absolute;
-  top: 0; }
+  top: 0;
+  border-right: 1px solid lightgrey; }
+  #SidePane .menu {
+    width: 100%; }
+  #SidePane a {
+    color: black;
+    font-size: 1.2em; }
+
+#playlistButton .menu {
+  width: 400px !important; }
 
 #Search {
   width: 75%;
@@ -53,10 +62,20 @@ a {
   padding: 1em;
   top: 0;
   right: 0;
-  height: 80%;
+  height: 95%;
   margin-left: 25%;
   background-color: white;
   width: 75%; }
+
+#queuePage {
+  position: absolute;
+  padding: 1em;
+  top: 0;
+  right: 0;
+  border-left: 1px solid lightgrey;
+  height: 95%;
+  background-color: white;
+  width: 30%; }
 
 #queue {
   height: 90%;
@@ -86,7 +105,7 @@ iframe {
   left: 0;
   margin-bottom: 30%; }
 
-#media-player {
+.media-player {
   display: none; }
 
 .track:hover .remove.icon {

@@ -38,7 +38,7 @@ class AddPlaylistModal extends React.Component {
 
   render() {
     return (
-      <Dropdown text='Add Playlist' search icon='add' floating labeled button className='icon green'>
+      <Dropdown search icon='add' floating button className='small icon blue circular'>
         <Dropdown.Menu>
           <Dropdown.Header content='Plalist Name' />
           <Input name='playlistName' ref={input =>  this.playlistName = input} />
@@ -68,37 +68,26 @@ class SidePane extends React.Component {
         return (
             <section id="SidePane" className="droppable">
                 <Link to="/search"><SearchBox></SearchBox></Link>
-                <div className="ui secondary vertical pointing menu" style={{width: "100%"}}>
-                    <h3 className="item ui">
+                <div className="ui text vertical menu">
+                    <div className="item ui">
                       <Link to="/">Home</Link>
-                    </h3>
-                  <h3 className="item ui">
-                    <Link to="/search">Search</Link>
-                  </h3>
-                  <h3 className="item ui">
+                    </div>
+                  <div className="item ui">
                     <Link to="/player">Player</Link>
-                  </h3>
+                  </div>
                   <div className="ui divider"></div>
-                  <h3 className="item ui">
+                  <div className="item ui">
                     <Link to="/library">Library</Link>
-                  </h3>
-                  <h3 className="item ui">
-                    <Link to="/queue">Queue</Link>
-                  </h3>
-                  <h3 className="item ui">
-                    <Link to="/history">History</Link>
-                  </h3>
+                  </div>
                   <div className="ui divider"></div>
-                  <h3 className="item">Playlists</h3>
-                  { _.map(playlists, playlist => {
-                    return (
-                      <h3  key={playlist.name} className="item ui">
-                        <Link to={`/playlist/${playlist.name.toLowerCase().replace(/\s/g, '')}`}>{playlist.name}</Link>
-                      </h3>
-                    )
-                  }) }
-                  <AddPlaylistModal addPlaylist={this.props.addPlaylist}/>
-
+                  <div id="playlistButton" className="item"><a href="">Playlists</a> <AddPlaylistModal addPlaylist={this.props.addPlaylist}/></div>
+                    { _.map(playlists, playlist => {
+                      return (
+                        <div  key={playlist.name} className="item ui">
+                          <Link to={`/playlist/${playlist.name.toLowerCase().replace(/\s/g, '')}`}>{playlist.name}</Link>
+                        </div>
+                      )
+                    }) }
                 </div>
                 <MediaPlayer></MediaPlayer>
             </section>

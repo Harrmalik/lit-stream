@@ -6,6 +6,7 @@ import _ from 'lodash'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { updateQueue } from '../actions'
+import moment from 'moment'
 
 class Results extends React.Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class Result extends React.Component {
     super(props)
 
     this.add = this.add.bind(this)
-    this.upNext = this.add.bind(this)
+    this.upNext = this.upNext.bind(this)
     this.renderPlatform = this.renderPlatform.bind(this)
   }
 
@@ -58,27 +59,39 @@ class Result extends React.Component {
   }
 
   add() {
-      this.props.callback(this.props.result, false)
+    let title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
+
+    this.props.callback({
+      ...this.props.result,
+      track: title[1] ? title[1] : title[0],
+      artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
+    }, false)
   }
 
   upNext() {
-      this.props.callback(this.props.result, true)
+    let title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
+
+    this.props.callback({
+      ...this.props.result,
+      track: title[1],
+      artist: title[0].trim()
+    }, true)
   }
 
   renderPlatform() {
-      let color,platform
+      let icon,platform
 
       switch (this.props.result.platform) {
           case 'youtube':
-              color = 'red'
+              icon = 'red youtube'
               break;
           case 'soundcloud':
-              color = 'orange'
+              icon = 'orange soundcloud'
               break;
 
       }
       return (
-           <a className={`ui ${color} label`}>{this.props.result.platform}</a>
+           <i className={`ui big ${icon} icon`}></i>
       )
   }
 
@@ -138,10 +151,15 @@ class PlaylistItem extends React.Component {
 
   addTrackToPlaylist() {
     let playlist = this.props.playlist,
-        playlists = this.props.playlists
+        playlists = this.props.playlists,
+        title = this.props.track.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
 
     playlist.tracks.push({
       ...this.props.track,
+      track: title[1],
+      artist: title[0].trim(),
+      liked: false,
+      created: moment(),
       isSeeking: false,
       played: 0,
       playing: true

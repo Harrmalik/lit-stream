@@ -114,6 +114,7 @@ class SearchBox extends React.Component {
                     return {
                         id: result.id.videoId ? result.id.videoId : result.id.playlistId,
                         url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
+                        channelTitle: result.snippet.channelTitle,
                         title: result.snippet.title,
                         thumbnail: result.snippet.thumbnails.default.url,
                         type: result.id.videoId ? 'video' : 'playlist',

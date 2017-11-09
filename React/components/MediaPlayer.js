@@ -18,6 +18,10 @@ class MediaPlayer extends React.Component {
     constructor(props) {
         super(props)
 
+        this.state = {
+          crossfade: false
+        }
+
         this.getNextTrack = this.getNextTrack.bind(this)
         this.onProgress = this.onProgress.bind(this)
     }
@@ -56,6 +60,10 @@ class MediaPlayer extends React.Component {
       if (!this.props.nowPlaying.isSeeking) {
         this.props.updateProgess(progress)
       }
+
+      if ((this.props.nowPlaying.duration - progress.playedSeconds).toFixed(0) == 12) {
+        // this.setState({ crossfade: true })
+      }
     }
 
     render() {
@@ -70,7 +78,7 @@ class MediaPlayer extends React.Component {
             const played = this.props.nowPlaying.played
             let component = this
             return (
-              <div id="media-player">
+              <div className="media-player">
                 <ReactPlayer
                     soundcloudConfig={soundcloudConfig}
                     url={this.props.nowPlaying.url}
@@ -88,7 +96,27 @@ class MediaPlayer extends React.Component {
                     onError={e => console.log('onError', e)}
                     onProgress={this.onProgress}
                     onDuration={duration => this.props.setDuration( duration )} />
-                </div>
+
+                    { this.state.crossfade ?
+                  <ReactPlayer
+                      soundcloudConfig={soundcloudConfig}
+                      url={"https://www.youtube.com/watch?v=I7HahVwYpwo"}
+                      ref={player =>  this.player = player}
+                      playing={true}
+                      playbackRate={playbackRate}
+                      volume={volume}
+                      width='100%'
+                      height='300px'
+                      controls
+                      onReady={() => console.log('onReady')}
+                      onStart={() => console.log('onStart')}
+                      onBuffer={() => console.log('onBuffer')}
+                      onEnded={this.getNextTrack}
+                      onError={e => console.log('onError', e)}
+                      onProgress={this.onProgress}
+                      onDuration={duration => this.props.setDuration( duration )} /> : null }
+              </div>
+
             )
         } else {
             return (
