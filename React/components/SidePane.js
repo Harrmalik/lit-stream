@@ -79,6 +79,9 @@ class SidePane extends React.Component {
                   <div className="item ui">
                     <Link to="/library">Library</Link>
                   </div>
+                  <div className="item ui">
+                    <Link to="/playlist/liked">liked</Link>
+                  </div>
                   <div className="ui divider"></div>
                   <div id="playlistButton" className="item"><a href="">Playlists</a> <AddPlaylistModal addPlaylist={this.props.addPlaylist}/></div>
                     { _.map(playlists, playlist => {

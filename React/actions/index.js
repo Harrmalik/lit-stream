@@ -63,6 +63,17 @@ export const isSeeking = () => ({
     type: 'IS_SEEKING'
 })
 
+// Like actions
+export const addTrack = (track) => ({
+    type: 'ADD_TRACK',
+    track
+})
+
+export const removeTrack = (track) => ({
+    type: 'REMOVE_TRACK',
+    track
+})
+
 // Playlists actions
 export const addPlaylist = (playlist) => ({
     type: 'ADD_PLAYLIST',

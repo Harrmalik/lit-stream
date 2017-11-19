@@ -40,12 +40,12 @@ class HistoryPage extends React.Component {
             <div className="page">
                 <div className="header">History</div>
                 <div id="history" className="ui items">
-                    {_.map(component.props.history, function(track, index) {
+                    {_.map(this.props.history, (track, index) => {
                         return (
                             <Track
                                 key={track.id + (Math.floor(Math.random() * 100000) + 1)}
                                 track={track}
-                                parent={component.props.parent}
+                                parent={this}
                                 position={index}></Track>
                         )
                     })}
@@ -63,7 +63,7 @@ class Track extends React.Component {
     removeTrack() {
         this.props.parent.props.removeTrack(this.props.track)
     }
-    
+
     render() {
         let track = this.props.track
         return (

@@ -4,7 +4,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking } from '../actions'
+import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking, setQueue } from '../actions'
 
 class MediaControls extends React.Component {
     constructor(props) {
@@ -48,7 +48,15 @@ class MediaControls extends React.Component {
     }
 
     shuffle() {
-        this.props.shuffle()
+        // this.props.shuffle()
+        let newQueue = [],
+            queue = this.props.queue
+
+        _.remove(queue, (track) => {
+            return track.id == this.props.nowPlaying.id
+        })
+
+        this.props.setQueue([this.props.nowPlaying, ..._.shuffle(queue)])
     }
 
     repeat() {
@@ -131,7 +139,8 @@ const mapDispatchToProps = dispatch => ({
     playTrack: bindActionCreators(playTrack, dispatch),
     stopTrack: bindActionCreators(stopTrack, dispatch),
     updateProgess: bindActionCreators(updateProgess, dispatch),
-    isSeeking: bindActionCreators(isSeeking, dispatch)
+    isSeeking: bindActionCreators(isSeeking, dispatch),
+    setQueue: bindActionCreators(setQueue, dispatch)
 })
 
 export default connect(

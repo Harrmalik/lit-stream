@@ -16,8 +16,7 @@ router.get('/findSong', function(req, res, next) {
             Youtube.search.list({
                 part: "snippet",
                 q: req.query.query,
-                maxResults: 20,
-                type: 'video'
+                maxResults: 20
             }, (err, data) => {
                 if (err) {
                     console.log(err);

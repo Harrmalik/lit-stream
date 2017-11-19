@@ -112,13 +112,14 @@ class SearchBox extends React.Component {
             success: function(data) {
                 tracks = _.map(data, function(result) {
                     return {
-                        id: result.id.videoId ? result.id.videoId : result.id.playlistId,
+                        id: result.id[`${result.id.kind.split('#')[1]}Id`],
                         url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
                         channelTitle: result.snippet.channelTitle,
                         title: result.snippet.title,
                         thumbnail: result.snippet.thumbnails.default.url,
-                        type: result.id.videoId ? 'video' : 'playlist',
-                        platform: 'youtube'
+                        type: result.id.kind.split('#')[1],
+                        platform: 'youtube',
+
                     }
                 })
                 component.setState({tracks});

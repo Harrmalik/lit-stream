@@ -6,9 +6,16 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 
+// Components
+import HistoryPage from './HistoryPage'
+
 class QueuePage extends React.Component {
     constructor(props) {
       super(props)
+
+      this.state = {
+          view: 'upnext'
+      }
 
       this.addToLibrary = this.addToLibrary.bind(this)
     }
@@ -75,14 +82,15 @@ class QueuePage extends React.Component {
         return (
             <div id="queuePage" className="page" style={{display: 'none'}}>
                 <div className="ui menu fluid two item">
-                  <a className="active item">
+                  <a className={this.state == 'upnext' ? "active item" : "item"} onClick={()=>{this.setState({view:'upnext'})}}>
                     Up Next
                   </a>
-                  <a className="item">
+                  <a className={this.state == 'history' ? "active item" : "item"} onClick={()=>{this.setState({view:'history'})}}>
                     History
                   </a>
                 </div>
                 <div className="ui divider"></div>
+                { this.state.view == 'upnext' ?
                 <div id="queue" className="ui divided feed">
                     {_.map(component.props.queue, function(track, index) {
                         return (
@@ -94,6 +102,17 @@ class QueuePage extends React.Component {
                         )
                     })}
                 </div>
+                :                 <div id="queue" className="ui divided feed">
+                                    {_.map(this.props.history, function(track, index) {
+                                        return (
+                                            <Track
+                                                key={track.id + (Math.floor(Math.random() * 100000) + 1)  }
+                                                track={track}
+                                                parent={component}
+                                                position={index}></Track>
+                                        )
+                                    })}
+                                </div> }
             </div>
         )
     }
@@ -176,7 +195,8 @@ class Track extends React.Component {
 
 const mapStateToProps = state => ({
   queue: state.queue,
-  currentTrack: state.nowPlaying
+  currentTrack: state.nowPlaying,
+  history: state.history
 })
 
 const mapDispatchToProps = dispatch => ({

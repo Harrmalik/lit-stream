@@ -80,27 +80,27 @@
 
 	var _SearchPage2 = _interopRequireDefault(_SearchPage);
 
-	var _MediaViewPage = __webpack_require__(972);
+	var _MediaViewPage = __webpack_require__(1092);
 
 	var _MediaViewPage2 = _interopRequireDefault(_MediaViewPage);
 
-	var _PlaylistPage = __webpack_require__(973);
+	var _PlaylistPage = __webpack_require__(1093);
 
 	var _PlaylistPage2 = _interopRequireDefault(_PlaylistPage);
 
-	var _HistoryPage = __webpack_require__(974);
+	var _HistoryPage = __webpack_require__(1095);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
-	var _QueuePage = __webpack_require__(975);
+	var _QueuePage = __webpack_require__(1096);
 
 	var _QueuePage2 = _interopRequireDefault(_QueuePage);
 
-	var _SettingsPage = __webpack_require__(976);
+	var _SettingsPage = __webpack_require__(1097);
 
 	var _SettingsPage2 = _interopRequireDefault(_SettingsPage);
 
-	var _LibraryPage = __webpack_require__(977);
+	var _LibraryPage = __webpack_require__(1098);
 
 	var _LibraryPage2 = _interopRequireDefault(_LibraryPage);
 
@@ -27775,8 +27775,8 @@
 	    autoplay: true,
 	    repeat: false
 	};
-	var theQueue = [];
-	var theHistory = [];
+	var theQueue = [],
+	    theHistory = [];
 
 	function options() {
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : defaultOptions;
@@ -27919,7 +27919,11 @@
 	}
 
 	function playlists() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [];
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [{
+	        name: 'liked',
+	        description: 'Liked songs',
+	        tracks: []
+	    }];
 	    var action = arguments[1];
 
 	    var thePlaylists = [].concat(_toConsumableArray(state)),
@@ -27979,7 +27983,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _reactRouterDom = __webpack_require__(184);
 
@@ -28130,6 +28134,15 @@
 	              'Library'
 	            )
 	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'item ui' },
+	            _react2.default.createElement(
+	              _reactRouterDom.Link,
+	              { to: '/playlist/liked' },
+	              'liked'
+	            )
+	          ),
 	          _react2.default.createElement('div', { className: 'ui divider' }),
 	          _react2.default.createElement(
 	            'div',
@@ -28182,152 +28195,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SidePane);
 
 /***/ }),
-/* 263 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	// Top level actions
-
-	// Search actions
-
-	// Queue actions
-	var nowPlaying = exports.nowPlaying = function nowPlaying(track) {
-	    return {
-	        type: 'NOW_PLAYING',
-	        track: track
-	    };
-	};
-
-	var updateQueue = exports.updateQueue = function updateQueue(track, upNext) {
-	    return {
-	        type: 'UPDATE_QUEUE',
-	        track: track,
-	        upNext: upNext
-	    };
-	};
-
-	var setQueue = exports.setQueue = function setQueue(queue) {
-	    return {
-	        type: 'SET_QUEUE',
-	        queue: queue
-	    };
-	};
-
-	var removeTrack = exports.removeTrack = function removeTrack(track) {
-	    return {
-	        type: 'REMOVE_TRACK',
-	        track: track
-	    };
-	};
-
-	// MediaPlayer actions
-	var setControls = exports.setControls = function setControls(controls) {
-	    return {
-	        type: 'SET_CONTROLS',
-	        controls: controls
-	    };
-	};
-
-	var nextTrack = exports.nextTrack = function nextTrack(track) {
-	    return {
-	        type: 'NEXT_TRACK',
-	        track: track
-	    };
-	};
-
-	var prevTrack = exports.prevTrack = function prevTrack(track) {
-	    return {
-	        type: 'PREV_TRACK',
-	        track: track
-	    };
-	};
-
-	var playTrack = exports.playTrack = function playTrack() {
-	    return {
-	        type: 'PLAY_TRACK'
-	    };
-	};
-
-	var stopTrack = exports.stopTrack = function stopTrack() {
-	    return {
-	        type: 'STOP_TRACK'
-	    };
-	};
-
-	var updateProgess = exports.updateProgess = function updateProgess(progress) {
-	    return {
-	        type: 'UPDATE_PROGRESS',
-	        played: progress.played,
-	        playedSeconds: progress.playedSeconds
-	    };
-	};
-
-	var setDuration = exports.setDuration = function setDuration(duration) {
-	    return {
-	        type: 'SET_DURATION',
-	        duration: duration
-	    };
-	};
-
-	var isSeeking = exports.isSeeking = function isSeeking() {
-	    return {
-	        type: 'IS_SEEKING'
-	    };
-	};
-
-	// Playlists actions
-	var addPlaylist = exports.addPlaylist = function addPlaylist(playlist) {
-	    return {
-	        type: 'ADD_PLAYLIST',
-	        playlist: playlist
-	    };
-	};
-
-	var editPlaylist = exports.editPlaylist = function editPlaylist(playlist) {
-	    return {
-	        type: 'EDIT_PLAYLIST',
-	        playlist: playlist
-	    };
-	};
-
-	var removePlaylist = exports.removePlaylist = function removePlaylist(playlist) {
-	    return {
-	        type: 'REMOVE_PLAYLIST',
-	        playlist: playlist
-	    };
-	};
-
-	var setPlaylistTracks = exports.setPlaylistTracks = function setPlaylistTracks(playlist) {
-	    return {
-	        type: 'SET_PLAYLIST_TRACKS',
-	        playlist: playlist
-	    };
-	};
-
-	// Options actions
-	var shuffle = exports.shuffle = function shuffle() {
-	    return {
-	        type: 'SHUFFLE'
-	    };
-	};
-
-	var repeat = exports.repeat = function repeat() {
-	    return {
-	        type: 'REPEAT'
-	    };
-	};
-
-	var autoPlay = exports.autoPlay = function autoPlay() {
-	    return {
-	        type: 'AUTO_PLAY'
-	    };
-	};
-
-/***/ }),
+/* 263 */,
 /* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -28479,13 +28347,14 @@
 	                success: function success(data) {
 	                    tracks = _lodash2.default.map(data, function (result) {
 	                        return {
-	                            id: result.id.videoId ? result.id.videoId : result.id.playlistId,
+	                            id: result.id[result.id.kind.split('#')[1] + 'Id'],
 	                            url: 'https://www.youtube.com/watch?v=' + result.id.videoId,
 	                            channelTitle: result.snippet.channelTitle,
 	                            title: result.snippet.title,
 	                            thumbnail: result.snippet.thumbnails.default.url,
-	                            type: result.id.videoId ? 'video' : 'playlist',
+	                            type: result.id.kind.split('#')[1],
 	                            platform: 'youtube'
+
 	                        };
 	                    });
 	                    component.setState({ tracks: tracks });
@@ -45703,7 +45572,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _YouTube = __webpack_require__(267);
 
@@ -92977,9 +92846,11 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -93040,7 +92911,17 @@
 	    }, {
 	        key: 'shuffle',
 	        value: function shuffle() {
-	            this.props.shuffle();
+	            var _this2 = this;
+
+	            // this.props.shuffle()
+	            var newQueue = [],
+	                queue = this.props.queue;
+
+	            _.remove(queue, function (track) {
+	                return track.id == _this2.props.nowPlaying.id;
+	            });
+
+	            this.props.setQueue([this.props.nowPlaying].concat(_toConsumableArray(_.shuffle(queue))));
 	        }
 	    }, {
 	        key: 'repeat',
@@ -93144,7 +93025,8 @@
 	        playTrack: (0, _redux.bindActionCreators)(_actions.playTrack, dispatch),
 	        stopTrack: (0, _redux.bindActionCreators)(_actions.stopTrack, dispatch),
 	        updateProgess: (0, _redux.bindActionCreators)(_actions.updateProgess, dispatch),
-	        isSeeking: (0, _redux.bindActionCreators)(_actions.isSeeking, dispatch)
+	        isSeeking: (0, _redux.bindActionCreators)(_actions.isSeeking, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch)
 	    };
 	};
 
@@ -93377,9 +93259,9 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(263);
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-	var _moment = __webpack_require__(979);
+	var _moment = __webpack_require__(972);
 
 	var _moment2 = _interopRequireDefault(_moment);
 
@@ -93449,6 +93331,7 @@
 	    var _this3 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
 
 	    _this3.add = _this3.add.bind(_this3);
+	    _this3.like = _this3.like.bind(_this3);
 	    _this3.upNext = _this3.upNext.bind(_this3);
 	    _this3.renderPlatform = _this3.renderPlatform.bind(_this3);
 	    return _this3;
@@ -93468,6 +93351,28 @@
 	        track: title[1] ? title[1] : title[0],
 	        artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
 	      }), false);
+	    }
+	  }, {
+	    key: 'like',
+	    value: function like(track) {
+	      var playlists = this.props.playlists,
+	          playlistName = 'liked',
+	          playlist = playlists[playlists.findIndex(function (playlist) {
+	        return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
+	      })],
+	          title = track.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-');
+
+	      playlist.tracks.push(_extends({}, track, {
+	        track: title[1],
+	        artist: title[0].trim(),
+	        liked: true,
+	        created: (0, _moment2.default)(),
+	        isSeeking: false,
+	        played: 0,
+	        playing: true
+	      }));
+	      playlists[1] = playlist; //change index
+	      localStorage.setItem('playlists', JSON.stringify(playlists));
 	    }
 	  }, {
 	    key: 'upNext',
@@ -93540,7 +93445,9 @@
 	                { className: 'menu' },
 	                _react2.default.createElement(
 	                  'div',
-	                  { className: 'item' },
+	                  { className: 'item', onClick: function onClick() {
+	                      _this4.like(_this4.props.result);
+	                    } },
 	                  _react2.default.createElement('i', { className: 'heart empty icon' })
 	                ),
 	                _react2.default.createElement(
@@ -93574,7 +93481,12 @@
 	                )
 	              )
 	            ),
-	            this.renderPlatform()
+	            this.renderPlatform(),
+	            _react2.default.createElement(
+	              'span',
+	              { className: 'ui blue label' },
+	              this.props.result.type
+	            )
 	          )
 	        )
 	      );
@@ -93646,1423 +93558,6 @@
 
 /***/ }),
 /* 972 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ct = new ColorThief();
-
-	var MediaViewPage = function (_React$Component) {
-	    _inherits(MediaViewPage, _React$Component);
-
-	    function MediaViewPage(props) {
-	        _classCallCheck(this, MediaViewPage);
-
-	        var _this = _possibleConstructorReturn(this, (MediaViewPage.__proto__ || Object.getPrototypeOf(MediaViewPage)).call(this, props));
-
-	        _this.state = {
-	            track: null
-	        };
-
-	        _this.getAlbum = _this.getAlbum.bind(_this);
-	        _this.getColors = _this.getColors.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(MediaViewPage, [{
-	        key: 'componentDidUpdate',
-	        value: function componentDidUpdate() {
-	            if (this.state.track !== this.props.nowPlaying.title) {
-	                this.setState({ track: this.props.nowPlaying.title });
-	                this.getAlbum();
-	            }
-	        }
-	    }, {
-	        key: 'getAlbum',
-	        value: function getAlbum() {
-	            var _this2 = this;
-
-	            var component = this;
-	            var nowPlaying = component.props.nowPlaying;
-	            if (component.props.nowPlaying) {
-	                $.ajax({
-	                    url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
-	                }).done(function (album) {
-	                    _this2.getColors(album);
-	                });
-	            }
-	        }
-	    }, {
-	        key: 'getColors',
-	        value: function getColors(album) {
-	            var track = this.props.nowPlaying;
-	            var img = document.getElementById('image');
-	            img.setAttribute('crossOrigin', '*');
-	            var src = album.image ? album.image + '?' + new Date().getTime() : '/imgs/no-img.png';
-
-	            img.setAttribute('src', src);
-	            $('.v').html(track.title.split('-')[1]);
-	            $('.0').html(track.title.split('-')[0] + ' - ' + album.album);
-
-	            img.addEventListener('load', function () {
-	                // Set variables and get colors from images
-	                var vibrant = new Vibrant(img, 64, 5);
-	                var swatches = vibrant.swatches();
-	                var color = ct.getColor(img);
-	                var pal = ct.getPalette(img);
-	                if (swatches['Vibrant']) {
-	                    var v = swatches['Vibrant'].getRgb();
-
-	                    // Change UI colors based on colors found
-	                    $(".v").css("color", swatches['Vibrant'].getHex());
-	                    // $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
-	                    $('#image').css('boxShadow', '0 0 50px ' + swatches['Vibrant'].getHex());
-	                    $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                    $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
-	                } else {
-	                    // Change UI colors based on colors found
-	                    $(".v").css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                    // $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
-	                    $('#image').css('boxShadow', '0 0 50px rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                    $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
-	                    $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
-	                }
-	            });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'Viewer', className: 'page' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'div1', className: 'ui container' },
-	                    _react2.default.createElement('img', { id: 'image', src: '' }),
-	                    _react2.default.createElement(
-	                        'h1',
-	                        { className: 'v' },
-	                        'hey'
-	                    ),
-	                    _react2.default.createElement('h2', { className: '0' })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return MediaViewPage;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        nowPlaying: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaViewPage);
-
-/***/ }),
-/* 973 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	var _Track = __webpack_require__(978);
-
-	var _Track2 = _interopRequireDefault(_Track);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// Components
-
-
-	var PlaylistPage = function (_React$Component) {
-	    _inherits(PlaylistPage, _React$Component);
-
-	    function PlaylistPage(props) {
-	        _classCallCheck(this, PlaylistPage);
-
-	        var _this = _possibleConstructorReturn(this, (PlaylistPage.__proto__ || Object.getPrototypeOf(PlaylistPage)).call(this, props));
-
-	        _this.state = {
-	            playlist: {
-	                tracks: []
-	            }
-	        };
-
-	        _this.getSongs = _this.getSongs.bind(_this);
-	        _this.playAll = _this.playAll.bind(_this);
-	        _this.addToUpNext = _this.addToUpNext.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(PlaylistPage, [{
-	        key: 'getSongs',
-	        value: function getSongs() {
-	            $.ajax({
-	                url: '',
-	                data: {}
-	            }).success(function (songs) {
-	                // TODO: get songs and add them to state
-	            }).fail(function (message) {
-	                // TODO: handle failure to load tracks
-	            });
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.getSongs();
-
-	            var playlists = this.props.playlists,
-	                playlistName = this.props.match.params.playlist,
-	                playlist = playlists[playlists.findIndex(function (playlist) {
-	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
-	            })];
-
-	            this.setState({ playlist: playlist });
-	        }
-	    }, {
-	        key: 'playAll',
-	        value: function playAll() {
-	            this.props.nowPlaying(this.state.playlist.tracks[0]);
-	            this.props.setQueue(this.state.playlist.tracks);
-	        }
-	    }, {
-	        key: 'addToUpNext',
-	        value: function addToUpNext() {
-	            var queue = [].concat(_toConsumableArray(this.props.queue), _toConsumableArray(this.state.playlist.tracks));
-	            this.props.setQueue(queue);
-	        }
-	    }, {
-	        key: 'removePlaylist',
-	        value: function removePlaylist() {
-	            // TODO: save change to local storage or database
-	            // Change page
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            // let playlist = this.state.playlist
-
-	            var playlists = this.props.playlists,
-	                playlistName = this.props.match.params.playlist,
-	                playlist = playlists[playlists.findIndex(function (playlist) {
-	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
-	            })];
-
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'libraryContainer' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'playlistHeader', className: 'ui segment' },
-	                    _react2.default.createElement(
-	                        'h2',
-	                        { className: 'ui inverted header' },
-	                        playlist.tracks.length > 0 ? _react2.default.createElement('img', { className: 'ui image', src: playlist.tracks[0].thumbnail }) : null,
-	                        playlist.name,
-	                        _react2.default.createElement(
-	                            'div',
-	                            { className: 'sub header' },
-	                            playlist.description
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'ui inverted active button', onClick: this.playAll },
-	                        'Play All songs'
-	                    ),
-	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'ui inverted active button', onClick: function onClick() {
-	                                _this2.props.removePlaylist(playlist);
-	                            } },
-	                        'Delete Playlist'
-	                    ),
-	                    _react2.default.createElement(
-	                        'button',
-	                        { className: 'ui inverted active button', onClick: this.addToUpNext },
-	                        'Add to Queue'
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'table',
-	                    { id: 'library', className: 'ui table striped compact' },
-	                    _react2.default.createElement(
-	                        'thead',
-	                        null,
-	                        _react2.default.createElement(
-	                            'tr',
-	                            null,
-	                            _react2.default.createElement('th', null),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Title'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Artist'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Liked'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Date added'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Platform'
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'tbody',
-	                        null,
-	                        _.map(playlist.tracks, function (song, index) {
-	                            return _react2.default.createElement(_Track2.default, {
-	                                key: song.id,
-	                                track: song,
-	                                view: 'playlist' });
-	                        })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    { id: 'libraryHUD' },
-	                    playlist.tracks.length,
-	                    ' songs'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return PlaylistPage;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        currentTrack: state.nowPlaying,
-	        queue: state.queue,
-	        playlists: state.playlists
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        removePlaylist: (0, _redux.bindActionCreators)(_actions.removePlaylist, dispatch),
-	        editPlaylist: (0, _redux.bindActionCreators)(_actions.editPlaylist, dispatch),
-	        setPlaylistTracks: (0, _redux.bindActionCreators)(_actions.setPlaylistTracks, dispatch),
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PlaylistPage);
-
-/***/ }),
-/* 974 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var HistoryPage = function (_React$Component) {
-	    _inherits(HistoryPage, _React$Component);
-
-	    function HistoryPage() {
-	        _classCallCheck(this, HistoryPage);
-
-	        return _possibleConstructorReturn(this, (HistoryPage.__proto__ || Object.getPrototypeOf(HistoryPage)).apply(this, arguments));
-	    }
-
-	    _createClass(HistoryPage, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var component = this;
-	            $('#history').sortable({
-	                update: function update(event, ui) {
-	                    var history = component.props.history;
-	                    history.splice(history.findIndex(function (track) {
-	                        return track.id == ui.item[0].id;
-	                    }), 1);
-	                    history.splice($('#history').find('#' + ui.item[0].id).index(), 0, {
-	                        id: ui.item[0].id,
-	                        title: $('#history').find('#' + ui.item[0].id).data("title"),
-	                        thumbnail: $('#history').find('#' + ui.item[0].id).data("thumbnail")
-	                    });
-	                    component.props.sethistory(history);
-	                }
-	            });
-	        }
-	    }, {
-	        key: 'remove',
-	        value: function remove(index) {
-	            var component = this;
-	            var history = component.state.history;
-	            history.splice(index, 1);
-	            component.setState({ history: history });
-	            if (index == 0) {
-	                component.getNextTrack();
-	            }
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var component = this;
-	            console.log(this.props.history);
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'page' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'header' },
-	                    'History'
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'history', className: 'ui items' },
-	                    _.map(component.props.history, function (track, index) {
-	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                            track: track,
-	                            parent: component.props.parent,
-	                            position: index });
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return HistoryPage;
-	}(_react2.default.Component);
-
-	var Track = function (_React$Component2) {
-	    _inherits(Track, _React$Component2);
-
-	    function Track() {
-	        _classCallCheck(this, Track);
-
-	        return _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).apply(this, arguments));
-	    }
-
-	    _createClass(Track, [{
-	        key: 'startThis',
-	        value: function startThis() {
-	            this.props.parent.props.nowPlaying(this.props.track);
-	        }
-	    }, {
-	        key: 'removeTrack',
-	        value: function removeTrack() {
-	            this.props.parent.props.removeTrack(this.props.track);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var track = this.props.track;
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'content' },
-	                    _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                    this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	                        'a',
-	                        { className: 'ui blue circular label' },
-	                        this.props.position + 1
-	                    ),
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
-	                        this.props.track.title
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Track;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        history: state.history,
-	        currentTrack: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
-
-/***/ }),
-/* 975 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var QueuePage = function (_React$Component) {
-	    _inherits(QueuePage, _React$Component);
-
-	    function QueuePage(props) {
-	        _classCallCheck(this, QueuePage);
-
-	        var _this = _possibleConstructorReturn(this, (QueuePage.__proto__ || Object.getPrototypeOf(QueuePage)).call(this, props));
-
-	        _this.addToLibrary = _this.addToLibrary.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(QueuePage, [{
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            var component = this;
-	            $('#queue').sortable({
-	                update: function update(event, ui) {
-	                    var queue = component.props.queue;
-	                    queue.splice(queue.findIndex(function (track) {
-	                        return track.id == ui.item[0].id;
-	                    }), 1);
-	                    queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
-	                        id: ui.item[0].id,
-	                        title: $('#queue').find('#' + ui.item[0].id).data("title"),
-	                        thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail"),
-	                        genre: $('#queue').find('#' + ui.item[0].id).data("genre"),
-	                        url: $('#queue').find('#' + ui.item[0].id).data("url"),
-	                        type: $('#queue').find('#' + ui.item[0].id).data("type"),
-	                        platform: $('#queue').find('#' + ui.item[0].id).data("platform"),
-	                        isSeeking: $('#queue').find('#' + ui.item[0].id).data("isSeeking"),
-	                        played: $('#queue').find('#' + ui.item[0].id).data("played"),
-	                        playing: $('#queue').find('#' + ui.item[0].id).data("playing")
-	                    });
-	                    component.props.setQueue(queue);
-	                }
-	            });
-	        }
-	    }, {
-	        key: 'getRelated',
-	        value: function getRelated() {
-	            // TODO: Get related songs when queue is finished
-	            //         $.ajax({
-	            //             url: `/api/getRelated`,
-	            //             data: { query },
-	            //             crossDomain : true,
-	            //             dataType: 'json',
-	            //             success: function(data) {
-	            //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
-	            //                 queue.push({
-	            //                     id: data[0].id.videoId,
-	            //                     title: data[0].snippet.title,
-	            //                     thumbnail: data[0].snippet.thumbnails.default.url
-	            //                 })
-	            //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
-	            //                 component.setState({queue})
-	            //                 component.setState({nowPlaying: queue[0]})
-	            //                 $('#searchBox').val('')
-	            //             }
-	            //         });
-	        }
-	    }, {
-	        key: 'addToLibrary',
-	        value: function addToLibrary(track) {
-	            var library = void 0;
-	            if (localStorage.getItem('library')) {
-	                library = JSON.parse(localStorage.getItem('library'));
-	                library.push(track);
-	            } else {
-	                library = [track];
-	            }
-
-	            localStorage.setItem('library', JSON.stringify(library));
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var component = this;
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'queuePage', className: 'page', style: { display: 'none' } },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'ui menu fluid two item' },
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: 'active item' },
-	                        'Up Next'
-	                    ),
-	                    _react2.default.createElement(
-	                        'a',
-	                        { className: 'item' },
-	                        'History'
-	                    )
-	                ),
-	                _react2.default.createElement('div', { className: 'ui divider' }),
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'queue', className: 'ui divided feed' },
-	                    _.map(component.props.queue, function (track, index) {
-	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
-	                            track: track,
-	                            parent: component,
-	                            position: index });
-	                    })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return QueuePage;
-	}(_react2.default.Component);
-
-	var Track = function (_React$Component2) {
-	    _inherits(Track, _React$Component2);
-
-	    function Track(props) {
-	        _classCallCheck(this, Track);
-
-	        var _this2 = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
-
-	        _this2.startTrack = _this2.startTrack.bind(_this2);
-	        _this2.removeTrack = _this2.removeTrack.bind(_this2);
-	        _this2.addToLibrary = _this2.addToLibrary.bind(_this2);
-	        _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
-	        return _this2;
-	    }
-
-	    _createClass(Track, [{
-	        key: 'startTrack',
-	        value: function startTrack() {
-	            this.props.parent.props.nowPlaying(this.props.track);
-	        }
-	    }, {
-	        key: 'removeTrack',
-	        value: function removeTrack() {
-	            this.props.parent.props.removeTrack(this.props.track);
-	        }
-	    }, {
-	        key: 'addToLibrary',
-	        value: function addToLibrary() {
-	            this.props.parent.addToLibrary(this.props.track);
-	        }
-	    }, {
-	        key: 'renderPlatform',
-	        value: function renderPlatform() {
-	            var icon = void 0,
-	                platform = void 0;
-
-	            switch (this.props.track.platform) {
-	                case 'youtube':
-	                    icon = 'red youtube';
-	                    break;
-	                case 'soundcloud':
-	                    icon = 'orange soundcloud';
-	                    break;
-
-	            }
-	            return _react2.default.createElement('i', { className: 'ui big ' + icon + ' icon' });
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var track = this.props.track;
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'event track', id: this.props.track.id,
-	                    'data-title': this.props.track.title,
-	                    'data-thumbnail': this.props.track.thumbnail,
-	                    'data-genere': this.props.track.genere,
-	                    'data-url': this.props.track.url,
-	                    'data-type': this.props.track.type,
-	                    'data-platform': this.props.track.platform,
-	                    'data-isSeeking': this.props.track.isSeeking,
-	                    'data-playing': this.props.track.playing,
-	                    'data-played': this.props.track.played },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'label' },
-	                    _react2.default.createElement('img', { className: 'ui tiny image', src: this.props.track.thumbnail })
-	                ),
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'content' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'date' },
-	                        this.props.track.artist
-	                    ),
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'summary' },
-	                        _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
-	                        this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : null,
-	                        _react2.default.createElement(
-	                            'span',
-	                            { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui', onClick: this.startTrack },
-	                            this.props.track.track
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Track;
-	}(_react2.default.Component);
-
-	//<a className="ui blue tiny circular label">{this.props.position + 1}</a>
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        queue: state.queue,
-	        currentTrack: state.nowPlaying
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
-
-/***/ }),
-/* 976 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var SettingsPage = function (_React$Component) {
-	    _inherits(SettingsPage, _React$Component);
-
-	    function SettingsPage() {
-	        _classCallCheck(this, SettingsPage);
-
-	        return _possibleConstructorReturn(this, (SettingsPage.__proto__ || Object.getPrototypeOf(SettingsPage)).apply(this, arguments));
-	    }
-
-	    _createClass(SettingsPage, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'page' },
-	                _react2.default.createElement(
-	                    'p',
-	                    null,
-	                    'SettingsPage'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return SettingsPage;
-	}(_react2.default.Component);
-
-	exports.default = SettingsPage;
-
-/***/ }),
-/* 977 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	var _Track = __webpack_require__(978);
-
-	var _Track2 = _interopRequireDefault(_Track);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// Components
-
-
-	var Library = function (_React$Component) {
-	    _inherits(Library, _React$Component);
-
-	    function Library(props) {
-	        _classCallCheck(this, Library);
-
-	        var _this = _possibleConstructorReturn(this, (Library.__proto__ || Object.getPrototypeOf(Library)).call(this, props));
-
-	        _this.state = {
-	            library: []
-	        };
-
-	        _this.getSongs = _this.getSongs.bind(_this);
-	        _this.playAll = _this.playAll.bind(_this);
-	        return _this;
-	    }
-
-	    _createClass(Library, [{
-	        key: 'componentWillMount',
-	        value: function componentWillMount() {
-	            if (localStorage.getItem('library')) {
-	                this.setState({ library: JSON.parse(localStorage.getItem('library')) });
-	            }
-	        }
-	    }, {
-	        key: 'getSongs',
-	        value: function getSongs() {
-	            $.ajax({
-	                url: '',
-	                data: {}
-	            }).success(function (songs) {
-	                // TODO: get songs and add them to state
-	            }).fail(function (message) {
-	                // TODO: handle failure to load tracks
-	            });
-	        }
-	    }, {
-	        key: 'componentDidMount',
-	        value: function componentDidMount() {
-	            this.getSongs();
-	        }
-	    }, {
-	        key: 'playAll',
-	        value: function playAll() {
-	            this.props.nowPlaying(this.state.library[0]);
-	            this.props.setQueue(this.state.library);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { id: 'libraryContainer' },
-	                _react2.default.createElement(
-	                    'table',
-	                    { id: 'library', className: 'ui table striped compact' },
-	                    _react2.default.createElement(
-	                        'thead',
-	                        null,
-	                        _react2.default.createElement(
-	                            'tr',
-	                            null,
-	                            _react2.default.createElement('th', null),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Title'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Artist'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Liked'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Date added'
-	                            ),
-	                            _react2.default.createElement(
-	                                'th',
-	                                null,
-	                                'Platform'
-	                            )
-	                        )
-	                    ),
-	                    _react2.default.createElement(
-	                        'tbody',
-	                        null,
-	                        _.map(this.state.library, function (song, index) {
-	                            return _react2.default.createElement(_Track2.default, {
-	                                key: song.url,
-	                                track: song,
-	                                view: 'library' });
-	                        })
-	                    )
-	                ),
-	                _react2.default.createElement(
-	                    'button',
-	                    { className: 'ui button basic', onClick: this.playAll },
-	                    'Play All songs'
-	                ),
-	                _react2.default.createElement(
-	                    'p',
-	                    { id: 'libraryHUD' },
-	                    this.state.library.length,
-	                    ' songs'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Library;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	    return {
-	        currentTrack: state.nowPlaying,
-	        queue: state.queue
-	    };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	    return {
-	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch)
-	    };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Library);
-
-/***/ }),
-/* 978 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _redux = __webpack_require__(233);
-
-	var _reactRedux = __webpack_require__(224);
-
-	var _actions = __webpack_require__(263);
-
-	var _moment = __webpack_require__(979);
-
-	var _moment2 = _interopRequireDefault(_moment);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Track = function (_React$Component) {
-	  _inherits(Track, _React$Component);
-
-	  function Track(props) {
-	    _classCallCheck(this, Track);
-
-	    var _this = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
-
-	    _this.startTrack = _this.startTrack.bind(_this);
-	    _this.renderView = _this.renderView.bind(_this);
-	    return _this;
-	  }
-
-	  _createClass(Track, [{
-	    key: 'startTrack',
-	    value: function startTrack() {
-	      var track = this.props.track;
-
-	      this.props.updateQueue(track, false);
-	      if (this.props.queue.length > 0) {
-	        this.props.nowPlaying(track);
-	      }
-	    }
-	  }, {
-	    key: 'renderView',
-	    value: function renderView() {
-	      var view = this.props.view;
-
-	      switch (view) {
-	        case 'library':
-	          return _react2.default.createElement(LibraryView, { track: this.props.track, startTrack: this.props.startTrack });
-	        default:
-	          return _react2.default.createElement(QueueView, { track: this.props.track, startTrack: this.props.startTrack });
-	      }
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var track = this.props.track,
-	          props = this.props;
-
-	      if (this.props.view.match(/library|playlist/)) {
-	        return _react2.default.createElement(
-	          'tr',
-	          { key: props.track.url, onClick: this.startTrack },
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'ui checkbox' },
-	              _react2.default.createElement('input', { type: 'checkbox' }),
-	              _react2.default.createElement('label', null)
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            props.track.track
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            props.track.artist
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            !props.track.liked ? _react2.default.createElement('i', { className: 'pink heart icon' }) : _react2.default.createElement('i', { className: 'empty heart icon' })
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            (0, _moment2.default)(props.track.created).format('MMMM Do')
-	          ),
-	          _react2.default.createElement(
-	            'td',
-	            null,
-	            _react2.default.createElement('i', { className: 'red big youtube icon' })
-	          )
-	        );
-	      } else {
-	        return _react2.default.createElement(
-	          'div',
-	          null,
-	          this.renderView()
-	        );
-	      }
-	    }
-	  }]);
-
-	  return Track;
-	}(_react2.default.Component);
-
-	// const ResultsView = props => {
-	//   return (
-	//
-	//   )
-	// }
-
-	var QueueView = function QueueView(props) {
-	  return _react2.default.createElement(
-	    'div',
-	    { className: 'item track', id: undefined.props.track.id,
-	      'data-title': undefined.props.track.title,
-	      'data-thumbnail': undefined.props.track.thumbnail,
-	      'data-genere': undefined.props.track.genere,
-	      'data-url': undefined.props.track.url,
-	      'data-type': undefined.props.track.type,
-	      'data-platform': undefined.props.track.platform,
-	      'data-isSeeking': undefined.props.track.isSeeking,
-	      'data-playing': undefined.props.track.playing,
-	      'data-played': undefined.props.track.played },
-	    _react2.default.createElement(
-	      'a',
-	      { className: 'ui tiny image' },
-	      _react2.default.createElement('img', { src: undefined.props.track.thumbnail })
-	    ),
-	    _react2.default.createElement(
-	      'div',
-	      { className: 'content' },
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'description' },
-	        _react2.default.createElement('i', { className: 'remove icon', onClick: undefined.removeTrack }),
-	        undefined.props.parent.props.currentTrack.id == undefined.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
-	          'a',
-	          { className: 'ui blue circular label' },
-	          undefined.props.position + 1
-	        ),
-	        _react2.default.createElement(
-	          'a',
-	          { className: undefined.props.parent.props.currentTrack.id == undefined.props.track.id ? 'ui blue header' : 'ui header', onClick: undefined.startTrack },
-	          undefined.props.track.title
-	        )
-	      ),
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'meta' },
-	        _react2.default.createElement('i', { className: 'empty heart icon' }),
-	        _react2.default.createElement(
-	          'span',
-	          { onClick: undefined.addToLibrary },
-	          'Add to library'
-	        ),
-	        undefined.renderPlatform()
-	      )
-	    )
-	  );
-	};
-
-	var Result = function (_React$Component2) {
-	  _inherits(Result, _React$Component2);
-
-	  function Result(props) {
-	    _classCallCheck(this, Result);
-
-	    var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
-
-	    _this2.add = _this2.add.bind(_this2);
-	    _this2.upNext = _this2.add.bind(_this2);
-	    _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
-	    return _this2;
-	  }
-
-	  _createClass(Result, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      //$('.ui.dropdown').dropdown()
-	    }
-	  }, {
-	    key: 'add',
-	    value: function add() {
-	      this.props.callback(this.props.result, false);
-	    }
-	  }, {
-	    key: 'upNext',
-	    value: function upNext() {
-	      this.props.callback(this.props.result, true);
-	    }
-	  }, {
-	    key: 'renderPlatform',
-	    value: function renderPlatform() {
-	      var icon = void 0,
-	          platform = void 0;
-
-	      switch (this.props.result.platform) {
-	        case 'youtube':
-	          icon = 'red youtube';
-	          break;
-	        case 'soundcloud':
-	          icon = 'orange soundcloud';
-	          break;
-
-	      }
-	      return _react2.default.createElement('i', { className: 'ui big ' + icon + ' icon' });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this3 = this;
-
-	      var playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [],
-	          component = this;
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'item' },
-	        _react2.default.createElement(
-	          'a',
-	          { className: 'ui tiny image' },
-	          _react2.default.createElement('img', { src: this.props.result.thumbnail })
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'content' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'description' },
-	            _react2.default.createElement(
-	              'h3',
-	              { onClick: this.add },
-	              this.props.result.title
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'meta' },
-	            _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
-	            _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'ui dropdown' },
-	              _react2.default.createElement('i', { className: 'ellipsis horizontal icon', onClick: function onClick(e) {
-	                  $(e.target).parent().dropdown('show');
-	                } }),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'menu' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item' },
-	                  _react2.default.createElement('i', { className: 'heart pink icon' })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item' },
-	                  'Download'
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item' },
-	                  'More like this'
-	                ),
-	                _react2.default.createElement('div', { className: 'divider' }),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item' },
-	                  _react2.default.createElement('i', { className: 'dropdown icon' }),
-	                  'Add to Playlist',
-	                  _react2.default.createElement(
-	                    'div',
-	                    { className: 'menu' },
-	                    _.map(playlists, function (playlist, index) {
-	                      return _react2.default.createElement(PlaylistItem, { key: playlist.name, playlists: playlists, playlist: playlist, index: index, track: _this3.props.result });
-	                    })
-	                  )
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item' },
-	                  'New Playlists'
-	                )
-	              )
-	            ),
-	            this.renderPlatform()
-	          )
-	        )
-	      );
-	    }
-	  }]);
-
-	  return Result;
-	}(_react2.default.Component);
-
-	var PlaylistItem = function (_React$Component3) {
-	  _inherits(PlaylistItem, _React$Component3);
-
-	  function PlaylistItem(props) {
-	    _classCallCheck(this, PlaylistItem);
-
-	    var _this4 = _possibleConstructorReturn(this, (PlaylistItem.__proto__ || Object.getPrototypeOf(PlaylistItem)).call(this));
-
-	    _this4.addTrackToPlaylist = _this4.addTrackToPlaylist.bind(_this4);
-	    return _this4;
-	  }
-
-	  _createClass(PlaylistItem, [{
-	    key: 'addTrackToPlaylist',
-	    value: function addTrackToPlaylist() {
-	      var playlist = this.props.playlist,
-	          playlists = this.props.playlists;
-
-	      playlist.tracks.push(_extends({}, this.props.track, {
-	        isSeeking: false,
-	        played: 0,
-	        playing: true
-	      }));
-	      playlists[this.props.index] = playlist;
-	      localStorage.setItem('playlists', JSON.stringify(playlists));
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'item', onClick: this.addTrackToPlaylist },
-	        this.props.playlist.name
-	      );
-	    }
-	  }]);
-
-	  return PlaylistItem;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    currentTrack: state.nowPlaying,
-	    queue: state.queue
-	  };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
-	    updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Track);
-
-/***/ }),
-/* 979 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var require;/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -96909,7 +95404,7 @@
 	        try {
 	            oldLocale = globalLocale._abbr;
 	            var aliasedRequire = require;
-	            __webpack_require__(980)("./" + name);
+	            __webpack_require__(973)("./" + name);
 	            getSetGlobalLocale(oldLocale);
 	        } catch (e) {}
 	    }
@@ -99583,246 +98078,246 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(247)(module)))
 
 /***/ }),
-/* 980 */
+/* 973 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 981,
-		"./af.js": 981,
-		"./ar": 982,
-		"./ar-dz": 983,
-		"./ar-dz.js": 983,
-		"./ar-kw": 984,
-		"./ar-kw.js": 984,
-		"./ar-ly": 985,
-		"./ar-ly.js": 985,
-		"./ar-ma": 986,
-		"./ar-ma.js": 986,
-		"./ar-sa": 987,
-		"./ar-sa.js": 987,
-		"./ar-tn": 988,
-		"./ar-tn.js": 988,
-		"./ar.js": 982,
-		"./az": 989,
-		"./az.js": 989,
-		"./be": 990,
-		"./be.js": 990,
-		"./bg": 991,
-		"./bg.js": 991,
-		"./bm": 992,
-		"./bm.js": 992,
-		"./bn": 993,
-		"./bn.js": 993,
-		"./bo": 994,
-		"./bo.js": 994,
-		"./br": 995,
-		"./br.js": 995,
-		"./bs": 996,
-		"./bs.js": 996,
-		"./ca": 997,
-		"./ca.js": 997,
-		"./cs": 998,
-		"./cs.js": 998,
-		"./cv": 999,
-		"./cv.js": 999,
-		"./cy": 1000,
-		"./cy.js": 1000,
-		"./da": 1001,
-		"./da.js": 1001,
-		"./de": 1002,
-		"./de-at": 1003,
-		"./de-at.js": 1003,
-		"./de-ch": 1004,
-		"./de-ch.js": 1004,
-		"./de.js": 1002,
-		"./dv": 1005,
-		"./dv.js": 1005,
-		"./el": 1006,
-		"./el.js": 1006,
-		"./en-au": 1007,
-		"./en-au.js": 1007,
-		"./en-ca": 1008,
-		"./en-ca.js": 1008,
-		"./en-gb": 1009,
-		"./en-gb.js": 1009,
-		"./en-ie": 1010,
-		"./en-ie.js": 1010,
-		"./en-nz": 1011,
-		"./en-nz.js": 1011,
-		"./eo": 1012,
-		"./eo.js": 1012,
-		"./es": 1013,
-		"./es-do": 1014,
-		"./es-do.js": 1014,
-		"./es-us": 1015,
-		"./es-us.js": 1015,
-		"./es.js": 1013,
-		"./et": 1016,
-		"./et.js": 1016,
-		"./eu": 1017,
-		"./eu.js": 1017,
-		"./fa": 1018,
-		"./fa.js": 1018,
-		"./fi": 1019,
-		"./fi.js": 1019,
-		"./fo": 1020,
-		"./fo.js": 1020,
-		"./fr": 1021,
-		"./fr-ca": 1022,
-		"./fr-ca.js": 1022,
-		"./fr-ch": 1023,
-		"./fr-ch.js": 1023,
-		"./fr.js": 1021,
-		"./fy": 1024,
-		"./fy.js": 1024,
-		"./gd": 1025,
-		"./gd.js": 1025,
-		"./gl": 1026,
-		"./gl.js": 1026,
-		"./gom-latn": 1027,
-		"./gom-latn.js": 1027,
-		"./gu": 1028,
-		"./gu.js": 1028,
-		"./he": 1029,
-		"./he.js": 1029,
-		"./hi": 1030,
-		"./hi.js": 1030,
-		"./hr": 1031,
-		"./hr.js": 1031,
-		"./hu": 1032,
-		"./hu.js": 1032,
-		"./hy-am": 1033,
-		"./hy-am.js": 1033,
-		"./id": 1034,
-		"./id.js": 1034,
-		"./is": 1035,
-		"./is.js": 1035,
-		"./it": 1036,
-		"./it.js": 1036,
-		"./ja": 1037,
-		"./ja.js": 1037,
-		"./jv": 1038,
-		"./jv.js": 1038,
-		"./ka": 1039,
-		"./ka.js": 1039,
-		"./kk": 1040,
-		"./kk.js": 1040,
-		"./km": 1041,
-		"./km.js": 1041,
-		"./kn": 1042,
-		"./kn.js": 1042,
-		"./ko": 1043,
-		"./ko.js": 1043,
-		"./ky": 1044,
-		"./ky.js": 1044,
-		"./lb": 1045,
-		"./lb.js": 1045,
-		"./lo": 1046,
-		"./lo.js": 1046,
-		"./lt": 1047,
-		"./lt.js": 1047,
-		"./lv": 1048,
-		"./lv.js": 1048,
-		"./me": 1049,
-		"./me.js": 1049,
-		"./mi": 1050,
-		"./mi.js": 1050,
-		"./mk": 1051,
-		"./mk.js": 1051,
-		"./ml": 1052,
-		"./ml.js": 1052,
-		"./mr": 1053,
-		"./mr.js": 1053,
-		"./ms": 1054,
-		"./ms-my": 1055,
-		"./ms-my.js": 1055,
-		"./ms.js": 1054,
-		"./my": 1056,
-		"./my.js": 1056,
-		"./nb": 1057,
-		"./nb.js": 1057,
-		"./ne": 1058,
-		"./ne.js": 1058,
-		"./nl": 1059,
-		"./nl-be": 1060,
-		"./nl-be.js": 1060,
-		"./nl.js": 1059,
-		"./nn": 1061,
-		"./nn.js": 1061,
-		"./pa-in": 1062,
-		"./pa-in.js": 1062,
-		"./pl": 1063,
-		"./pl.js": 1063,
-		"./pt": 1064,
-		"./pt-br": 1065,
-		"./pt-br.js": 1065,
-		"./pt.js": 1064,
-		"./ro": 1066,
-		"./ro.js": 1066,
-		"./ru": 1067,
-		"./ru.js": 1067,
-		"./sd": 1068,
-		"./sd.js": 1068,
-		"./se": 1069,
-		"./se.js": 1069,
-		"./si": 1070,
-		"./si.js": 1070,
-		"./sk": 1071,
-		"./sk.js": 1071,
-		"./sl": 1072,
-		"./sl.js": 1072,
-		"./sq": 1073,
-		"./sq.js": 1073,
-		"./sr": 1074,
-		"./sr-cyrl": 1075,
-		"./sr-cyrl.js": 1075,
-		"./sr.js": 1074,
-		"./ss": 1076,
-		"./ss.js": 1076,
-		"./sv": 1077,
-		"./sv.js": 1077,
-		"./sw": 1078,
-		"./sw.js": 1078,
-		"./ta": 1079,
-		"./ta.js": 1079,
-		"./te": 1080,
-		"./te.js": 1080,
-		"./tet": 1081,
-		"./tet.js": 1081,
-		"./th": 1082,
-		"./th.js": 1082,
-		"./tl-ph": 1083,
-		"./tl-ph.js": 1083,
-		"./tlh": 1084,
-		"./tlh.js": 1084,
-		"./tr": 1085,
-		"./tr.js": 1085,
-		"./tzl": 1086,
-		"./tzl.js": 1086,
-		"./tzm": 1087,
-		"./tzm-latn": 1088,
-		"./tzm-latn.js": 1088,
-		"./tzm.js": 1087,
-		"./uk": 1089,
-		"./uk.js": 1089,
-		"./ur": 1090,
-		"./ur.js": 1090,
-		"./uz": 1091,
-		"./uz-latn": 1092,
-		"./uz-latn.js": 1092,
-		"./uz.js": 1091,
-		"./vi": 1093,
-		"./vi.js": 1093,
-		"./x-pseudo": 1094,
-		"./x-pseudo.js": 1094,
-		"./yo": 1095,
-		"./yo.js": 1095,
-		"./zh-cn": 1096,
-		"./zh-cn.js": 1096,
-		"./zh-hk": 1097,
-		"./zh-hk.js": 1097,
-		"./zh-tw": 1098,
-		"./zh-tw.js": 1098
+		"./af": 974,
+		"./af.js": 974,
+		"./ar": 975,
+		"./ar-dz": 976,
+		"./ar-dz.js": 976,
+		"./ar-kw": 977,
+		"./ar-kw.js": 977,
+		"./ar-ly": 978,
+		"./ar-ly.js": 978,
+		"./ar-ma": 979,
+		"./ar-ma.js": 979,
+		"./ar-sa": 980,
+		"./ar-sa.js": 980,
+		"./ar-tn": 981,
+		"./ar-tn.js": 981,
+		"./ar.js": 975,
+		"./az": 982,
+		"./az.js": 982,
+		"./be": 983,
+		"./be.js": 983,
+		"./bg": 984,
+		"./bg.js": 984,
+		"./bm": 985,
+		"./bm.js": 985,
+		"./bn": 986,
+		"./bn.js": 986,
+		"./bo": 987,
+		"./bo.js": 987,
+		"./br": 988,
+		"./br.js": 988,
+		"./bs": 989,
+		"./bs.js": 989,
+		"./ca": 990,
+		"./ca.js": 990,
+		"./cs": 991,
+		"./cs.js": 991,
+		"./cv": 992,
+		"./cv.js": 992,
+		"./cy": 993,
+		"./cy.js": 993,
+		"./da": 994,
+		"./da.js": 994,
+		"./de": 995,
+		"./de-at": 996,
+		"./de-at.js": 996,
+		"./de-ch": 997,
+		"./de-ch.js": 997,
+		"./de.js": 995,
+		"./dv": 998,
+		"./dv.js": 998,
+		"./el": 999,
+		"./el.js": 999,
+		"./en-au": 1000,
+		"./en-au.js": 1000,
+		"./en-ca": 1001,
+		"./en-ca.js": 1001,
+		"./en-gb": 1002,
+		"./en-gb.js": 1002,
+		"./en-ie": 1003,
+		"./en-ie.js": 1003,
+		"./en-nz": 1004,
+		"./en-nz.js": 1004,
+		"./eo": 1005,
+		"./eo.js": 1005,
+		"./es": 1006,
+		"./es-do": 1007,
+		"./es-do.js": 1007,
+		"./es-us": 1008,
+		"./es-us.js": 1008,
+		"./es.js": 1006,
+		"./et": 1009,
+		"./et.js": 1009,
+		"./eu": 1010,
+		"./eu.js": 1010,
+		"./fa": 1011,
+		"./fa.js": 1011,
+		"./fi": 1012,
+		"./fi.js": 1012,
+		"./fo": 1013,
+		"./fo.js": 1013,
+		"./fr": 1014,
+		"./fr-ca": 1015,
+		"./fr-ca.js": 1015,
+		"./fr-ch": 1016,
+		"./fr-ch.js": 1016,
+		"./fr.js": 1014,
+		"./fy": 1017,
+		"./fy.js": 1017,
+		"./gd": 1018,
+		"./gd.js": 1018,
+		"./gl": 1019,
+		"./gl.js": 1019,
+		"./gom-latn": 1020,
+		"./gom-latn.js": 1020,
+		"./gu": 1021,
+		"./gu.js": 1021,
+		"./he": 1022,
+		"./he.js": 1022,
+		"./hi": 1023,
+		"./hi.js": 1023,
+		"./hr": 1024,
+		"./hr.js": 1024,
+		"./hu": 1025,
+		"./hu.js": 1025,
+		"./hy-am": 1026,
+		"./hy-am.js": 1026,
+		"./id": 1027,
+		"./id.js": 1027,
+		"./is": 1028,
+		"./is.js": 1028,
+		"./it": 1029,
+		"./it.js": 1029,
+		"./ja": 1030,
+		"./ja.js": 1030,
+		"./jv": 1031,
+		"./jv.js": 1031,
+		"./ka": 1032,
+		"./ka.js": 1032,
+		"./kk": 1033,
+		"./kk.js": 1033,
+		"./km": 1034,
+		"./km.js": 1034,
+		"./kn": 1035,
+		"./kn.js": 1035,
+		"./ko": 1036,
+		"./ko.js": 1036,
+		"./ky": 1037,
+		"./ky.js": 1037,
+		"./lb": 1038,
+		"./lb.js": 1038,
+		"./lo": 1039,
+		"./lo.js": 1039,
+		"./lt": 1040,
+		"./lt.js": 1040,
+		"./lv": 1041,
+		"./lv.js": 1041,
+		"./me": 1042,
+		"./me.js": 1042,
+		"./mi": 1043,
+		"./mi.js": 1043,
+		"./mk": 1044,
+		"./mk.js": 1044,
+		"./ml": 1045,
+		"./ml.js": 1045,
+		"./mr": 1046,
+		"./mr.js": 1046,
+		"./ms": 1047,
+		"./ms-my": 1048,
+		"./ms-my.js": 1048,
+		"./ms.js": 1047,
+		"./my": 1049,
+		"./my.js": 1049,
+		"./nb": 1050,
+		"./nb.js": 1050,
+		"./ne": 1051,
+		"./ne.js": 1051,
+		"./nl": 1052,
+		"./nl-be": 1053,
+		"./nl-be.js": 1053,
+		"./nl.js": 1052,
+		"./nn": 1054,
+		"./nn.js": 1054,
+		"./pa-in": 1055,
+		"./pa-in.js": 1055,
+		"./pl": 1056,
+		"./pl.js": 1056,
+		"./pt": 1057,
+		"./pt-br": 1058,
+		"./pt-br.js": 1058,
+		"./pt.js": 1057,
+		"./ro": 1059,
+		"./ro.js": 1059,
+		"./ru": 1060,
+		"./ru.js": 1060,
+		"./sd": 1061,
+		"./sd.js": 1061,
+		"./se": 1062,
+		"./se.js": 1062,
+		"./si": 1063,
+		"./si.js": 1063,
+		"./sk": 1064,
+		"./sk.js": 1064,
+		"./sl": 1065,
+		"./sl.js": 1065,
+		"./sq": 1066,
+		"./sq.js": 1066,
+		"./sr": 1067,
+		"./sr-cyrl": 1068,
+		"./sr-cyrl.js": 1068,
+		"./sr.js": 1067,
+		"./ss": 1069,
+		"./ss.js": 1069,
+		"./sv": 1070,
+		"./sv.js": 1070,
+		"./sw": 1071,
+		"./sw.js": 1071,
+		"./ta": 1072,
+		"./ta.js": 1072,
+		"./te": 1073,
+		"./te.js": 1073,
+		"./tet": 1074,
+		"./tet.js": 1074,
+		"./th": 1075,
+		"./th.js": 1075,
+		"./tl-ph": 1076,
+		"./tl-ph.js": 1076,
+		"./tlh": 1077,
+		"./tlh.js": 1077,
+		"./tr": 1078,
+		"./tr.js": 1078,
+		"./tzl": 1079,
+		"./tzl.js": 1079,
+		"./tzm": 1080,
+		"./tzm-latn": 1081,
+		"./tzm-latn.js": 1081,
+		"./tzm.js": 1080,
+		"./uk": 1082,
+		"./uk.js": 1082,
+		"./ur": 1083,
+		"./ur.js": 1083,
+		"./uz": 1084,
+		"./uz-latn": 1085,
+		"./uz-latn.js": 1085,
+		"./uz.js": 1084,
+		"./vi": 1086,
+		"./vi.js": 1086,
+		"./x-pseudo": 1087,
+		"./x-pseudo.js": 1087,
+		"./yo": 1088,
+		"./yo.js": 1088,
+		"./zh-cn": 1089,
+		"./zh-cn.js": 1089,
+		"./zh-hk": 1090,
+		"./zh-hk.js": 1090,
+		"./zh-tw": 1091,
+		"./zh-tw.js": 1091
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -99835,11 +98330,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 980;
+	webpackContext.id = 973;
 
 
 /***/ }),
-/* 981 */
+/* 974 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -99847,7 +98342,7 @@
 	//! author : Werner Mollentze : https://github.com/wernerm
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -99917,7 +98412,7 @@
 
 
 /***/ }),
-/* 982 */
+/* 975 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -99927,7 +98422,7 @@
 	//! author : forabi https://github.com/forabi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100064,7 +98559,7 @@
 
 
 /***/ }),
-/* 983 */
+/* 976 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100072,7 +98567,7 @@
 	//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100128,7 +98623,7 @@
 
 
 /***/ }),
-/* 984 */
+/* 977 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100136,7 +98631,7 @@
 	//! author : Nusret Parlak: https://github.com/nusretparlak
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100192,7 +98687,7 @@
 
 
 /***/ }),
-/* 985 */
+/* 978 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100200,7 +98695,7 @@
 	//! author : Ali Hmer: https://github.com/kikoanis
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100323,7 +98818,7 @@
 
 
 /***/ }),
-/* 986 */
+/* 979 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100332,7 +98827,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100388,7 +98883,7 @@
 
 
 /***/ }),
-/* 987 */
+/* 980 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100396,7 +98891,7 @@
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100498,7 +98993,7 @@
 
 
 /***/ }),
-/* 988 */
+/* 981 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100506,7 +99001,7 @@
 	//! author : Nader Toukabri : https://github.com/naderio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100562,7 +99057,7 @@
 
 
 /***/ }),
-/* 989 */
+/* 982 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100570,7 +99065,7 @@
 	//! author : topchiyev : https://github.com/topchiyev
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100672,7 +99167,7 @@
 
 
 /***/ }),
-/* 990 */
+/* 983 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100682,7 +99177,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100811,7 +99306,7 @@
 
 
 /***/ }),
-/* 991 */
+/* 984 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100819,7 +99314,7 @@
 	//! author : Krasen Borisov : https://github.com/kraz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100906,7 +99401,7 @@
 
 
 /***/ }),
-/* 992 */
+/* 985 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100914,7 +99409,7 @@
 	//! author : Estelle Comment : https://github.com/estellecomment
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -100970,7 +99465,7 @@
 
 
 /***/ }),
-/* 993 */
+/* 986 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -100978,7 +99473,7 @@
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101094,7 +99589,7 @@
 
 
 /***/ }),
-/* 994 */
+/* 987 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101102,7 +99597,7 @@
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101218,7 +99713,7 @@
 
 
 /***/ }),
-/* 995 */
+/* 988 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101226,7 +99721,7 @@
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101331,7 +99826,7 @@
 
 
 /***/ }),
-/* 996 */
+/* 989 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101340,7 +99835,7 @@
 	//! based on (hr) translation by Bojan Marković
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101479,7 +99974,7 @@
 
 
 /***/ }),
-/* 997 */
+/* 990 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101487,7 +99982,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101572,7 +100067,7 @@
 
 
 /***/ }),
-/* 998 */
+/* 991 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101580,7 +100075,7 @@
 	//! author : petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101749,7 +100244,7 @@
 
 
 /***/ }),
-/* 999 */
+/* 992 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101757,7 +100252,7 @@
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101817,7 +100312,7 @@
 
 
 /***/ }),
-/* 1000 */
+/* 993 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101826,7 +100321,7 @@
 	//! author : https://github.com/ryangreaves
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101903,7 +100398,7 @@
 
 
 /***/ }),
-/* 1001 */
+/* 994 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101911,7 +100406,7 @@
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -101968,7 +100463,7 @@
 
 
 /***/ }),
-/* 1002 */
+/* 995 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -101978,7 +100473,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102051,7 +100546,7 @@
 
 
 /***/ }),
-/* 1003 */
+/* 996 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102062,7 +100557,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102135,7 +100630,7 @@
 
 
 /***/ }),
-/* 1004 */
+/* 997 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102143,7 +100638,7 @@
 	//! author : sschueller : https://github.com/sschueller
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102218,7 +100713,7 @@
 
 
 /***/ }),
-/* 1005 */
+/* 998 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102226,7 +100721,7 @@
 	//! author : Jawish Hameed : https://github.com/jawish
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102323,7 +100818,7 @@
 
 
 /***/ }),
-/* 1006 */
+/* 999 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102331,7 +100826,7 @@
 	//! author : Aggelos Karalias : https://github.com/mehiel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102428,7 +100923,7 @@
 
 
 /***/ }),
-/* 1007 */
+/* 1000 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102436,7 +100931,7 @@
 	//! author : Jared Morse : https://github.com/jarcoal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102500,7 +100995,7 @@
 
 
 /***/ }),
-/* 1008 */
+/* 1001 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102508,7 +101003,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102568,7 +101063,7 @@
 
 
 /***/ }),
-/* 1009 */
+/* 1002 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102576,7 +101071,7 @@
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102640,7 +101135,7 @@
 
 
 /***/ }),
-/* 1010 */
+/* 1003 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102648,7 +101143,7 @@
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102712,7 +101207,7 @@
 
 
 /***/ }),
-/* 1011 */
+/* 1004 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102720,7 +101215,7 @@
 	//! author : Luke McGregor : https://github.com/lukemcgregor
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102784,7 +101279,7 @@
 
 
 /***/ }),
-/* 1012 */
+/* 1005 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102794,7 +101289,7 @@
 	//! comment : miestasmia corrected the translation by colindean
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102862,7 +101357,7 @@
 
 
 /***/ }),
-/* 1013 */
+/* 1006 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -102870,7 +101365,7 @@
 	//! author : Julio Napurí : https://github.com/julionc
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -102959,14 +101454,14 @@
 
 
 /***/ }),
-/* 1014 */
+/* 1007 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : Spanish (Dominican Republic) [es-do]
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103055,7 +101550,7 @@
 
 
 /***/ }),
-/* 1015 */
+/* 1008 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103063,7 +101558,7 @@
 	//! author : bustta : https://github.com/bustta
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103143,7 +101638,7 @@
 
 
 /***/ }),
-/* 1016 */
+/* 1009 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103152,7 +101647,7 @@
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103228,7 +101723,7 @@
 
 
 /***/ }),
-/* 1017 */
+/* 1010 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103236,7 +101731,7 @@
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103299,7 +101794,7 @@
 
 
 /***/ }),
-/* 1018 */
+/* 1011 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103307,7 +101802,7 @@
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103411,7 +101906,7 @@
 
 
 /***/ }),
-/* 1019 */
+/* 1012 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103419,7 +101914,7 @@
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103523,7 +102018,7 @@
 
 
 /***/ }),
-/* 1020 */
+/* 1013 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103531,7 +102026,7 @@
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103588,7 +102083,7 @@
 
 
 /***/ }),
-/* 1021 */
+/* 1014 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103596,7 +102091,7 @@
 	//! author : John Fischer : https://github.com/jfroffice
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103676,7 +102171,7 @@
 
 
 /***/ }),
-/* 1022 */
+/* 1015 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103684,7 +102179,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103755,7 +102250,7 @@
 
 
 /***/ }),
-/* 1023 */
+/* 1016 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103763,7 +102258,7 @@
 	//! author : Gaspard Bucher : https://github.com/gaspard
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103838,7 +102333,7 @@
 
 
 /***/ }),
-/* 1024 */
+/* 1017 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103846,7 +102341,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103918,7 +102413,7 @@
 
 
 /***/ }),
-/* 1025 */
+/* 1018 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -103926,7 +102421,7 @@
 	//! author : Jon Ashdown : https://github.com/jonashdown
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -103999,7 +102494,7 @@
 
 
 /***/ }),
-/* 1026 */
+/* 1019 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104007,7 +102502,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104081,7 +102576,7 @@
 
 
 /***/ }),
-/* 1027 */
+/* 1020 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104089,7 +102584,7 @@
 	//! author : The Discoverer : https://github.com/WikiDiscoverer
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104208,7 +102703,7 @@
 
 
 /***/ }),
-/* 1028 */
+/* 1021 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104216,7 +102711,7 @@
 	//! author : Kaushik Thanki : https://github.com/Kaushik1987
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104337,7 +102832,7 @@
 
 
 /***/ }),
-/* 1029 */
+/* 1022 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104347,7 +102842,7 @@
 	//! author : Tal Ater : https://github.com/TalAter
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104441,7 +102936,7 @@
 
 
 /***/ }),
-/* 1030 */
+/* 1023 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104449,7 +102944,7 @@
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104570,7 +103065,7 @@
 
 
 /***/ }),
-/* 1031 */
+/* 1024 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104578,7 +103073,7 @@
 	//! author : Bojan Marković : https://github.com/bmarkovic
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104720,7 +103215,7 @@
 
 
 /***/ }),
-/* 1032 */
+/* 1025 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104728,7 +103223,7 @@
 	//! author : Adam Brunner : https://github.com/adambrunner
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104834,7 +103329,7 @@
 
 
 /***/ }),
-/* 1033 */
+/* 1026 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104842,7 +103337,7 @@
 	//! author : Armendarabyan : https://github.com/armendarabyan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -104934,7 +103429,7 @@
 
 
 /***/ }),
-/* 1034 */
+/* 1027 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -104943,7 +103438,7 @@
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105022,7 +103517,7 @@
 
 
 /***/ }),
-/* 1035 */
+/* 1028 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105030,7 +103525,7 @@
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105154,7 +103649,7 @@
 
 
 /***/ }),
-/* 1036 */
+/* 1029 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105163,7 +103658,7 @@
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105229,7 +103724,7 @@
 
 
 /***/ }),
-/* 1037 */
+/* 1030 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105237,7 +103732,7 @@
 	//! author : LI Long : https://github.com/baryon
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105314,7 +103809,7 @@
 
 
 /***/ }),
-/* 1038 */
+/* 1031 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105323,7 +103818,7 @@
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105402,7 +103897,7 @@
 
 
 /***/ }),
-/* 1039 */
+/* 1032 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105410,7 +103905,7 @@
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105496,7 +103991,7 @@
 
 
 /***/ }),
-/* 1040 */
+/* 1033 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105504,7 +103999,7 @@
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105588,7 +104083,7 @@
 
 
 /***/ }),
-/* 1041 */
+/* 1034 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105596,7 +104091,7 @@
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105651,7 +104146,7 @@
 
 
 /***/ }),
-/* 1042 */
+/* 1035 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105659,7 +104154,7 @@
 	//! author : Rajeev Naik : https://github.com/rajeevnaikte
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105782,7 +104277,7 @@
 
 
 /***/ }),
-/* 1043 */
+/* 1036 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105791,7 +104286,7 @@
 	//! author : Jeeeyul Lee <jeeeyul@gmail.com>
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105870,7 +104365,7 @@
 
 
 /***/ }),
-/* 1044 */
+/* 1037 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105878,7 +104373,7 @@
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -105963,7 +104458,7 @@
 
 
 /***/ }),
-/* 1045 */
+/* 1038 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -105972,7 +104467,7 @@
 	//! author : David Raison : https://github.com/kwisatz
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106105,7 +104600,7 @@
 
 
 /***/ }),
-/* 1046 */
+/* 1039 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106113,7 +104608,7 @@
 	//! author : Ryan Hart : https://github.com/ryanhart2
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106180,7 +104675,7 @@
 
 
 /***/ }),
-/* 1047 */
+/* 1040 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106188,7 +104683,7 @@
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106302,7 +104797,7 @@
 
 
 /***/ }),
-/* 1048 */
+/* 1041 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106311,7 +104806,7 @@
 	//! author : Jānis Elmeris : https://github.com/JanisE
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106404,7 +104899,7 @@
 
 
 /***/ }),
-/* 1049 */
+/* 1042 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106412,7 +104907,7 @@
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106520,7 +105015,7 @@
 
 
 /***/ }),
-/* 1050 */
+/* 1043 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106528,7 +105023,7 @@
 	//! author : John Corrigan <robbiecloset@gmail.com> : https://github.com/johnideal
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106589,7 +105084,7 @@
 
 
 /***/ }),
-/* 1051 */
+/* 1044 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106597,7 +105092,7 @@
 	//! author : Borislav Mickov : https://github.com/B0k0
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106684,7 +105179,7 @@
 
 
 /***/ }),
-/* 1052 */
+/* 1045 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106692,7 +105187,7 @@
 	//! author : Floyd Pink : https://github.com/floydpink
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106770,7 +105265,7 @@
 
 
 /***/ }),
-/* 1053 */
+/* 1046 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106779,7 +105274,7 @@
 	//! author : Vivek Athalye : https://github.com/vnathalye
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -106934,7 +105429,7 @@
 
 
 /***/ }),
-/* 1054 */
+/* 1047 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -106942,7 +105437,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107021,7 +105516,7 @@
 
 
 /***/ }),
-/* 1055 */
+/* 1048 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107030,7 +105525,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107109,7 +105604,7 @@
 
 
 /***/ }),
-/* 1056 */
+/* 1049 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107119,7 +105614,7 @@
 	//! author : Tin Aung Lin : https://github.com/thanyawzinmin
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107210,7 +105705,7 @@
 
 
 /***/ }),
-/* 1057 */
+/* 1050 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107219,7 +105714,7 @@
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107278,7 +105773,7 @@
 
 
 /***/ }),
-/* 1058 */
+/* 1051 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107286,7 +105781,7 @@
 	//! author : suvash : https://github.com/suvash
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107406,7 +105901,7 @@
 
 
 /***/ }),
-/* 1059 */
+/* 1052 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107415,7 +105910,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107499,7 +105994,7 @@
 
 
 /***/ }),
-/* 1060 */
+/* 1053 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107508,7 +106003,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107592,7 +106087,7 @@
 
 
 /***/ }),
-/* 1061 */
+/* 1054 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107600,7 +106095,7 @@
 	//! author : https://github.com/mechuwind
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107657,7 +106152,7 @@
 
 
 /***/ }),
-/* 1062 */
+/* 1055 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107665,7 +106160,7 @@
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107786,7 +106281,7 @@
 
 
 /***/ }),
-/* 1063 */
+/* 1056 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107794,7 +106289,7 @@
 	//! author : Rafal Hirsz : https://github.com/evoL
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107915,7 +106410,7 @@
 
 
 /***/ }),
-/* 1064 */
+/* 1057 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107923,7 +106418,7 @@
 	//! author : Jefferson : https://github.com/jalex79
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -107985,7 +106480,7 @@
 
 
 /***/ }),
-/* 1065 */
+/* 1058 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -107993,7 +106488,7 @@
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108052,7 +106547,7 @@
 
 
 /***/ }),
-/* 1066 */
+/* 1059 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108061,7 +106556,7 @@
 	//! author : Valentin Agachi : https://github.com/avaly
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108132,7 +106627,7 @@
 
 
 /***/ }),
-/* 1067 */
+/* 1060 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108142,7 +106637,7 @@
 	//! author : Коренберг Марк : https://github.com/socketpair
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108320,7 +106815,7 @@
 
 
 /***/ }),
-/* 1068 */
+/* 1061 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108328,7 +106823,7 @@
 	//! author : Narain Sagar : https://github.com/narainsagar
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108423,7 +106918,7 @@
 
 
 /***/ }),
-/* 1069 */
+/* 1062 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108431,7 +106926,7 @@
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108489,7 +106984,7 @@
 
 
 /***/ }),
-/* 1070 */
+/* 1063 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108497,7 +106992,7 @@
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108565,7 +107060,7 @@
 
 
 /***/ }),
-/* 1071 */
+/* 1064 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108574,7 +107069,7 @@
 	//! based on work of petrbela : https://github.com/petrbela
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108720,7 +107215,7 @@
 
 
 /***/ }),
-/* 1072 */
+/* 1065 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108728,7 +107223,7 @@
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108887,7 +107382,7 @@
 
 
 /***/ }),
-/* 1073 */
+/* 1066 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108897,7 +107392,7 @@
 	//! author : Oerd Cukalla : https://github.com/oerd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -108962,7 +107457,7 @@
 
 
 /***/ }),
-/* 1074 */
+/* 1067 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -108970,7 +107465,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109077,7 +107572,7 @@
 
 
 /***/ }),
-/* 1075 */
+/* 1068 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109085,7 +107580,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109192,7 +107687,7 @@
 
 
 /***/ }),
-/* 1076 */
+/* 1069 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109200,7 +107695,7 @@
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109286,7 +107781,7 @@
 
 
 /***/ }),
-/* 1077 */
+/* 1070 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109294,7 +107789,7 @@
 	//! author : Jens Alm : https://github.com/ulmus
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109360,7 +107855,7 @@
 
 
 /***/ }),
-/* 1078 */
+/* 1071 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109368,7 +107863,7 @@
 	//! author : Fahad Kassim : https://github.com/fadsel
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109424,7 +107919,7 @@
 
 
 /***/ }),
-/* 1079 */
+/* 1072 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109432,7 +107927,7 @@
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109559,7 +108054,7 @@
 
 
 /***/ }),
-/* 1080 */
+/* 1073 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109567,7 +108062,7 @@
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109653,7 +108148,7 @@
 
 
 /***/ }),
-/* 1081 */
+/* 1074 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109662,7 +108157,7 @@
 	//! author : Onorio De J. Afonso : https://github.com/marobo
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109726,7 +108221,7 @@
 
 
 /***/ }),
-/* 1082 */
+/* 1075 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109734,7 +108229,7 @@
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109798,7 +108293,7 @@
 
 
 /***/ }),
-/* 1083 */
+/* 1076 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109806,7 +108301,7 @@
 	//! author : Dan Hagman : https://github.com/hagmandan
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109865,7 +108360,7 @@
 
 
 /***/ }),
-/* 1084 */
+/* 1077 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109873,7 +108368,7 @@
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -109990,7 +108485,7 @@
 
 
 /***/ }),
-/* 1085 */
+/* 1078 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -109999,7 +108494,7 @@
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110085,7 +108580,7 @@
 
 
 /***/ }),
-/* 1086 */
+/* 1079 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110094,7 +108589,7 @@
 	//! author : Iustì Canun
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110181,7 +108676,7 @@
 
 
 /***/ }),
-/* 1087 */
+/* 1080 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110189,7 +108684,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110244,7 +108739,7 @@
 
 
 /***/ }),
-/* 1088 */
+/* 1081 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110252,7 +108747,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110307,7 +108802,7 @@
 
 
 /***/ }),
-/* 1089 */
+/* 1082 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110316,7 +108811,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110463,7 +108958,7 @@
 
 
 /***/ }),
-/* 1090 */
+/* 1083 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110472,7 +108967,7 @@
 	//! author : Zack : https://github.com/ZackVision
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110567,7 +109062,7 @@
 
 
 /***/ }),
-/* 1091 */
+/* 1084 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110575,7 +109070,7 @@
 	//! author : Sardor Muminov : https://github.com/muminoff
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110630,7 +109125,7 @@
 
 
 /***/ }),
-/* 1092 */
+/* 1085 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110638,7 +109133,7 @@
 	//! author : Rasulbek Mirzayev : github.com/Rasulbeeek
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110693,7 +109188,7 @@
 
 
 /***/ }),
-/* 1093 */
+/* 1086 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110701,7 +109196,7 @@
 	//! author : Bang Nguyen : https://github.com/bangnk
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110777,7 +109272,7 @@
 
 
 /***/ }),
-/* 1094 */
+/* 1087 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110785,7 +109280,7 @@
 	//! author : Andrew Hood : https://github.com/andrewhood125
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110850,7 +109345,7 @@
 
 
 /***/ }),
-/* 1095 */
+/* 1088 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110858,7 +109353,7 @@
 	//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -110915,7 +109410,7 @@
 
 
 /***/ }),
-/* 1096 */
+/* 1089 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -110924,7 +109419,7 @@
 	//! author : Zeno Zeng : https://github.com/zenozeng
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -111031,7 +109526,7 @@
 
 
 /***/ }),
-/* 1097 */
+/* 1090 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -111041,7 +109536,7 @@
 	//! author : Konstantin : https://github.com/skfd
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -111141,7 +109636,7 @@
 
 
 /***/ }),
-/* 1098 */
+/* 1091 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -111150,7 +109645,7 @@
 	//! author : Chris Lam : https://github.com/hehachris
 
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(979)) :
+	    true ? factory(__webpack_require__(972)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -111248,6 +109743,1453 @@
 
 	})));
 
+
+/***/ }),
+/* 1092 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ct = new ColorThief();
+
+	var MediaViewPage = function (_React$Component) {
+	    _inherits(MediaViewPage, _React$Component);
+
+	    function MediaViewPage(props) {
+	        _classCallCheck(this, MediaViewPage);
+
+	        var _this = _possibleConstructorReturn(this, (MediaViewPage.__proto__ || Object.getPrototypeOf(MediaViewPage)).call(this, props));
+
+	        _this.state = {
+	            track: null
+	        };
+
+	        _this.getAlbum = _this.getAlbum.bind(_this);
+	        _this.getColors = _this.getColors.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(MediaViewPage, [{
+	        key: 'componentDidUpdate',
+	        value: function componentDidUpdate() {
+	            if (this.state.track !== this.props.nowPlaying.title) {
+	                this.setState({ track: this.props.nowPlaying.title });
+	                this.getAlbum();
+	            }
+	        }
+	    }, {
+	        key: 'getAlbum',
+	        value: function getAlbum() {
+	            var _this2 = this;
+
+	            var component = this;
+	            var nowPlaying = component.props.nowPlaying;
+	            if (component.props.nowPlaying) {
+	                $.ajax({
+	                    url: '/api/getCover?track=' + nowPlaying.title.split('-')[1] + '&artist=' + nowPlaying.title.split('-')[0]
+	                }).done(function (album) {
+	                    _this2.getColors(album);
+	                });
+	            }
+	        }
+	    }, {
+	        key: 'getColors',
+	        value: function getColors(album) {
+	            var track = this.props.nowPlaying;
+	            var img = document.getElementById('image');
+	            img.setAttribute('crossOrigin', '*');
+	            var src = album.image ? album.image + '?' + new Date().getTime() : '/imgs/no-img.png';
+
+	            img.setAttribute('src', src);
+	            $('.v').html(track.title.split('-')[1]);
+	            $('.0').html(track.title.split('-')[0] + ' - ' + album.album);
+
+	            img.addEventListener('load', function () {
+	                // Set variables and get colors from images
+	                var vibrant = new Vibrant(img, 64, 5);
+	                var swatches = vibrant.swatches();
+	                var color = ct.getColor(img);
+	                var pal = ct.getPalette(img);
+	                if (swatches['Vibrant']) {
+	                    var v = swatches['Vibrant'].getRgb();
+
+	                    // Change UI colors based on colors found
+	                    $(".v").css("color", swatches['Vibrant'].getHex());
+	                    // $('#Viewer').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+	                    $('#image').css('boxShadow', '0 0 50px ' + swatches['Vibrant'].getHex());
+	                    $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                    $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
+	                } else {
+	                    // Change UI colors based on colors found
+	                    $(".v").css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                    // $('body').css("backgroundColor", `rgb(${pal[1][0]}, ${pal[1][1]}, ${pal[1][2]})`);
+	                    $('#image').css('boxShadow', '0 0 50px rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                    $('.dom').css("color", 'rgb(' + color[0] + ', ' + color[1] + ', ' + color[2] + ')');
+	                    $('.0').css("color", 'rgb(' + pal[0][0] + ', ' + pal[0][1] + ', ' + pal[0][2] + ')');
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'Viewer', className: 'page' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'div1', className: 'ui container' },
+	                    _react2.default.createElement('img', { id: 'image', src: '' }),
+	                    _react2.default.createElement(
+	                        'h1',
+	                        { className: 'v' },
+	                        'hey'
+	                    ),
+	                    _react2.default.createElement('h2', { className: '0' })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return MediaViewPage;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        nowPlaying: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        setControls: (0, _redux.bindActionCreators)(_actions.setControls, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaViewPage);
+
+/***/ }),
+/* 1093 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _Track = __webpack_require__(1094);
+
+	var _Track2 = _interopRequireDefault(_Track);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components
+
+
+	var PlaylistPage = function (_React$Component) {
+	    _inherits(PlaylistPage, _React$Component);
+
+	    function PlaylistPage(props) {
+	        _classCallCheck(this, PlaylistPage);
+
+	        var _this = _possibleConstructorReturn(this, (PlaylistPage.__proto__ || Object.getPrototypeOf(PlaylistPage)).call(this, props));
+
+	        _this.state = {
+	            playlist: {
+	                tracks: []
+	            }
+	        };
+
+	        _this.getSongs = _this.getSongs.bind(_this);
+	        _this.playAll = _this.playAll.bind(_this);
+	        _this.addToUpNext = _this.addToUpNext.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(PlaylistPage, [{
+	        key: 'getSongs',
+	        value: function getSongs() {
+	            $.ajax({
+	                url: '',
+	                data: {}
+	            }).success(function (songs) {
+	                // TODO: get songs and add them to state
+	            }).fail(function (message) {
+	                // TODO: handle failure to load tracks
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.getSongs();
+
+	            var playlists = this.props.playlists,
+	                playlistName = this.props.match.params.playlist,
+	                playlist = playlists[playlists.findIndex(function (playlist) {
+	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
+	            })];
+
+	            this.setState({ playlist: playlist });
+	        }
+	    }, {
+	        key: 'playAll',
+	        value: function playAll() {
+	            this.props.nowPlaying(this.state.playlist.tracks[0]);
+	            this.props.setQueue(this.state.playlist.tracks);
+	        }
+	    }, {
+	        key: 'addToUpNext',
+	        value: function addToUpNext() {
+	            var queue = [].concat(_toConsumableArray(this.props.queue), _toConsumableArray(this.state.playlist.tracks));
+	            this.props.setQueue(queue);
+	        }
+	    }, {
+	        key: 'removePlaylist',
+	        value: function removePlaylist() {
+	            // TODO: save change to local storage or database
+	            // Change page
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            // let playlist = this.state.playlist
+
+	            var playlists = this.props.playlists,
+	                playlistName = this.props.match.params.playlist,
+	                playlist = playlists[playlists.findIndex(function (playlist) {
+	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
+	            })];
+
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'libraryContainer' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'playlistHeader', className: 'ui segment' },
+	                    _react2.default.createElement(
+	                        'h2',
+	                        { className: 'ui inverted header' },
+	                        playlist.tracks.length > 0 ? _react2.default.createElement('img', { className: 'ui image', src: playlist.tracks[0].thumbnail }) : null,
+	                        playlist.name,
+	                        _react2.default.createElement(
+	                            'div',
+	                            { className: 'sub header' },
+	                            playlist.description
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'ui inverted active button', onClick: this.playAll },
+	                        'Play All songs'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'ui inverted active button', onClick: function onClick() {
+	                                _this2.props.removePlaylist(playlist);
+	                            } },
+	                        'Delete Playlist'
+	                    ),
+	                    _react2.default.createElement(
+	                        'button',
+	                        { className: 'ui inverted active button', onClick: this.addToUpNext },
+	                        'Add to Queue'
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'table',
+	                    { id: 'library', className: 'ui table striped compact' },
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement('th', null),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Title'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Artist'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Liked'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Date added'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Platform'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        _.map(playlist.tracks, function (song, index) {
+	                            return _react2.default.createElement(_Track2.default, {
+	                                key: song.id,
+	                                track: song,
+	                                view: 'playlist' });
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    { id: 'libraryHUD' },
+	                    playlist.tracks.length,
+	                    ' songs'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return PlaylistPage;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        currentTrack: state.nowPlaying,
+	        queue: state.queue,
+	        playlists: state.playlists
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        removePlaylist: (0, _redux.bindActionCreators)(_actions.removePlaylist, dispatch),
+	        editPlaylist: (0, _redux.bindActionCreators)(_actions.editPlaylist, dispatch),
+	        setPlaylistTracks: (0, _redux.bindActionCreators)(_actions.setPlaylistTracks, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PlaylistPage);
+
+/***/ }),
+/* 1094 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _moment = __webpack_require__(972);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Track = function (_React$Component) {
+	  _inherits(Track, _React$Component);
+
+	  function Track(props) {
+	    _classCallCheck(this, Track);
+
+	    var _this = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
+
+	    _this.startTrack = _this.startTrack.bind(_this);
+	    _this.renderView = _this.renderView.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(Track, [{
+	    key: 'startTrack',
+	    value: function startTrack() {
+	      var track = this.props.track;
+
+	      this.props.updateQueue(track, false);
+	      if (this.props.queue.length > 0) {
+	        this.props.nowPlaying(track);
+	      }
+	    }
+	  }, {
+	    key: 'renderView',
+	    value: function renderView() {
+	      var view = this.props.view;
+
+	      switch (view) {
+	        case 'library':
+	          return _react2.default.createElement(LibraryView, { track: this.props.track, startTrack: this.props.startTrack });
+	        default:
+	          return _react2.default.createElement(QueueView, { track: this.props.track, startTrack: this.props.startTrack });
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var track = this.props.track,
+	          props = this.props;
+
+	      if (this.props.view.match(/library|playlist/)) {
+	        return _react2.default.createElement(
+	          'tr',
+	          { key: props.track.url, onClick: this.startTrack },
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui checkbox' },
+	              _react2.default.createElement('input', { type: 'checkbox' }),
+	              _react2.default.createElement('label', null)
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            props.track.track
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            props.track.artist
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            !props.track.liked ? _react2.default.createElement('i', { className: 'pink heart icon' }) : _react2.default.createElement('i', { className: 'empty heart icon' })
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            (0, _moment2.default)(props.track.created).format('MMMM Do')
+	          ),
+	          _react2.default.createElement(
+	            'td',
+	            null,
+	            _react2.default.createElement('i', { className: 'red big youtube icon' })
+	          )
+	        );
+	      } else {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          this.renderView()
+	        );
+	      }
+	    }
+	  }]);
+
+	  return Track;
+	}(_react2.default.Component);
+
+	// const ResultsView = props => {
+	//   return (
+	//
+	//   )
+	// }
+
+	var QueueView = function QueueView(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    { className: 'item track', id: undefined.props.track.id,
+	      'data-title': undefined.props.track.title,
+	      'data-thumbnail': undefined.props.track.thumbnail,
+	      'data-genere': undefined.props.track.genere,
+	      'data-url': undefined.props.track.url,
+	      'data-type': undefined.props.track.type,
+	      'data-platform': undefined.props.track.platform,
+	      'data-isSeeking': undefined.props.track.isSeeking,
+	      'data-playing': undefined.props.track.playing,
+	      'data-played': undefined.props.track.played },
+	    _react2.default.createElement(
+	      'a',
+	      { className: 'ui tiny image' },
+	      _react2.default.createElement('img', { src: undefined.props.track.thumbnail })
+	    ),
+	    _react2.default.createElement(
+	      'div',
+	      { className: 'content' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'description' },
+	        _react2.default.createElement('i', { className: 'remove icon', onClick: undefined.removeTrack }),
+	        undefined.props.parent.props.currentTrack.id == undefined.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	          'a',
+	          { className: 'ui blue circular label' },
+	          undefined.props.position + 1
+	        ),
+	        _react2.default.createElement(
+	          'a',
+	          { className: undefined.props.parent.props.currentTrack.id == undefined.props.track.id ? 'ui blue header' : 'ui header', onClick: undefined.startTrack },
+	          undefined.props.track.title
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'meta' },
+	        _react2.default.createElement('i', { className: 'empty heart icon' }),
+	        _react2.default.createElement(
+	          'span',
+	          { onClick: undefined.addToLibrary },
+	          'Add to library'
+	        ),
+	        undefined.renderPlatform()
+	      )
+	    )
+	  );
+	};
+
+	var Result = function (_React$Component2) {
+	  _inherits(Result, _React$Component2);
+
+	  function Result(props) {
+	    _classCallCheck(this, Result);
+
+	    var _this2 = _possibleConstructorReturn(this, (Result.__proto__ || Object.getPrototypeOf(Result)).call(this, props));
+
+	    _this2.add = _this2.add.bind(_this2);
+	    _this2.upNext = _this2.add.bind(_this2);
+	    _this2.renderPlatform = _this2.renderPlatform.bind(_this2);
+	    return _this2;
+	  }
+
+	  _createClass(Result, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      //$('.ui.dropdown').dropdown()
+	    }
+	  }, {
+	    key: 'add',
+	    value: function add() {
+	      this.props.callback(this.props.result, false);
+	    }
+	  }, {
+	    key: 'upNext',
+	    value: function upNext() {
+	      this.props.callback(this.props.result, true);
+	    }
+	  }, {
+	    key: 'renderPlatform',
+	    value: function renderPlatform() {
+	      var icon = void 0,
+	          platform = void 0;
+
+	      switch (this.props.result.platform) {
+	        case 'youtube':
+	          icon = 'red youtube';
+	          break;
+	        case 'soundcloud':
+	          icon = 'orange soundcloud';
+	          break;
+
+	      }
+	      return _react2.default.createElement('i', { className: 'ui big ' + icon + ' icon' });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this3 = this;
+
+	      var playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [],
+	          component = this;
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'item' },
+	        _react2.default.createElement(
+	          'a',
+	          { className: 'ui tiny image' },
+	          _react2.default.createElement('img', { src: this.props.result.thumbnail })
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'content' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'description' },
+	            _react2.default.createElement(
+	              'h3',
+	              { onClick: this.add },
+	              this.props.result.title
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'meta' },
+	            _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
+	            _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'ui dropdown' },
+	              _react2.default.createElement('i', { className: 'ellipsis horizontal icon', onClick: function onClick(e) {
+	                  $(e.target).parent().dropdown('show');
+	                } }),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'menu' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  _react2.default.createElement('i', { className: 'heart pink icon' })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'Download'
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'More like this'
+	                ),
+	                _react2.default.createElement('div', { className: 'divider' }),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  _react2.default.createElement('i', { className: 'dropdown icon' }),
+	                  'Add to Playlist',
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'menu' },
+	                    _.map(playlists, function (playlist, index) {
+	                      return _react2.default.createElement(PlaylistItem, { key: playlist.name, playlists: playlists, playlist: playlist, index: index, track: _this3.props.result });
+	                    })
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'item' },
+	                  'New Playlists'
+	                )
+	              )
+	            ),
+	            this.renderPlatform()
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Result;
+	}(_react2.default.Component);
+
+	var PlaylistItem = function (_React$Component3) {
+	  _inherits(PlaylistItem, _React$Component3);
+
+	  function PlaylistItem(props) {
+	    _classCallCheck(this, PlaylistItem);
+
+	    var _this4 = _possibleConstructorReturn(this, (PlaylistItem.__proto__ || Object.getPrototypeOf(PlaylistItem)).call(this));
+
+	    _this4.addTrackToPlaylist = _this4.addTrackToPlaylist.bind(_this4);
+	    return _this4;
+	  }
+
+	  _createClass(PlaylistItem, [{
+	    key: 'addTrackToPlaylist',
+	    value: function addTrackToPlaylist() {
+	      var playlist = this.props.playlist,
+	          playlists = this.props.playlists;
+
+	      playlist.tracks.push(_extends({}, this.props.track, {
+	        isSeeking: false,
+	        played: 0,
+	        playing: true
+	      }));
+	      playlists[this.props.index] = playlist;
+	      localStorage.setItem('playlists', JSON.stringify(playlists));
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'item', onClick: this.addTrackToPlaylist },
+	        this.props.playlist.name
+	      );
+	    }
+	  }]);
+
+	  return PlaylistItem;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    currentTrack: state.nowPlaying,
+	    queue: state.queue
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	    updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch)
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Track);
+
+/***/ }),
+/* 1095 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var HistoryPage = function (_React$Component) {
+	    _inherits(HistoryPage, _React$Component);
+
+	    function HistoryPage() {
+	        _classCallCheck(this, HistoryPage);
+
+	        return _possibleConstructorReturn(this, (HistoryPage.__proto__ || Object.getPrototypeOf(HistoryPage)).apply(this, arguments));
+	    }
+
+	    _createClass(HistoryPage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var component = this;
+	            $('#history').sortable({
+	                update: function update(event, ui) {
+	                    var history = component.props.history;
+	                    history.splice(history.findIndex(function (track) {
+	                        return track.id == ui.item[0].id;
+	                    }), 1);
+	                    history.splice($('#history').find('#' + ui.item[0].id).index(), 0, {
+	                        id: ui.item[0].id,
+	                        title: $('#history').find('#' + ui.item[0].id).data("title"),
+	                        thumbnail: $('#history').find('#' + ui.item[0].id).data("thumbnail")
+	                    });
+	                    component.props.sethistory(history);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'remove',
+	        value: function remove(index) {
+	            var component = this;
+	            var history = component.state.history;
+	            history.splice(index, 1);
+	            component.setState({ history: history });
+	            if (index == 0) {
+	                component.getNextTrack();
+	            }
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var component = this;
+	            console.log(this.props.history);
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'page' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'header' },
+	                    'History'
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { id: 'history', className: 'ui items' },
+	                    _.map(this.props.history, function (track, index) {
+	                        return _react2.default.createElement(Track, {
+	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                            track: track,
+	                            parent: _this2,
+	                            position: index });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return HistoryPage;
+	}(_react2.default.Component);
+
+	var Track = function (_React$Component2) {
+	    _inherits(Track, _React$Component2);
+
+	    function Track() {
+	        _classCallCheck(this, Track);
+
+	        return _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).apply(this, arguments));
+	    }
+
+	    _createClass(Track, [{
+	        key: 'startThis',
+	        value: function startThis() {
+	            this.props.parent.props.nowPlaying(this.props.track);
+	        }
+	    }, {
+	        key: 'removeTrack',
+	        value: function removeTrack() {
+	            this.props.parent.props.removeTrack(this.props.track);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var track = this.props.track;
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'item track', id: this.props.track.id, 'data-title': this.props.track.title, 'data-thumbnail': this.props.track.thumbnail },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                    this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : _react2.default.createElement(
+	                        'a',
+	                        { className: 'ui blue circular label' },
+	                        this.props.position + 1
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'header', onClick: this.startThis },
+	                        this.props.track.title
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Track;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        history: state.history,
+	        currentTrack: state.nowPlaying
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        updateQueue: (0, _redux.bindActionCreators)(_actions.updateQueue, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
+
+/***/ }),
+/* 1096 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _HistoryPage = __webpack_require__(1095);
+
+	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components
+
+
+	var QueuePage = function (_React$Component) {
+	    _inherits(QueuePage, _React$Component);
+
+	    function QueuePage(props) {
+	        _classCallCheck(this, QueuePage);
+
+	        var _this = _possibleConstructorReturn(this, (QueuePage.__proto__ || Object.getPrototypeOf(QueuePage)).call(this, props));
+
+	        _this.state = {
+	            view: 'upnext'
+	        };
+
+	        _this.addToLibrary = _this.addToLibrary.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(QueuePage, [{
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            var component = this;
+	            $('#queue').sortable({
+	                update: function update(event, ui) {
+	                    var queue = component.props.queue;
+	                    queue.splice(queue.findIndex(function (track) {
+	                        return track.id == ui.item[0].id;
+	                    }), 1);
+	                    queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
+	                        id: ui.item[0].id,
+	                        title: $('#queue').find('#' + ui.item[0].id).data("title"),
+	                        thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail"),
+	                        genre: $('#queue').find('#' + ui.item[0].id).data("genre"),
+	                        url: $('#queue').find('#' + ui.item[0].id).data("url"),
+	                        type: $('#queue').find('#' + ui.item[0].id).data("type"),
+	                        platform: $('#queue').find('#' + ui.item[0].id).data("platform"),
+	                        isSeeking: $('#queue').find('#' + ui.item[0].id).data("isSeeking"),
+	                        played: $('#queue').find('#' + ui.item[0].id).data("played"),
+	                        playing: $('#queue').find('#' + ui.item[0].id).data("playing")
+	                    });
+	                    component.props.setQueue(queue);
+	                }
+	            });
+	        }
+	    }, {
+	        key: 'getRelated',
+	        value: function getRelated() {
+	            // TODO: Get related songs when queue is finished
+	            //         $.ajax({
+	            //             url: `/api/getRelated`,
+	            //             data: { query },
+	            //             crossDomain : true,
+	            //             dataType: 'json',
+	            //             success: function(data) {
+	            //                 component.mediaPlayer.nowPlaying(data[0].id.videoId)
+	            //                 queue.push({
+	            //                     id: data[0].id.videoId,
+	            //                     title: data[0].snippet.title,
+	            //                     thumbnail: data[0].snippet.thumbnails.default.url
+	            //                 })
+	            //                 scroller(`Lit Stream: ${data[0].snippet.title}`, 'document')
+	            //                 component.setState({queue})
+	            //                 component.setState({nowPlaying: queue[0]})
+	            //                 $('#searchBox').val('')
+	            //             }
+	            //         });
+	        }
+	    }, {
+	        key: 'addToLibrary',
+	        value: function addToLibrary(track) {
+	            var library = void 0;
+	            if (localStorage.getItem('library')) {
+	                library = JSON.parse(localStorage.getItem('library'));
+	                library.push(track);
+	            } else {
+	                library = [track];
+	            }
+
+	            localStorage.setItem('library', JSON.stringify(library));
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            var component = this;
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'queuePage', className: 'page', style: { display: 'none' } },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'ui menu fluid two item' },
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: this.state == 'upnext' ? "active item" : "item", onClick: function onClick() {
+	                                _this2.setState({ view: 'upnext' });
+	                            } },
+	                        'Up Next'
+	                    ),
+	                    _react2.default.createElement(
+	                        'a',
+	                        { className: this.state == 'history' ? "active item" : "item", onClick: function onClick() {
+	                                _this2.setState({ view: 'history' });
+	                            } },
+	                        'History'
+	                    )
+	                ),
+	                _react2.default.createElement('div', { className: 'ui divider' }),
+	                this.state.view == 'upnext' ? _react2.default.createElement(
+	                    'div',
+	                    { id: 'queue', className: 'ui divided feed' },
+	                    _.map(component.props.queue, function (track, index) {
+	                        return _react2.default.createElement(Track, {
+	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                            track: track,
+	                            parent: component,
+	                            position: index });
+	                    })
+	                ) : _react2.default.createElement(
+	                    'div',
+	                    { id: 'queue', className: 'ui divided feed' },
+	                    _.map(this.props.history, function (track, index) {
+	                        return _react2.default.createElement(Track, {
+	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                            track: track,
+	                            parent: component,
+	                            position: index });
+	                    })
+	                )
+	            );
+	        }
+	    }]);
+
+	    return QueuePage;
+	}(_react2.default.Component);
+
+	var Track = function (_React$Component2) {
+	    _inherits(Track, _React$Component2);
+
+	    function Track(props) {
+	        _classCallCheck(this, Track);
+
+	        var _this3 = _possibleConstructorReturn(this, (Track.__proto__ || Object.getPrototypeOf(Track)).call(this, props));
+
+	        _this3.startTrack = _this3.startTrack.bind(_this3);
+	        _this3.removeTrack = _this3.removeTrack.bind(_this3);
+	        _this3.addToLibrary = _this3.addToLibrary.bind(_this3);
+	        _this3.renderPlatform = _this3.renderPlatform.bind(_this3);
+	        return _this3;
+	    }
+
+	    _createClass(Track, [{
+	        key: 'startTrack',
+	        value: function startTrack() {
+	            this.props.parent.props.nowPlaying(this.props.track);
+	        }
+	    }, {
+	        key: 'removeTrack',
+	        value: function removeTrack() {
+	            this.props.parent.props.removeTrack(this.props.track);
+	        }
+	    }, {
+	        key: 'addToLibrary',
+	        value: function addToLibrary() {
+	            this.props.parent.addToLibrary(this.props.track);
+	        }
+	    }, {
+	        key: 'renderPlatform',
+	        value: function renderPlatform() {
+	            var icon = void 0,
+	                platform = void 0;
+
+	            switch (this.props.track.platform) {
+	                case 'youtube':
+	                    icon = 'red youtube';
+	                    break;
+	                case 'soundcloud':
+	                    icon = 'orange soundcloud';
+	                    break;
+
+	            }
+	            return _react2.default.createElement('i', { className: 'ui big ' + icon + ' icon' });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var track = this.props.track;
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'event track', id: this.props.track.id,
+	                    'data-title': this.props.track.title,
+	                    'data-thumbnail': this.props.track.thumbnail,
+	                    'data-genere': this.props.track.genere,
+	                    'data-url': this.props.track.url,
+	                    'data-type': this.props.track.type,
+	                    'data-platform': this.props.track.platform,
+	                    'data-isSeeking': this.props.track.isSeeking,
+	                    'data-playing': this.props.track.playing,
+	                    'data-played': this.props.track.played },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'label' },
+	                    _react2.default.createElement('img', { className: 'ui tiny image', src: this.props.track.thumbnail })
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'content' },
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'date' },
+	                        this.props.track.artist
+	                    ),
+	                    _react2.default.createElement(
+	                        'div',
+	                        { className: 'summary' },
+	                        _react2.default.createElement('i', { className: 'remove icon', onClick: this.removeTrack }),
+	                        this.props.parent.props.currentTrack.id == this.props.track.id ? _react2.default.createElement('i', { className: 'volume up icon' }) : null,
+	                        _react2.default.createElement(
+	                            'span',
+	                            { className: this.props.parent.props.currentTrack.id == this.props.track.id ? 'ui blue header' : 'ui', onClick: this.startTrack },
+	                            this.props.track.track
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Track;
+	}(_react2.default.Component);
+
+	//<a className="ui blue tiny circular label">{this.props.position + 1}</a>
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        queue: state.queue,
+	        currentTrack: state.nowPlaying,
+	        history: state.history
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch),
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        removeTrack: (0, _redux.bindActionCreators)(_actions.removeTrack, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
+
+/***/ }),
+/* 1097 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SettingsPage = function (_React$Component) {
+	    _inherits(SettingsPage, _React$Component);
+
+	    function SettingsPage() {
+	        _classCallCheck(this, SettingsPage);
+
+	        return _possibleConstructorReturn(this, (SettingsPage.__proto__ || Object.getPrototypeOf(SettingsPage)).apply(this, arguments));
+	    }
+
+	    _createClass(SettingsPage, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'page' },
+	                _react2.default.createElement(
+	                    'p',
+	                    null,
+	                    'SettingsPage'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return SettingsPage;
+	}(_react2.default.Component);
+
+	exports.default = SettingsPage;
+
+/***/ }),
+/* 1098 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _Track = __webpack_require__(1094);
+
+	var _Track2 = _interopRequireDefault(_Track);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components
+
+
+	var Library = function (_React$Component) {
+	    _inherits(Library, _React$Component);
+
+	    function Library(props) {
+	        _classCallCheck(this, Library);
+
+	        var _this = _possibleConstructorReturn(this, (Library.__proto__ || Object.getPrototypeOf(Library)).call(this, props));
+
+	        _this.state = {
+	            library: []
+	        };
+
+	        _this.getSongs = _this.getSongs.bind(_this);
+	        _this.playAll = _this.playAll.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Library, [{
+	        key: 'componentWillMount',
+	        value: function componentWillMount() {
+	            if (localStorage.getItem('library')) {
+	                this.setState({ library: JSON.parse(localStorage.getItem('library')) });
+	            }
+	        }
+	    }, {
+	        key: 'getSongs',
+	        value: function getSongs() {
+	            $.ajax({
+	                url: '',
+	                data: {}
+	            }).success(function (songs) {
+	                // TODO: get songs and add them to state
+	            }).fail(function (message) {
+	                // TODO: handle failure to load tracks
+	            });
+	        }
+	    }, {
+	        key: 'componentDidMount',
+	        value: function componentDidMount() {
+	            this.getSongs();
+	        }
+	    }, {
+	        key: 'playAll',
+	        value: function playAll() {
+	            this.props.nowPlaying(this.state.library[0]);
+	            this.props.setQueue(this.state.library);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { id: 'libraryContainer' },
+	                _react2.default.createElement(
+	                    'table',
+	                    { id: 'library', className: 'ui table striped compact' },
+	                    _react2.default.createElement(
+	                        'thead',
+	                        null,
+	                        _react2.default.createElement(
+	                            'tr',
+	                            null,
+	                            _react2.default.createElement('th', null),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Title'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Artist'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Liked'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Date added'
+	                            ),
+	                            _react2.default.createElement(
+	                                'th',
+	                                null,
+	                                'Platform'
+	                            )
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'tbody',
+	                        null,
+	                        _.map(this.state.library, function (song, index) {
+	                            return _react2.default.createElement(_Track2.default, {
+	                                key: song.url,
+	                                track: song,
+	                                view: 'library' });
+	                        })
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'button',
+	                    { className: 'ui button basic', onClick: this.playAll },
+	                    'Play All songs'
+	                ),
+	                _react2.default.createElement(
+	                    'p',
+	                    { id: 'libraryHUD' },
+	                    this.state.library.length,
+	                    ' songs'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Library;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        currentTrack: state.nowPlaying,
+	        queue: state.queue
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        nowPlaying: (0, _redux.bindActionCreators)(_actions.nowPlaying, dispatch),
+	        setQueue: (0, _redux.bindActionCreators)(_actions.setQueue, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Library);
 
 /***/ })
 /******/ ]);

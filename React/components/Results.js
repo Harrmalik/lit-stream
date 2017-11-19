@@ -50,6 +50,7 @@ class Result extends React.Component {
     super(props)
 
     this.add = this.add.bind(this)
+    this.like = this.like.bind(this)
     this.upNext = this.upNext.bind(this)
     this.renderPlatform = this.renderPlatform.bind(this)
   }
@@ -66,6 +67,26 @@ class Result extends React.Component {
       track: title[1] ? title[1] : title[0],
       artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
     }, false)
+  }
+
+  like(track) {
+    let playlists = this.props.playlists,
+        playlistName = 'liked',
+        playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)],
+        title = track.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
+
+    playlist.tracks.push({
+      ...track,
+      track: title[1],
+      artist: title[0].trim(),
+      liked: true,
+      created: moment(),
+      isSeeking: false,
+      played: 0,
+      playing: true
+    })
+    playlists[1] = playlist //change index
+    localStorage.setItem('playlists', JSON.stringify(playlists))
   }
 
   upNext() {
@@ -114,7 +135,7 @@ class Result extends React.Component {
                   <div className="ui dropdown">
                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">
-                      <div className="item"><i className="heart empty icon"></i></div>
+                      <div className="item" onClick={() => { this.like(this.props.result)}}><i className="heart empty icon"></i></div>
                       <a className="item" href={`http://www.flvto.biz/downloads/mp3/yt_${this.props.result.id}/`} target='_blank'>
                         Download
                       </a>
@@ -135,6 +156,7 @@ class Result extends React.Component {
                     </div>
                   </div>
                   {this.renderPlatform()}
+                  <span className="ui blue label">{this.props.result.type}</span>
               </div>
             </div>
           </div>

@@ -11,8 +11,8 @@ let defaultOptions = {
     autoplay: true,
     repeat: false
 }
-let theQueue = []
-let theHistory = []
+let theQueue = [],
+    theHistory = []
 
 
 function options (state = defaultOptions, action) {
@@ -134,7 +134,11 @@ function controls (state = null, action) {
     }
 }
 
-function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [], action) {
+function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [{
+  name: 'liked',
+  description: 'Liked songs',
+  tracks: []
+}], action) {
   let thePlaylists = [...state],
       index = 0
   if (action.playlist) {
