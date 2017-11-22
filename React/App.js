@@ -16,6 +16,7 @@ import HomePage from './pages/HomePage'
 import SearchPage from './pages/SearchPage'
 import MediaViewPage from './pages/MediaViewPage'
 import PlaylistPage from './pages/PlaylistPage'
+import ChannelPage from './pages/ChannelPage'
 import HistoryPage from './pages/HistoryPage'
 import QueuePage from './pages/QueuePage'
 import SettingsPage from './pages/SettingsPage'
@@ -36,6 +37,7 @@ const App = () => (
                   <Route path="/search" component={SearchPage}/>
                   <Route path="/player" component={MediaViewPage}/>
                   <Route path="/playlist/:playlist" component={PlaylistPage}/>
+                  <Route path="/channel/:channelId" component={ChannelPage}/>
                   <Route path="/library" component={LibraryPage}/>
                   <Route path="/settings" component={SettingsPage}/>
 

@@ -59,10 +59,11 @@ a {
 
 .page {
   position: absolute;
+  overflow: auto;
   padding: 1em;
   top: 0;
   right: 0;
-  height: 95%;
+  height: 90%;
   margin-left: 25%;
   background-color: white;
   width: 75%; }

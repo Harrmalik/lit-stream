@@ -80,37 +80,43 @@
 
 	var _SearchPage2 = _interopRequireDefault(_SearchPage);
 
-	var _MediaViewPage = __webpack_require__(1092);
+	var _MediaViewPage = __webpack_require__(1093);
 
 	var _MediaViewPage2 = _interopRequireDefault(_MediaViewPage);
 
-	var _PlaylistPage = __webpack_require__(1093);
+	var _PlaylistPage = __webpack_require__(1094);
 
 	var _PlaylistPage2 = _interopRequireDefault(_PlaylistPage);
 
-	var _HistoryPage = __webpack_require__(1095);
+	var _ChannelPage = __webpack_require__(1100);
+
+	var _ChannelPage2 = _interopRequireDefault(_ChannelPage);
+
+	var _HistoryPage = __webpack_require__(1096);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
-	var _QueuePage = __webpack_require__(1096);
+	var _QueuePage = __webpack_require__(1097);
 
 	var _QueuePage2 = _interopRequireDefault(_QueuePage);
 
-	var _SettingsPage = __webpack_require__(1097);
+	var _SettingsPage = __webpack_require__(1098);
 
 	var _SettingsPage2 = _interopRequireDefault(_SettingsPage);
 
-	var _LibraryPage = __webpack_require__(1098);
+	var _LibraryPage = __webpack_require__(1099);
 
 	var _LibraryPage2 = _interopRequireDefault(_LibraryPage);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	console.log(_Store2.default.getState());
+
 	// Pages
 
 
 	// Components
-	console.log(_Store2.default.getState());
+
 	var unsubscribe = _Store2.default.subscribe(function () {
 	    return console.log(_Store2.default.getState());
 	});
@@ -130,6 +136,7 @@
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/search', component: _SearchPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/player', component: _MediaViewPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/playlist/:playlist', component: _PlaylistPage2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/channel/:channelId', component: _ChannelPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/library', component: _LibraryPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/settings', component: _SettingsPage2.default }),
 	                _react2.default.createElement(_QueuePage2.default, null),
@@ -27918,12 +27925,31 @@
 	    }
 	}
 
+	function liked() {
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : localStorage.getItem('liked') ? JSON.parse(localStorage.getItem('liked')) : [];
+	    var action = arguments[1];
+
+	    var likedPlaylist = [].concat(_toConsumableArray(state)),
+	        index = 0;
+
+	    switch (action.type) {
+	        case 'ADD_LIKE':
+	            likedPlaylist.push(action.track);
+	            return likedPlaylist;
+	        case 'REMOVE_LIKE':
+	            index = likedPlaylist.findIndex(function (tracks) {
+	                return track.id == action.track.id;
+	            });
+	            likedPlaylist.splice(index, 1);
+	            return likedPlaylist;
+
+	        default:
+	            return state;
+	    }
+	}
+
 	function playlists() {
-	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [{
-	        name: 'liked',
-	        description: 'Liked songs',
-	        tracks: []
-	    }];
+	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [];
 	    var action = arguments[1];
 
 	    var thePlaylists = [].concat(_toConsumableArray(state)),
@@ -27956,6 +27982,7 @@
 	    queue: queue,
 	    nowPlaying: nowPlaying,
 	    controls: controls,
+	    liked: liked,
 	    playlists: playlists
 	});
 
@@ -27983,7 +28010,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	var _reactRouterDom = __webpack_require__(184);
 
@@ -28195,7 +28222,167 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(SidePane);
 
 /***/ }),
-/* 263 */,
+/* 263 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// Top level actions
+
+	// Search actions
+
+	// Queue actions
+	var nowPlaying = exports.nowPlaying = function nowPlaying(track) {
+	    return {
+	        type: 'NOW_PLAYING',
+	        track: track
+	    };
+	};
+
+	var updateQueue = exports.updateQueue = function updateQueue(track, upNext) {
+	    return {
+	        type: 'UPDATE_QUEUE',
+	        track: track,
+	        upNext: upNext
+	    };
+	};
+
+	var setQueue = exports.setQueue = function setQueue(queue) {
+	    return {
+	        type: 'SET_QUEUE',
+	        queue: queue
+	    };
+	};
+
+	var removeTrack = exports.removeTrack = function removeTrack(track) {
+	    return {
+	        type: 'REMOVE_TRACK',
+	        track: track
+	    };
+	};
+
+	// MediaPlayer actions
+	var setControls = exports.setControls = function setControls(controls) {
+	    return {
+	        type: 'SET_CONTROLS',
+	        controls: controls
+	    };
+	};
+
+	var nextTrack = exports.nextTrack = function nextTrack(track) {
+	    return {
+	        type: 'NEXT_TRACK',
+	        track: track
+	    };
+	};
+
+	var prevTrack = exports.prevTrack = function prevTrack(track) {
+	    return {
+	        type: 'PREV_TRACK',
+	        track: track
+	    };
+	};
+
+	var playTrack = exports.playTrack = function playTrack() {
+	    return {
+	        type: 'PLAY_TRACK'
+	    };
+	};
+
+	var stopTrack = exports.stopTrack = function stopTrack() {
+	    return {
+	        type: 'STOP_TRACK'
+	    };
+	};
+
+	var updateProgess = exports.updateProgess = function updateProgess(progress) {
+	    return {
+	        type: 'UPDATE_PROGRESS',
+	        played: progress.played,
+	        playedSeconds: progress.playedSeconds
+	    };
+	};
+
+	var setDuration = exports.setDuration = function setDuration(duration) {
+	    return {
+	        type: 'SET_DURATION',
+	        duration: duration
+	    };
+	};
+
+	var isSeeking = exports.isSeeking = function isSeeking() {
+	    return {
+	        type: 'IS_SEEKING'
+	    };
+	};
+
+	// Like actions
+	var addLike = exports.addLike = function addLike(track) {
+	    return {
+	        type: 'ADD_LIKE',
+	        track: track
+	    };
+	};
+
+	var removeLike = exports.removeLike = function removeLike(track) {
+	    return {
+	        type: 'REMOVE_LIKE',
+	        track: track
+	    };
+	};
+
+	// Playlists actions
+	var addPlaylist = exports.addPlaylist = function addPlaylist(playlist) {
+	    return {
+	        type: 'ADD_PLAYLIST',
+	        playlist: playlist
+	    };
+	};
+
+	var editPlaylist = exports.editPlaylist = function editPlaylist(playlist) {
+	    return {
+	        type: 'EDIT_PLAYLIST',
+	        playlist: playlist
+	    };
+	};
+
+	var removePlaylist = exports.removePlaylist = function removePlaylist(playlist) {
+	    return {
+	        type: 'REMOVE_PLAYLIST',
+	        playlist: playlist
+	    };
+	};
+
+	var setPlaylistTracks = exports.setPlaylistTracks = function setPlaylistTracks(playlist) {
+	    return {
+	        type: 'SET_PLAYLIST_TRACKS',
+	        playlist: playlist
+	    };
+	};
+
+	// Options actions
+	var shuffle = exports.shuffle = function shuffle() {
+	    return {
+	        type: 'SHUFFLE'
+	    };
+	};
+
+	var repeat = exports.repeat = function repeat() {
+	    return {
+	        type: 'REPEAT'
+	    };
+	};
+
+	var autoPlay = exports.autoPlay = function autoPlay() {
+	    return {
+	        type: 'AUTO_PLAY'
+	    };
+	};
+
+/***/ }),
 /* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -45572,7 +45759,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	var _YouTube = __webpack_require__(267);
 
@@ -92846,7 +93033,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93259,11 +93446,15 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	var _moment = __webpack_require__(972);
 
 	var _moment2 = _interopRequireDefault(_moment);
+
+	var _Liked = __webpack_require__(1092);
+
+	var _Liked2 = _interopRequireDefault(_Liked);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -93272,6 +93463,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components
+
 
 	var Results = function (_React$Component) {
 	  _inherits(Results, _React$Component);
@@ -93443,13 +93637,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'menu' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'item', onClick: function onClick() {
-	                      _this4.like(_this4.props.result);
-	                    } },
-	                  _react2.default.createElement('i', { className: 'heart empty icon' })
-	                ),
+	                _react2.default.createElement(_Liked2.default, { track: this.props.result }),
 	                _react2.default.createElement(
 	                  'a',
 	                  { className: 'item', href: 'http://www.flvto.biz/downloads/mp3/yt_' + this.props.result.id + '/', target: '_blank' },
@@ -109756,6 +109944,127 @@
 	    value: true
 	});
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _lodash = __webpack_require__(265);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	var _redux = __webpack_require__(233);
+
+	var _reactRedux = __webpack_require__(224);
+
+	var _actions = __webpack_require__(263);
+
+	var _moment = __webpack_require__(972);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Liked = function (_React$Component) {
+	    _inherits(Liked, _React$Component);
+
+	    function Liked(props) {
+	        _classCallCheck(this, Liked);
+
+	        var _this = _possibleConstructorReturn(this, (Liked.__proto__ || Object.getPrototypeOf(Liked)).call(this, props));
+
+	        var track = _lodash2.default.find(props.liked, function (t) {
+	            return t.id == props.track.id;
+	        });
+
+	        _this.state = {
+	            liked: track ? true : false,
+	            style: track
+	        };
+
+	        _this.toggleLike = _this.toggleLike.bind(_this);
+	        return _this;
+	    }
+
+	    _createClass(Liked, [{
+	        key: 'toggleLike',
+	        value: function toggleLike() {
+	            var track = this.props.track,
+	                title = track.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-'),
+	                liked = this.props.liked;
+
+	            if (this.state.liked) {
+	                var index = _lodash2.default.findIndex(liked, function (t) {
+	                    return t.id == track.id;
+	                });
+	                liked.splice(index, 1);
+	                this.props.removeLike(track);
+	            } else {
+	                track = _extends({}, this.props.track, {
+	                    track: title[1],
+	                    artist: title[0].trim(),
+	                    liked: false,
+	                    created: (0, _moment2.default)(),
+	                    isSeeking: false,
+	                    played: 0,
+	                    playing: true
+	                });
+	                this.props.addLike(track);
+	                liked.push(track);
+	            }
+	            localStorage.setItem('liked', JSON.stringify(liked));
+	            this.setState({ liked: !this.state.liked });
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'div',
+	                { className: 'item', onClick: this.toggleLike },
+	                _react2.default.createElement('i', { className: this.state.liked ? "heart pink icon" : "heart empty icon" })
+	            );
+	        }
+	    }]);
+
+	    return Liked;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(state) {
+	    return {
+	        liked: state.liked
+	    };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	    return {
+	        addLike: (0, _redux.bindActionCreators)(_actions.addLike, dispatch),
+	        removeLike: (0, _redux.bindActionCreators)(_actions.removeLike, dispatch)
+	    };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Liked);
+
+/***/ }),
+/* 1093 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
@@ -109766,7 +110075,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -109894,7 +110203,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(MediaViewPage);
 
 /***/ }),
-/* 1093 */
+/* 1094 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -109915,9 +110224,9 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
-	var _Track = __webpack_require__(1094);
+	var _Track = __webpack_require__(1095);
 
 	var _Track2 = _interopRequireDefault(_Track);
 
@@ -109977,6 +110286,13 @@
 	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
 	            })];
 
+	            console.log(this.props.liked);
+	            if (playlistName == 'liked') playlist = {
+	                name: "Liked",
+	                description: "Waddup",
+	                tracks: this.props.liked
+	            };
+
 	            this.setState({ playlist: playlist });
 	        }
 	    }, {
@@ -110009,6 +110325,12 @@
 	                playlist = playlists[playlists.findIndex(function (playlist) {
 	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
 	            })];
+
+	            if (playlistName == 'liked') playlist = {
+	                name: "Liked",
+	                description: "Waddup",
+	                tracks: this.props.liked
+	            };
 
 	            return _react2.default.createElement(
 	                'div',
@@ -110110,7 +110432,8 @@
 	    return {
 	        currentTrack: state.nowPlaying,
 	        queue: state.queue,
-	        playlists: state.playlists
+	        playlists: state.playlists,
+	        liked: state.liked
 	    };
 	};
 
@@ -110127,7 +110450,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(PlaylistPage);
 
 /***/ }),
-/* 1094 */
+/* 1095 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -110150,7 +110473,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	var _moment = __webpack_require__(972);
 
@@ -110505,7 +110828,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Track);
 
 /***/ }),
-/* 1095 */
+/* 1096 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -110526,7 +110849,7 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -110675,7 +110998,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
 
 /***/ }),
-/* 1096 */
+/* 1097 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -110696,9 +111019,9 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
-	var _HistoryPage = __webpack_require__(1095);
+	var _HistoryPage = __webpack_require__(1096);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
@@ -110736,6 +111059,7 @@
 	            $('#queue').sortable({
 	                update: function update(event, ui) {
 	                    var queue = component.props.queue;
+	                    // TODO: make data just index to queue position
 	                    queue.splice(queue.findIndex(function (track) {
 	                        return track.id == ui.item[0].id;
 	                    }), 1);
@@ -110963,7 +111287,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
 
 /***/ }),
-/* 1097 */
+/* 1098 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111018,7 +111342,7 @@
 	exports.default = SettingsPage;
 
 /***/ }),
-/* 1098 */
+/* 1099 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111039,9 +111363,9 @@
 
 	var _reactRedux = __webpack_require__(224);
 
-	var _actions = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _actions = __webpack_require__(263);
 
-	var _Track = __webpack_require__(1094);
+	var _Track = __webpack_require__(1095);
 
 	var _Track2 = _interopRequireDefault(_Track);
 
@@ -111190,6 +111514,110 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Library);
+
+/***/ }),
+/* 1100 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ChannelPage = function (_React$Component) {
+	  _inherits(ChannelPage, _React$Component);
+
+	  function ChannelPage(props) {
+	    _classCallCheck(this, ChannelPage);
+
+	    var _this = _possibleConstructorReturn(this, (ChannelPage.__proto__ || Object.getPrototypeOf(ChannelPage)).call(this, props));
+
+	    _this.state = {
+	      playlists: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(ChannelPage, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var component = this;
+
+	      $.ajax({
+	        url: '/api/getChannelPlaylists?query=UCSa8IUd1uEjlREMa21I3ZPQ'
+	      }).done(function (playlists) {
+	        component.setState({ playlists: playlists });
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'page' },
+	        this.state.playlists.length > 0 ? _react2.default.createElement(
+	          'h2',
+	          { className: 'ui header' },
+	          this.state.playlists[0].snippet.channelTitle
+	        ) : null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'ui three column grid' },
+	          _.map(this.state.playlists, function (playlist) {
+	            return _react2.default.createElement(
+	              'div',
+	              { className: 'column', key: playlist.id },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'ui fluid link card' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'image' },
+	                  _react2.default.createElement('img', { src: playlist.snippet.thumbnails.standard.url })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'content' },
+	                  _react2.default.createElement(
+	                    'a',
+	                    { className: 'header' },
+	                    playlist.snippet.title
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'meta' },
+	                    playlist.snippet.description
+	                  )
+	                )
+	              )
+	            );
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ChannelPage;
+	}(_react2.default.Component);
+
+	exports.default = ChannelPage;
 
 /***/ })
 /******/ ]);

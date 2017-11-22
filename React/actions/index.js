@@ -64,13 +64,13 @@ export const isSeeking = () => ({
 })
 
 // Like actions
-export const addTrack = (track) => ({
-    type: 'ADD_TRACK',
+export const addLike = (track) => ({
+    type: 'ADD_LIKE',
     track
 })
 
-export const removeTrack = (track) => ({
-    type: 'REMOVE_TRACK',
+export const removeLike = (track) => ({
+    type: 'REMOVE_LIKE',
     track
 })
 

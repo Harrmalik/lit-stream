@@ -8,6 +8,9 @@ import { connect } from 'react-redux'
 import { updateQueue } from '../actions'
 import moment from 'moment'
 
+// Components
+import Liked from './Liked'
+
 class Results extends React.Component {
   constructor(props) {
     super(props)
@@ -135,7 +138,7 @@ class Result extends React.Component {
                   <div className="ui dropdown">
                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">
-                      <div className="item" onClick={() => { this.like(this.props.result)}}><i className="heart empty icon"></i></div>
+                      <Liked track={this.props.result}/>
                       <a className="item" href={`http://www.flvto.biz/downloads/mp3/yt_${this.props.result.id}/`} target='_blank'>
                         Download
                       </a>

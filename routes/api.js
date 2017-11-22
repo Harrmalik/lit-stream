@@ -40,12 +40,47 @@ router.get('/findSong', function(req, res, next) {
 });
 
 router.get('/getPlaylist', function(req, res, next) {
-    console.log(req.query.query)
-    console.log('called');
     Youtube.playlistItems.list({
         part: "snippet",
         playlistId: req.query.query,
-        maxResults: 20
+        maxResults: 50,
+        nextPageToken: ""
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        if (data) {
+            res.json(data.items);
+        } else {
+            res.json({});
+        }
+    });
+});
+
+router.get('/getChannel', function(req, res, next) {
+    Youtube.channels.list({
+        part: "snippet",
+        id: req.query.query,
+        maxResults: 50,
+        nextPageToken: ""
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        if (data) {
+            res.json(data.items);
+        } else {
+            res.json({});
+        }
+    });
+});
+
+router.get('/getChannelPlaylists', function(req, res, next) {
+    Youtube.playlists.list({
+        part: "snippet",
+        channelId: req.query.query,
+        maxResults: 50,
+        nextPageToken: ""
     }, (err, data) => {
         if (err) {
             console.log(err);

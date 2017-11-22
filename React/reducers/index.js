@@ -134,11 +134,25 @@ function controls (state = null, action) {
     }
 }
 
-function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [{
-  name: 'liked',
-  description: 'Liked songs',
-  tracks: []
-}], action) {
+function liked (state = localStorage.getItem('liked') ? JSON.parse(localStorage.getItem('liked')) : [], action) {
+  let likedPlaylist = [...state],
+      index = 0
+      
+  switch (action.type) {
+      case 'ADD_LIKE':
+          likedPlaylist.push(action.track)
+          return likedPlaylist
+      case 'REMOVE_LIKE':
+          index = likedPlaylist.findIndex(tracks => track.id == action.track.id)
+          likedPlaylist.splice(index,1)
+          return likedPlaylist
+
+      default:
+          return state
+  }
+}
+
+function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [], action) {
   let thePlaylists = [...state],
       index = 0
   if (action.playlist) {
@@ -167,6 +181,7 @@ const rootReducer = combineReducers({
     queue,
     nowPlaying,
     controls,
+    liked,
     playlists
 })
 

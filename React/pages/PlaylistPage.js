@@ -44,6 +44,14 @@ class PlaylistPage extends React.Component {
             playlistName = this.props.match.params.playlist,
             playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
 
+            console.log(this.props.liked);
+        if (playlistName == 'liked')
+            playlist = {
+                name: "Liked",
+                description: "Waddup",
+                tracks: this.props.liked
+            }
+
         this.setState({ playlist })
     }
 
@@ -68,6 +76,13 @@ class PlaylistPage extends React.Component {
         let playlists = this.props.playlists,
             playlistName = this.props.match.params.playlist,
             playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
+
+            if (playlistName == 'liked')
+                playlist = {
+                    name: "Liked",
+                    description: "Waddup",
+                    tracks: this.props.liked
+                }
 
         return (
             <div id="libraryContainer">
@@ -114,7 +129,8 @@ class PlaylistPage extends React.Component {
 const mapStateToProps = state => ({
   currentTrack: state.nowPlaying,
   queue: state.queue,
-  playlists: state.playlists
+  playlists: state.playlists,
+  liked: state.liked
 })
 
 const mapDispatchToProps = dispatch => ({

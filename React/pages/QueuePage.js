@@ -25,6 +25,7 @@ class QueuePage extends React.Component {
         $('#queue').sortable({
           update: function( event, ui ) {
               let queue = component.props.queue
+              // TODO: make data just index to queue position
               queue.splice(queue.findIndex(track=> track.id == ui.item[0].id), 1)
               queue.splice($('#queue').find(`#${ui.item[0].id}`).index(), 0, {
                   id: ui.item[0].id,
