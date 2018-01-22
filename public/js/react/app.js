@@ -88,23 +88,23 @@
 
 	var _PlaylistPage2 = _interopRequireDefault(_PlaylistPage);
 
-	var _ChannelPage = __webpack_require__(1100);
+	var _ChannelPage = __webpack_require__(1096);
 
 	var _ChannelPage2 = _interopRequireDefault(_ChannelPage);
 
-	var _HistoryPage = __webpack_require__(1096);
+	var _HistoryPage = __webpack_require__(1097);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
-	var _QueuePage = __webpack_require__(1097);
+	var _QueuePage = __webpack_require__(1098);
 
 	var _QueuePage2 = _interopRequireDefault(_QueuePage);
 
-	var _SettingsPage = __webpack_require__(1098);
+	var _SettingsPage = __webpack_require__(1099);
 
 	var _SettingsPage2 = _interopRequireDefault(_SettingsPage);
 
-	var _LibraryPage = __webpack_require__(1099);
+	var _LibraryPage = __webpack_require__(1100);
 
 	var _LibraryPage2 = _interopRequireDefault(_LibraryPage);
 
@@ -136,6 +136,8 @@
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/search', component: _SearchPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/player', component: _MediaViewPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/playlist/:playlist', component: _PlaylistPage2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/youtube/:playlist', component: _PlaylistPage2.default }),
+	                _react2.default.createElement(_reactRouterDom.Route, { path: '/soundcloud/:playlist', component: _PlaylistPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/channel/:channelId', component: _ChannelPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/library', component: _LibraryPage2.default }),
 	                _react2.default.createElement(_reactRouterDom.Route, { path: '/settings', component: _SettingsPage2.default }),
@@ -27937,7 +27939,7 @@
 	            likedPlaylist.push(action.track);
 	            return likedPlaylist;
 	        case 'REMOVE_LIKE':
-	            index = likedPlaylist.findIndex(function (tracks) {
+	            index = likedPlaylist.findIndex(function (track) {
 	                return track.id == action.track.id;
 	            });
 	            likedPlaylist.splice(index, 1);
@@ -93098,14 +93100,13 @@
 	    }, {
 	        key: 'shuffle',
 	        value: function shuffle() {
-	            var _this2 = this;
+	            var component = this;
+	            this.props.shuffle();
 
-	            // this.props.shuffle()
-	            var newQueue = [],
-	                queue = this.props.queue;
+	            var queue = _.shuffle(this.props.queue);
 
-	            _.remove(queue, function (track) {
-	                return track.id == _this2.props.nowPlaying.id;
+	            _.remove(queue, function (t) {
+	                return t.id == component.props.nowPlaying.id;
 	            });
 
 	            this.props.setQueue([this.props.nowPlaying].concat(_toConsumableArray(_.shuffle(queue))));
@@ -93539,12 +93540,24 @@
 	  }, {
 	    key: 'add',
 	    value: function add() {
-	      var title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-');
+	      switch (this.props.result.type) {
+	        case 'video':
+	          var title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-');
 
-	      this.props.callback(_extends({}, this.props.result, {
-	        track: title[1] ? title[1] : title[0],
-	        artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
-	      }), false);
+	          this.props.callback(_extends({}, this.props.result, {
+	            track: title[1] ? title[1] : title[0],
+	            artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
+	          }), false);
+	          break;
+
+	        case 'channel':
+	          location.hash = '#/channel/' + this.props.result.id;
+	          break;
+
+	        case 'playlist':
+	          location.hash = '#/playlist/' + this.props.result.id;
+	          break;
+	      }
 	    }
 	  }, {
 	    key: 'like',
@@ -93626,8 +93639,8 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'meta' },
-	            _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }),
-	            _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }),
+	            this.props.result.type == 'video' ? _react2.default.createElement('i', { className: 'plus icon', onClick: this.add }) : null,
+	            this.props.result.type == 'video' ? _react2.default.createElement('i', { className: 'forward icon', onClick: this.upNext }) : null,
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'ui dropdown' },
@@ -110006,7 +110019,6 @@
 	                var index = _lodash2.default.findIndex(liked, function (t) {
 	                    return t.id == track.id;
 	                });
-	                liked.splice(index, 1);
 	                this.props.removeLike(track);
 	            } else {
 	                track = _extends({}, this.props.track, {
@@ -110226,6 +110238,10 @@
 
 	var _actions = __webpack_require__(263);
 
+	var _moment = __webpack_require__(972);
+
+	var _moment2 = _interopRequireDefault(_moment);
+
 	var _Track = __webpack_require__(1095);
 
 	var _Track2 = _interopRequireDefault(_Track);
@@ -110260,17 +110276,39 @@
 	        _this.getSongs = _this.getSongs.bind(_this);
 	        _this.playAll = _this.playAll.bind(_this);
 	        _this.addToUpNext = _this.addToUpNext.bind(_this);
+	        _this.renderView = _this.renderView.bind(_this);
 	        return _this;
 	    }
 
 	    _createClass(PlaylistPage, [{
 	        key: 'getSongs',
 	        value: function getSongs() {
+	            var component = this;
+
 	            $.ajax({
-	                url: '',
-	                data: {}
-	            }).success(function (songs) {
-	                // TODO: get songs and add them to state
+	                url: '/api/getPlaylist?query=' + this.props.match.params.playlist
+	            }).success(function (tracks) {
+	                // TODO: Make resource to pretty prints tracks
+	                component.setState({ playlist: { tracks: _.map(tracks, function (track) {
+	                            var title = track.snippet.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-');
+
+	                            return {
+	                                id: track.snippet.resourceId.videoId,
+	                                url: 'https://www.youtube.com/watch?v=' + track.snippet.resourceId.videoId,
+	                                channelTitle: track.snippet.channelTitle,
+	                                title: track.snippet.title,
+	                                thumbnail: track.snippet.thumbnails.default.url,
+	                                type: track.snippet.resourceId.kind.split('#')[1],
+	                                platform: 'youtube',
+	                                track: title[1],
+	                                artist: title[0].trim(),
+	                                liked: false,
+	                                created: (0, _moment2.default)(track.snippet.publishedAt),
+	                                isSeeking: false,
+	                                played: 0,
+	                                playing: true
+	                            };
+	                        }) } });
 	            }).fail(function (message) {
 	                // TODO: handle failure to load tracks
 	            });
@@ -110280,26 +110318,49 @@
 	        value: function componentDidMount() {
 	            this.getSongs();
 
-	            var playlists = this.props.playlists,
-	                playlistName = this.props.match.params.playlist,
-	                playlist = playlists[playlists.findIndex(function (playlist) {
-	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
-	            })];
+	            var platform = this.props.match.path.split('/')[1];
 
-	            console.log(this.props.liked);
-	            if (playlistName == 'liked') playlist = {
-	                name: "Liked",
-	                description: "Waddup",
-	                tracks: this.props.liked
-	            };
+	            // switch (platform) {
+	            //   case 'youtube': return <YoutubeView />
+	            //   case 'soundcloud': return <YoutubeView />
+	            //   default: return <DefaultView />
+	            // }
 
-	            this.setState({ playlist: playlist });
+	            // let playlists = this.props.playlists,
+	            //     playlistName = this.props.match.params.playlist,
+	            //     playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
+	            //
+	            //     console.log(this.props.liked);
+	            // if (playlistName == 'liked')
+	            //     playlist = {
+	            //         name: "Liked",
+	            //         description: "Waddup",
+	            //         tracks: this.props.liked
+	            //     }
+	            //
+	            // this.setState({ playlist })
 	        }
 	    }, {
 	        key: 'playAll',
 	        value: function playAll() {
-	            this.props.nowPlaying(this.state.playlist.tracks[0]);
-	            this.props.setQueue(this.state.playlist.tracks);
+	            var playlistName = this.props.match.params.playlist;
+
+	            if (playlistName == 'liked') {
+	                var playlist = void 0;
+
+	                playlist = {
+	                    name: "Liked",
+	                    description: "Waddup",
+	                    tracks: this.props.liked
+	                };
+
+	                this.props.nowPlaying(playlist.tracks[0]);
+	                this.props.setQueue(playlist.tracks);
+	            } else {
+
+	                this.props.nowPlaying(this.state.playlist.tracks[0]);
+	                this.props.setQueue(this.state.playlist.tracks);
+	            }
 	        }
 	    }, {
 	        key: 'addToUpNext',
@@ -110314,17 +110375,23 @@
 	            // Change page
 	        }
 	    }, {
+	        key: 'renderView',
+	        value: function renderView() {}
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
 	            // let playlist = this.state.playlist
+	            console.log(this.state);
 
 	            var playlists = this.props.playlists,
 	                playlistName = this.props.match.params.playlist,
 	                playlist = playlists[playlists.findIndex(function (playlist) {
 	                return playlist.name.toLowerCase().replace(/\s/g, '') == playlistName;
 	            })];
+
+	            playlist = this.state.playlist;
 
 	            if (playlistName == 'liked') playlist = {
 	                name: "Liked",
@@ -110428,6 +110495,18 @@
 	    return PlaylistPage;
 	}(_react2.default.Component);
 
+	// const DefaultView = (props) => {
+	//     return (
+	//
+	//     )
+	// }
+
+	// const YoutubeView = (props) => {
+	//     return (
+	//
+	//     )
+	// }
+
 	var mapStateToProps = function mapStateToProps(state) {
 	    return {
 	        currentTrack: state.nowPlaying,
@@ -110479,6 +110558,10 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
+	var _Liked = __webpack_require__(1092);
+
+	var _Liked2 = _interopRequireDefault(_Liked);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -110486,6 +110569,9 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components
+
 
 	var Track = function (_React$Component) {
 	  _inherits(Track, _React$Component);
@@ -110531,7 +110617,7 @@
 	      if (this.props.view.match(/library|playlist/)) {
 	        return _react2.default.createElement(
 	          'tr',
-	          { key: props.track.url, onClick: this.startTrack },
+	          { key: props.track.url },
 	          _react2.default.createElement(
 	            'td',
 	            null,
@@ -110544,7 +110630,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'td',
-	            null,
+	            { onClick: this.startTrack },
 	            props.track.track
 	          ),
 	          _react2.default.createElement(
@@ -110555,7 +110641,7 @@
 	          _react2.default.createElement(
 	            'td',
 	            null,
-	            !props.track.liked ? _react2.default.createElement('i', { className: 'pink heart icon' }) : _react2.default.createElement('i', { className: 'empty heart icon' })
+	            _react2.default.createElement(_Liked2.default, { track: track })
 	          ),
 	          _react2.default.createElement(
 	            'td',
@@ -110836,6 +110922,110 @@
 	// Dependencies
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ChannelPage = function (_React$Component) {
+	  _inherits(ChannelPage, _React$Component);
+
+	  function ChannelPage(props) {
+	    _classCallCheck(this, ChannelPage);
+
+	    var _this = _possibleConstructorReturn(this, (ChannelPage.__proto__ || Object.getPrototypeOf(ChannelPage)).call(this, props));
+
+	    _this.state = {
+	      playlists: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(ChannelPage, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var component = this;
+
+	      $.ajax({
+	        url: '/api/getChannelPlaylists?query=' + this.props.match.params.channelId
+	      }).done(function (playlists) {
+	        component.setState({ playlists: playlists });
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'page' },
+	        this.state.playlists.length > 0 ? _react2.default.createElement(
+	          'h2',
+	          { className: 'ui header' },
+	          this.state.playlists[0].snippet.channelTitle
+	        ) : null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'ui three column grid' },
+	          _.map(this.state.playlists, function (playlist) {
+	            return _react2.default.createElement(
+	              'div',
+	              { className: 'column', key: playlist.id },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'ui fluid link card' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'image' },
+	                  _react2.default.createElement('img', { src: playlist.snippet.thumbnails.standard.url })
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'content' },
+	                  _react2.default.createElement(
+	                    'a',
+	                    { className: 'header', href: '/youtube/' + playlist.id },
+	                    playlist.snippet.title
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'meta' },
+	                    playlist.snippet.description
+	                  )
+	                )
+	              )
+	            );
+	          })
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ChannelPage;
+	}(_react2.default.Component);
+
+	exports.default = ChannelPage;
+
+/***/ }),
+/* 1097 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	// Dependencies
+
+	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
 
@@ -110998,7 +111188,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(HistoryPage);
 
 /***/ }),
-/* 1097 */
+/* 1098 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111021,7 +111211,7 @@
 
 	var _actions = __webpack_require__(263);
 
-	var _HistoryPage = __webpack_require__(1096);
+	var _HistoryPage = __webpack_require__(1097);
 
 	var _HistoryPage2 = _interopRequireDefault(_HistoryPage);
 
@@ -111056,25 +111246,17 @@
 	        key: 'componentDidMount',
 	        value: function componentDidMount() {
 	            var component = this;
+
 	            $('#queue').sortable({
 	                update: function update(event, ui) {
 	                    var queue = component.props.queue;
-	                    // TODO: make data just index to queue position
-	                    queue.splice(queue.findIndex(function (track) {
+	                    var index = queue.findIndex(function (track) {
 	                        return track.id == ui.item[0].id;
-	                    }), 1);
-	                    queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, {
-	                        id: ui.item[0].id,
-	                        title: $('#queue').find('#' + ui.item[0].id).data("title"),
-	                        thumbnail: $('#queue').find('#' + ui.item[0].id).data("thumbnail"),
-	                        genre: $('#queue').find('#' + ui.item[0].id).data("genre"),
-	                        url: $('#queue').find('#' + ui.item[0].id).data("url"),
-	                        type: $('#queue').find('#' + ui.item[0].id).data("type"),
-	                        platform: $('#queue').find('#' + ui.item[0].id).data("platform"),
-	                        isSeeking: $('#queue').find('#' + ui.item[0].id).data("isSeeking"),
-	                        played: $('#queue').find('#' + ui.item[0].id).data("played"),
-	                        playing: $('#queue').find('#' + ui.item[0].id).data("playing")
-	                    });
+	                    }),
+	                        track = queue[index];
+
+	                    queue.splice(index, 1);
+	                    queue.splice($('#queue').find('#' + ui.item[0].id).index(), 0, track);
 	                    component.props.setQueue(queue);
 	                }
 	            });
@@ -111148,7 +111330,7 @@
 	                    { id: 'queue', className: 'ui divided feed' },
 	                    _.map(component.props.queue, function (track, index) {
 	                        return _react2.default.createElement(Track, {
-	                            key: track.id + (Math.floor(Math.random() * 100000) + 1),
+	                            key: track.id,
 	                            track: track,
 	                            parent: component,
 	                            position: index });
@@ -111224,20 +111406,11 @@
 	            var track = this.props.track;
 	            return _react2.default.createElement(
 	                'div',
-	                { className: 'event track', id: this.props.track.id,
-	                    'data-title': this.props.track.title,
-	                    'data-thumbnail': this.props.track.thumbnail,
-	                    'data-genere': this.props.track.genere,
-	                    'data-url': this.props.track.url,
-	                    'data-type': this.props.track.type,
-	                    'data-platform': this.props.track.platform,
-	                    'data-isSeeking': this.props.track.isSeeking,
-	                    'data-playing': this.props.track.playing,
-	                    'data-played': this.props.track.played },
+	                { className: 'event track', id: this.props.track.id },
 	                _react2.default.createElement(
 	                    'div',
 	                    { className: 'label' },
-	                    _react2.default.createElement('img', { className: 'ui tiny image', src: this.props.track.thumbnail })
+	                    _react2.default.createElement('img', { className: 'ui image', src: this.props.track.thumbnail, style: { marginTop: '.5em' } })
 	                ),
 	                _react2.default.createElement(
 	                    'div',
@@ -111287,7 +111460,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(QueuePage);
 
 /***/ }),
-/* 1098 */
+/* 1099 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111342,7 +111515,7 @@
 	exports.default = SettingsPage;
 
 /***/ }),
-/* 1099 */
+/* 1100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -111514,110 +111687,6 @@
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(Library);
-
-/***/ }),
-/* 1100 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	// Dependencies
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var ChannelPage = function (_React$Component) {
-	  _inherits(ChannelPage, _React$Component);
-
-	  function ChannelPage(props) {
-	    _classCallCheck(this, ChannelPage);
-
-	    var _this = _possibleConstructorReturn(this, (ChannelPage.__proto__ || Object.getPrototypeOf(ChannelPage)).call(this, props));
-
-	    _this.state = {
-	      playlists: []
-	    };
-	    return _this;
-	  }
-
-	  _createClass(ChannelPage, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var component = this;
-
-	      $.ajax({
-	        url: '/api/getChannelPlaylists?query=UCSa8IUd1uEjlREMa21I3ZPQ'
-	      }).done(function (playlists) {
-	        component.setState({ playlists: playlists });
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'page' },
-	        this.state.playlists.length > 0 ? _react2.default.createElement(
-	          'h2',
-	          { className: 'ui header' },
-	          this.state.playlists[0].snippet.channelTitle
-	        ) : null,
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'ui three column grid' },
-	          _.map(this.state.playlists, function (playlist) {
-	            return _react2.default.createElement(
-	              'div',
-	              { className: 'column', key: playlist.id },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'ui fluid link card' },
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'image' },
-	                  _react2.default.createElement('img', { src: playlist.snippet.thumbnails.standard.url })
-	                ),
-	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'content' },
-	                  _react2.default.createElement(
-	                    'a',
-	                    { className: 'header' },
-	                    playlist.snippet.title
-	                  ),
-	                  _react2.default.createElement(
-	                    'div',
-	                    { className: 'meta' },
-	                    playlist.snippet.description
-	                  )
-	                )
-	              )
-	            );
-	          })
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ChannelPage;
-	}(_react2.default.Component);
-
-	exports.default = ChannelPage;
 
 /***/ })
 /******/ ]);

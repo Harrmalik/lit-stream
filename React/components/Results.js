@@ -63,13 +63,26 @@ class Result extends React.Component {
   }
 
   add() {
-    let title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
+    switch (this.props.result.type) {
+      case 'video':
+        let title = this.props.result.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
 
-    this.props.callback({
-      ...this.props.result,
-      track: title[1] ? title[1] : title[0],
-      artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
-    }, false)
+        this.props.callback({
+          ...this.props.result,
+          track: title[1] ? title[1] : title[0],
+          artist: title[1] ? title[0].trim() : this.props.result.channelTitle.split('-')[0].trim()
+        }, false)
+        break;
+
+      case 'channel':
+          location.hash = `#/channel/${this.props.result.id}`
+          break;
+
+      case 'playlist':
+          location.hash = `#/playlist/${this.props.result.id}`
+          break;
+    }
+
   }
 
   like(track) {
@@ -133,8 +146,8 @@ class Result extends React.Component {
                   <h3 onClick={this.add}>{this.props.result.title}</h3>
               </div>
               <div className="meta">
-                  <i className="plus icon" onClick={this.add}></i>
-                  <i className="forward icon" onClick={this.upNext}></i>
+                  { this.props.result.type == 'video' ? <i className="plus icon" onClick={this.add}></i> : null }
+                  { this.props.result.type == 'video' ? <i className="forward icon" onClick={this.upNext}></i> : null }
                   <div className="ui dropdown">
                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">

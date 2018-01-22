@@ -22,23 +22,15 @@ class QueuePage extends React.Component {
 
     componentDidMount() {
         let component = this
+
         $('#queue').sortable({
           update: function( event, ui ) {
               let queue = component.props.queue
-              // TODO: make data just index to queue position
-              queue.splice(queue.findIndex(track=> track.id == ui.item[0].id), 1)
-              queue.splice($('#queue').find(`#${ui.item[0].id}`).index(), 0, {
-                  id: ui.item[0].id,
-                  title: $('#queue').find(`#${ui.item[0].id}`).data("title"),
-                  thumbnail: $('#queue').find(`#${ui.item[0].id}`).data("thumbnail"),
-                  genre: $('#queue').find(`#${ui.item[0].id}`).data("genre"),
-                  url: $('#queue').find(`#${ui.item[0].id}`).data("url"),
-                  type: $('#queue').find(`#${ui.item[0].id}`).data("type"),
-                  platform: $('#queue').find(`#${ui.item[0].id}`).data("platform"),
-                  isSeeking: $('#queue').find(`#${ui.item[0].id}`).data("isSeeking"),
-                  played: $('#queue').find(`#${ui.item[0].id}`).data("played"),
-                  playing: $('#queue').find(`#${ui.item[0].id}`).data("playing")
-              })
+              let index = queue.findIndex(track=> track.id == ui.item[0].id),
+                  track = queue[index]
+
+              queue.splice(index, 1)
+              queue.splice($('#queue').find(`#${ui.item[0].id}`).index(), 0, track)
               component.props.setQueue(queue)
           }
         });
@@ -96,7 +88,7 @@ class QueuePage extends React.Component {
                     {_.map(component.props.queue, function(track, index) {
                         return (
                             <Track
-                                key={track.id + (Math.floor(Math.random() * 100000) + 1)  }
+                                key={track.id}
                                 track={track}
                                 parent={component}
                                 position={index}></Track>
@@ -161,18 +153,9 @@ class Track extends React.Component {
     render() {
         let track = this.props.track
         return (
-            <div className="event track" id={this.props.track.id}
-                data-title={this.props.track.title}
-                data-thumbnail={this.props.track.thumbnail}
-                data-genere={this.props.track.genere}
-                data-url={this.props.track.url}
-                data-type={this.props.track.type}
-                data-platform={this.props.track.platform}
-                data-isSeeking={this.props.track.isSeeking}
-                data-playing={this.props.track.playing}
-                data-played={this.props.track.played}>
+            <div className="event track" id={this.props.track.id}>
               <div className="label">
-                <img className="ui tiny image" src={this.props.track.thumbnail}></img>
+                <img className="ui image" src={this.props.track.thumbnail} style={{marginTop: '.5em'}}></img>
               </div>
               <div className="content">
                 <div className="date">

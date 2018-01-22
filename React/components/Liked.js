@@ -29,7 +29,6 @@ class Liked extends React.Component {
 
         if (this.state.liked) {
             let index = _.findIndex(liked, (t) => { return t.id == track.id })
-            liked.splice(index,1)
             this.props.removeLike(track)
         } else {
           track = {

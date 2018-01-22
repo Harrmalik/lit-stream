@@ -37,6 +37,8 @@ const App = () => (
                   <Route path="/search" component={SearchPage}/>
                   <Route path="/player" component={MediaViewPage}/>
                   <Route path="/playlist/:playlist" component={PlaylistPage}/>
+                  <Route path="/youtube/:playlist" component={PlaylistPage}/>
+                  <Route path="/soundcloud/:playlist" component={PlaylistPage}/>
                   <Route path="/channel/:channelId" component={ChannelPage}/>
                   <Route path="/library" component={LibraryPage}/>
                   <Route path="/settings" component={SettingsPage}/>

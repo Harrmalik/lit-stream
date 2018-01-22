@@ -137,13 +137,13 @@ function controls (state = null, action) {
 function liked (state = localStorage.getItem('liked') ? JSON.parse(localStorage.getItem('liked')) : [], action) {
   let likedPlaylist = [...state],
       index = 0
-      
+
   switch (action.type) {
       case 'ADD_LIKE':
           likedPlaylist.push(action.track)
           return likedPlaylist
       case 'REMOVE_LIKE':
-          index = likedPlaylist.findIndex(tracks => track.id == action.track.id)
+          index = likedPlaylist.findIndex(track => track.id == action.track.id)
           likedPlaylist.splice(index,1)
           return likedPlaylist
 

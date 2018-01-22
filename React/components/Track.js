@@ -7,6 +7,9 @@ import { connect } from 'react-redux'
 import { nowPlaying, updateQueue } from '../actions'
 import moment from 'moment'
 
+// Components
+import Liked from './Liked'
+
 class Track extends React.Component {
     constructor(props) {
       super(props)
@@ -41,16 +44,16 @@ class Track extends React.Component {
 
         if (this.props.view.match(/library|playlist/)) {
           return (
-            <tr key={props.track.url} onClick={this.startTrack}>
+            <tr key={props.track.url}>
                 <td>
                     <div className="ui checkbox">
                         <input type="checkbox"></input>
                         <label></label>
                     </div>
                 </td>
-                <td>{props.track.track}</td>
+                <td  onClick={this.startTrack}>{props.track.track}</td>
                 <td>{props.track.artist}</td>
-                <td>{!props.track.liked ? <i className="pink heart icon"></i> : <i className="empty heart icon"></i>}</td>
+                <td><Liked track={track}/></td>
                 <td>{moment(props.track.created).format('MMMM Do')}</td>
                 <td><i className="red big youtube icon"></i></td>
             </tr>

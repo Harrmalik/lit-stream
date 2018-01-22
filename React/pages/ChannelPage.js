@@ -16,7 +16,7 @@ class ChannelPage extends React.Component {
         let component = this
 
         $.ajax({
-          url: '/api/getChannelPlaylists?query=UCSa8IUd1uEjlREMa21I3ZPQ'
+          url: `/api/getChannelPlaylists?query=${this.props.match.params.channelId}`
         }).done((playlists) => {
           component.setState({ playlists })
         })
@@ -35,7 +35,7 @@ class ChannelPage extends React.Component {
                               <img src={playlist.snippet.thumbnails.standard.url}/>
                             </div>
                             <div className="content">
-                              <a className="header">{playlist.snippet.title}</a>
+                              <a className="header" href={`/youtube/${playlist.id}`}>{playlist.snippet.title}</a>
                               <div className="meta">{playlist.snippet.description}</div>
                             </div>
                           </div>

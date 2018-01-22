@@ -110,10 +110,10 @@ iframe {
   display: none; }
 
 .track:hover .remove.icon {
-  opacity: 1; }
+  display: inline-block; }
 
 .remove.icon {
-  opacity: 0; }
+  display: none; }
 
 #playlistHeader {
   background: linear-gradient(141deg, #2cb5e8 0%, #146DBA 75%);

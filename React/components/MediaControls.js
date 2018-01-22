@@ -48,12 +48,13 @@ class MediaControls extends React.Component {
     }
 
     shuffle() {
-        // this.props.shuffle()
-        let newQueue = [],
-            queue = this.props.queue
+        let component = this
+        this.props.shuffle()
 
-        _.remove(queue, (track) => {
-            return track.id == this.props.nowPlaying.id
+        let queue = _.shuffle(this.props.queue);
+
+        _.remove(queue, (t) => {
+          return t.id == component.props.nowPlaying.id;
         })
 
         this.props.setQueue([this.props.nowPlaying, ..._.shuffle(queue)])

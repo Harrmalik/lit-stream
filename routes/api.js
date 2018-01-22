@@ -16,7 +16,7 @@ router.get('/findSong', function(req, res, next) {
             Youtube.search.list({
                 part: "snippet",
                 q: req.query.query,
-                maxResults: 20
+                maxResults: 20,
             }, (err, data) => {
                 if (err) {
                     console.log(err);
@@ -36,7 +36,6 @@ router.get('/findSong', function(req, res, next) {
         default:
 
     }
-
 });
 
 router.get('/getPlaylist', function(req, res, next) {
@@ -58,6 +57,20 @@ router.get('/getPlaylist', function(req, res, next) {
 });
 
 router.get('/getChannel', function(req, res, next) {
+    // TODO: make ayscronous 
+    Youtube.search.list({
+        part: "snippet",
+        q: req.query.query,
+        maxResults: 50,
+        order: 'date',
+        type: 'video'
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+
+        res.json(data.items);
+    });
     Youtube.channels.list({
         part: "snippet",
         id: req.query.query,
