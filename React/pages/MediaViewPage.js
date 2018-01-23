@@ -1,21 +1,31 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { nowPlaying, setControls } from '../actions'
 var ct = new ColorThief();
 
-let MediaViewPage = React.createClass({
-    getInitialState() {
-            return {
-                track: null
-            }
-    },
+class MediaViewPage extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        track: null
+      }
+
+      this.getAlbum = this.getAlbum.bind(this)
+      this.getColors = this.getColors.bind(this)
+    }
+
     componentDidUpdate() {
         if (this.state.track !== this.props.nowPlaying.title) {
             this.setState({track: this.props.nowPlaying.title})
             this.getAlbum()
         }
-    },
+    }
+
     getAlbum() {
         let component = this
         let nowPlaying = component.props.nowPlaying
@@ -26,7 +36,8 @@ let MediaViewPage = React.createClass({
                 this.getColors(album)
             });
         }
-    },
+    }
+
     getColors(album) {
         let track = this.props.nowPlaying
         var img = document.getElementById('image')
@@ -61,7 +72,8 @@ let MediaViewPage = React.createClass({
                 $('.0').css("color", `rgb(${pal[0][0]}, ${pal[0][1]}, ${pal[0][2]})`);
             }
         });
-    },
+    }
+
     render() {
         return (
             <div id="Viewer" className="page">
@@ -73,7 +85,7 @@ let MediaViewPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,

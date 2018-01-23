@@ -1,16 +1,25 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import SearchBox from '../components/SearchBox'
 import Results from '../components/Results'
 
-let SearchPage = React.createClass({
-    getInitialState() {
-        return {
-            data: []
-        }
-    },
+class SearchPage extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        data: []
+      }
+
+      this.updateResults = this.updateResults.bind(this)
+    }
+
     updateResults(data) {
-        this.setState({data: [data]})
-    },
+        this.setState({ data })
+    }
+
     render() {
         return (
             <div className="page">
@@ -22,6 +31,6 @@ let SearchPage = React.createClass({
             </div>
         )
     }
-})
+}
 
 export default SearchPage

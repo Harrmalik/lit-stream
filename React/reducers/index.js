@@ -11,8 +11,8 @@ let defaultOptions = {
     autoplay: true,
     repeat: false
 }
-let theQueue = []
-let theHistory = []
+let theQueue = [],
+    theHistory = []
 
 
 function options (state = defaultOptions, action) {
@@ -41,7 +41,7 @@ function queue (state = [], action) {
     switch (action.type) {
         case 'UPDATE_QUEUE':
             action.upNext ?
-                theQueue.splice(index,0, action.track) :
+                theQueue.splice(1,0, action.track) :
                 theQueue.push(action.track)
                 return theQueue
 
@@ -134,12 +134,55 @@ function controls (state = null, action) {
     }
 }
 
+function liked (state = localStorage.getItem('liked') ? JSON.parse(localStorage.getItem('liked')) : [], action) {
+  let likedPlaylist = [...state],
+      index = 0
+
+  switch (action.type) {
+      case 'ADD_LIKE':
+          likedPlaylist.push(action.track)
+          return likedPlaylist
+      case 'REMOVE_LIKE':
+          index = likedPlaylist.findIndex(track => track.id == action.track.id)
+          likedPlaylist.splice(index,1)
+          return likedPlaylist
+
+      default:
+          return state
+  }
+}
+
+function playlists (state = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [], action) {
+  let thePlaylists = [...state],
+      index = 0
+  if (action.playlist) {
+      index = thePlaylists.findIndex(playlist => playlist.name == action.playlist.name)
+  }
+  switch (action.type) {
+      case 'ADD_PLAYLIST':
+          return [...state, action.playlist]
+
+      // case 'SET_QUEUE':
+      //     theQueue = action.queue
+      //     return theQueue
+      //
+      case 'REMOVE_PLAYLIST':
+          thePlaylists.splice(index,1)
+          return thePlaylists
+
+      default:
+          return state
+  }
+}
+
 const rootReducer = combineReducers({
     options,
     history,
     queue,
     nowPlaying,
-    controls
+    controls,
+    liked,
+    playlists
 })
 
 export default rootReducer

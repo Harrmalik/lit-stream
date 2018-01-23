@@ -19,6 +19,19 @@ a
     padding: 1em
     position: absolute
     top: 0
+    border-right: 1px solid lightgrey
+
+    .menu
+        width: 100%
+
+    a
+        color: black
+        font-size: 1.2em
+
+#playlistButton
+
+    .menu
+        width: 400px !important
 
 #Search
     width: 75%
@@ -52,13 +65,24 @@ a
 
 .page
     position: absolute
+    overflow: auto
     padding: 1em
     top: 0
     right: 0
-    height: 80%
+    height: 90%
     margin-left: 25%
     background-color: white
     width: 75%
+
+#queuePage
+    position: absolute
+    padding: 1em
+    top: 0
+    right: 0
+    border-left: 1px solid lightgrey
+    height: 90%
+    background-color: white
+    width: 30%
 
 #queue
     height: 90%
@@ -88,9 +112,17 @@ iframe
     left: 0
     margin-bottom: 30%
 
+.media-player
+    display: none
+
 .track:hover
     .remove.icon
-        opacity: 1
+        display: inline-block
 
 .remove.icon
-    opacity: 0
+    display: none
+
+#playlistHeader
+    background: linear-gradient(141deg, #2cb5e8 0%, #146DBA 75%)
+    margin: 0 0 -1em
+    height: 150px

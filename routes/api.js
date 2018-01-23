@@ -17,7 +17,6 @@ router.get('/findSong', function(req, res, next) {
                 part: "snippet",
                 q: req.query.query,
                 maxResults: 20,
-                type: 'video'
             }, (err, data) => {
                 if (err) {
                     console.log(err);
@@ -37,16 +36,64 @@ router.get('/findSong', function(req, res, next) {
         default:
 
     }
-
 });
 
 router.get('/getPlaylist', function(req, res, next) {
-    console.log(req.query.query)
-    console.log('called');
     Youtube.playlistItems.list({
         part: "snippet",
         playlistId: req.query.query,
-        maxResults: 20
+        maxResults: 50,
+        nextPageToken: ""
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        if (data) {
+            res.json(data.items);
+        } else {
+            res.json({});
+        }
+    });
+});
+
+router.get('/getChannel', function(req, res, next) {
+    // TODO: make ayscronous 
+    Youtube.search.list({
+        part: "snippet",
+        q: req.query.query,
+        maxResults: 50,
+        order: 'date',
+        type: 'video'
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+
+        res.json(data.items);
+    });
+    Youtube.channels.list({
+        part: "snippet",
+        id: req.query.query,
+        maxResults: 50,
+        nextPageToken: ""
+    }, (err, data) => {
+        if (err) {
+            console.log(err);
+        }
+        if (data) {
+            res.json(data.items);
+        } else {
+            res.json({});
+        }
+    });
+});
+
+router.get('/getChannelPlaylists', function(req, res, next) {
+    Youtube.playlists.list({
+        part: "snippet",
+        channelId: req.query.query,
+        maxResults: 50,
+        nextPageToken: ""
     }, (err, data) => {
         if (err) {
             console.log(err);

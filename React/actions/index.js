@@ -63,6 +63,38 @@ export const isSeeking = () => ({
     type: 'IS_SEEKING'
 })
 
+// Like actions
+export const addLike = (track) => ({
+    type: 'ADD_LIKE',
+    track
+})
+
+export const removeLike = (track) => ({
+    type: 'REMOVE_LIKE',
+    track
+})
+
+// Playlists actions
+export const addPlaylist = (playlist) => ({
+    type: 'ADD_PLAYLIST',
+    playlist
+})
+
+export const editPlaylist = (playlist) => ({
+    type: 'EDIT_PLAYLIST',
+    playlist
+})
+
+export const removePlaylist = (playlist) => ({
+    type: 'REMOVE_PLAYLIST',
+    playlist
+})
+
+export const setPlaylistTracks = (playlist) => ({
+    type: 'SET_PLAYLIST_TRACKS',
+    playlist
+})
+
 // Options actions
 export const shuffle = () => ({
     type: 'SHUFFLE'

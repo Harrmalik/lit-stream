@@ -1,3 +1,6 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -10,7 +13,19 @@ var soundcloudConfig = {
     clientId: 'ac896ad5490da37d6c8064572d06d7bb',
     showArtwork: true
 }
-var MediaPlayer = React.createClass({
+
+class MediaPlayer extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+          crossfade: false
+        }
+
+        this.getNextTrack = this.getNextTrack.bind(this)
+        this.onProgress = this.onProgress.bind(this)
+    }
+
     componentWillReceiveProps(nextProps) {
         let nowPlaying = this.props.nowPlaying
         if (nextProps.queue.length == 1 && nextProps.nowPlaying == null)
@@ -24,7 +39,8 @@ var MediaPlayer = React.createClass({
                 e.preventDefault()
             })
         }
-    },
+    }
+
     getNextTrack(event) {
         if (this.props.options.repeat) {
             event.target.playVideo()
@@ -37,13 +53,19 @@ var MediaPlayer = React.createClass({
                 this.props.nextTrack(this.props.nowPlaying)
             }
         }
-    },
+    }
+
     onProgress(progress) {
       // We only want to update time slider if we are not currently seeking
       if (!this.props.nowPlaying.isSeeking) {
         this.props.updateProgess(progress)
       }
-    },
+
+      if ((this.props.nowPlaying.duration - progress.playedSeconds).toFixed(0) == 12) {
+        // this.setState({ crossfade: true })
+      }
+    }
+
     render() {
         const {
           url, volume, loaded, duration,
@@ -56,6 +78,7 @@ var MediaPlayer = React.createClass({
             const played = this.props.nowPlaying.played
             let component = this
             return (
+              <div className="media-player">
                 <ReactPlayer
                     soundcloudConfig={soundcloudConfig}
                     url={this.props.nowPlaying.url}
@@ -73,6 +96,27 @@ var MediaPlayer = React.createClass({
                     onError={e => console.log('onError', e)}
                     onProgress={this.onProgress}
                     onDuration={duration => this.props.setDuration( duration )} />
+
+                    { this.state.crossfade ?
+                  <ReactPlayer
+                      soundcloudConfig={soundcloudConfig}
+                      url={"https://www.youtube.com/watch?v=I7HahVwYpwo"}
+                      ref={player =>  this.player = player}
+                      playing={true}
+                      playbackRate={playbackRate}
+                      volume={volume}
+                      width='100%'
+                      height='300px'
+                      controls
+                      onReady={() => console.log('onReady')}
+                      onStart={() => console.log('onStart')}
+                      onBuffer={() => console.log('onBuffer')}
+                      onEnded={this.getNextTrack}
+                      onError={e => console.log('onError', e)}
+                      onProgress={this.onProgress}
+                      onDuration={duration => this.props.setDuration( duration )} /> : null }
+              </div>
+
             )
         } else {
             return (
@@ -80,7 +124,7 @@ var MediaPlayer = React.createClass({
             )
         }
     }
-})
+}
 
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,

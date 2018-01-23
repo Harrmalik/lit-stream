@@ -1,20 +1,32 @@
+'use strict'
+
+// Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateQueue, setQueue, nowPlaying, removeTrack } from '../actions'
+import { setQueue, nowPlaying } from '../actions'
 
-let Library = React.createClass({
-    getInitialState() {
-        return {
-            library: []
-        }
+// Components
+import Track from '../components/Track'
 
-    },
+class Library extends React.Component {
+    constructor(props) {
+      super(props)
+
+      this.state = {
+        library: []
+      }
+
+      this.getSongs = this.getSongs.bind(this)
+      this.playAll = this.playAll.bind(this)
+    }
+
     componentWillMount() {
         if (localStorage.getItem('library')) {
             this.setState({ library: JSON.parse(localStorage.getItem('library')) })
         }
-    },
+    }
+
     getSongs() {
         $.ajax({
             url: '',
@@ -26,13 +38,17 @@ let Library = React.createClass({
         }).fail((message) => {
             // TODO: handle failure to load tracks
         })
-    },
+    }
+
     componentDidMount() {
         this.getSongs()
-    },
+    }
+
     playAll() {
+        this.props.nowPlaying(this.state.library[0])
         this.props.setQueue(this.state.library)
-    },
+    }
+
     render() {
         return (
             <div id="libraryContainer">
@@ -54,7 +70,7 @@ let Library = React.createClass({
                             <Track
                                 key={song.url}
                                 track={song}
-                                parent={this}></Track>
+                                view={'library'}></Track>
                         )
                     })}
                     </tbody>
@@ -64,38 +80,7 @@ let Library = React.createClass({
             </div>
         )
     }
-})
-
-let Track = React.createClass({
-    startThis() {
-        let parent = this.props.parent.props
-        let track = this.props.track
-        track.no
-        parent.updateQueue(this.props.track, false)
-        if (parent.queue.length > 0) {
-            parent.nowPlaying(this.props.track)
-        }
-    },
-    render() {
-        let track = this.props.track
-        return (
-            <tr key={track.url} onClick={this.startThis}>
-                <td>
-                    <div className="ui checkbox">
-                        <input type="checkbox"></input>
-                        <label></label>
-                    </div>
-                </td>
-                <td>{track.title}</td>
-                <td>{track.url}</td>
-                <td>{track.liked ? <i className="heart icon"></i> : <i className="empty heart icon"></i>}</td>
-                <td>July 4th</td>
-                <td>{track.platform}</td>
-            </tr>
-        )
-    }
-})
-
+}
 
 const mapStateToProps = state => ({
   currentTrack: state.nowPlaying,
@@ -104,7 +89,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     nowPlaying: bindActionCreators(nowPlaying, dispatch),
-    updateQueue: bindActionCreators(updateQueue, dispatch),
     setQueue: bindActionCreators(setQueue, dispatch)
 })
 

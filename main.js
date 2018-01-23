@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow,globalShortcut } = require('electron');
 const path = require('path')
 const url = require('url')
 
@@ -33,6 +33,54 @@ function createWindow () {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', createWindow)
+
+// app.on('ready', function handleReady () {
+//   // Create our browser window for google.com
+//   var windowOpts = {
+//     height: 920,
+//     width: 1024
+//   };
+//   // var browserWindow = new BrowserWindow(windowOpts);
+//   // browserWindow.loadUrl('file://' + __dirname + '/index.html');
+// createWindow()
+//   // Load our media keys
+//   // Copied from https://gist.github.com/twolfson/0a03820e27583cc9ad6e
+//   var registered = globalShortcut.register('medianexttrack', function () {
+//     console.log('medianexttrack pressed');
+//   });
+//   if (!registered) {
+//     console.log('medianexttrack registration failed');
+//   } else {
+//     console.log('medianexttrack registration bound!');
+//   }
+//
+//   var registered = globalShortcut.register('mediaplaypause', function () {
+//     console.log('mediaplaypause pressed');
+//   });
+//   if (!registered) {
+//     console.log('mediaplaypause registration failed');
+//   } else {
+//     console.log('mediaplaypause registration bound!');
+//   }
+//
+//   var registered = globalShortcut.register('mediaprevioustrack', function () {
+//     console.log('mediaprevioustrack pressed');
+//   });
+//   if (!registered) {
+//     console.log('mediaprevioustrack registration failed');
+//   } else {
+//     console.log('mediaprevioustrack registration bound!');
+//   }
+//
+//   var registered = globalShortcut.register('mediastop', function () {
+//     console.log('mediastop pressed');
+//   });
+//   if (!registered) {
+//     console.log('mediastop registration failed');
+//   } else {
+//     console.log('mediastop registration bound!');
+//   }
+// });
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
