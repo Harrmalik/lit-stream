@@ -8,6 +8,7 @@ import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 
 // Components
 import HistoryPage from './HistoryPage'
+import Liked from '../components/Liked'
 
 class QueuePage extends React.Component {
     constructor(props) {
@@ -168,6 +169,7 @@ class Track extends React.Component {
                   : null }
                   <span className={this.props.parent.props.currentTrack.id == this.props.track.id ?
                   'ui blue header' : 'ui'} onClick={this.startTrack}>{this.props.track.track}</span>
+                  <Liked track={track}/>
                 </div>
               </div>
             </div>

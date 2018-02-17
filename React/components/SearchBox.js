@@ -116,10 +116,10 @@ class SearchBox extends React.Component {
                         url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
                         channelTitle: result.snippet.channelTitle,
                         title: result.snippet.title,
+                        artist: result.snippet.title,
                         thumbnail: result.snippet.thumbnails.default.url,
                         type: result.id.kind.split('#')[1],
                         platform: 'youtube',
-
                     }
                 })
                 component.setState({tracks});

@@ -14,7 +14,6 @@ let defaultOptions = {
 let theQueue = [],
     theHistory = []
 
-
 function options (state = defaultOptions, action) {
     switch (action.type) {
         case 'SHUFFLE':
@@ -77,6 +76,7 @@ function nowPlaying (state = null, action) {
     let prevIndex,newIndex
     switch (action.type) {
         case 'NOW_PLAYING':
+            document.title = action.track.title
             return action.track
 
         case 'NEXT_TRACK':
@@ -89,6 +89,7 @@ function nowPlaying (state = null, action) {
                     prevIndex = theQueue.findIndex(track => track.id == action.track.id)
                     newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex
                 }
+                document.title = theQueue[newIndex].title
                 return theQueue[newIndex]
 
             } else {
@@ -99,15 +100,18 @@ function nowPlaying (state = null, action) {
             if (theQueue.length > 0) {
                 prevIndex = theQueue.findIndex(track => track.id == action.track.id)
                 newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex
+                document.title = theQueue[newIndex].title
                 return theQueue[newIndex]
             } else {
                 return state
             }
 
         case 'PLAY_TRACK':
+            document.title = state.title
             return { ...state, playing: true }
 
         case 'STOP_TRACK':
+            document.title = 'Lit Stream'
             return { ...state, playing: false }
 
         case 'UPDATE_PROGRESS':

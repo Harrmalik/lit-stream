@@ -23,45 +23,69 @@ class PlaylistPage extends React.Component {
       this.getSongs = this.getSongs.bind(this)
       this.playAll = this.playAll.bind(this)
       this.addToUpNext = this.addToUpNext.bind(this)
+      this.savePlaylist = this.savePlaylist.bind(this)
       this.renderView = this.renderView.bind(this)
     }
 
     getSongs() {
-        let component = this
+        let component = this,
+            playlistid = this.props.match.params.playlist
 
-        $.ajax({
-            url: `/api/getPlaylist?query=${this.props.match.params.playlist}`
-        }).success((tracks) => {
-            // TODO: Make resource to pretty prints tracks
-            component.setState({playlist: {tracks : _.map(tracks, (track) => {
-                let title = track.snippet.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
+        switch (playlistid.substring(0,2)) {
+            case 'YT':
+                $.ajax({
+                    url: `/api/getPlaylist?query=${this.props.match.params.playlist.substring(2)}`
+                }).success((tracks) => {
+                    // TODO: Make resource to pretty prints tracks
+                    component.setState({playlist: {tracks : _.map(tracks, (track) => {
+                        let title = track.snippet.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
 
-                return {
-                    id: track.snippet.resourceId.videoId,
-                    url: `https://www.youtube.com/watch?v=${track.snippet.resourceId.videoId}`,
-                    channelTitle: track.snippet.channelTitle,
-                    title: track.snippet.title,
-                    thumbnail: track.snippet.thumbnails.default.url,
-                    type: track.snippet.resourceId.kind.split('#')[1],
-                    platform: 'youtube',
-                    track: title[1],
-                    artist: title[0].trim(),
-                    liked: false,
-                    created: moment(track.snippet.publishedAt),
-                    isSeeking: false,
-                    played: 0,
-                    playing: true
-                }
-            })}})
-        }).fail((message) => {
-            // TODO: handle failure to load tracks
-        })
+                        return {
+                            id: track.snippet.resourceId.videoId,
+                            url: `https://www.youtube.com/watch?v=${track.snippet.resourceId.videoId}`,
+                            channelTitle: track.snippet.channelTitle,
+                            title: track.snippet.title,
+                            thumbnail: track.snippet.thumbnails.default.url,
+                            type: track.snippet.resourceId.kind.split('#')[1],
+                            platform: 'youtube',
+                            track: title[1],
+                            artist: title[0].trim(),
+                            liked: false,
+                            created: moment(track.snippet.publishedAt),
+                            isSeeking: false,
+                            played: 0,
+                            playing: true
+                        }
+                    })}})
+                }).fail((message) => {
+                    // TODO: handle failure to load tracks
+                })
+                break;
+            default:
+                let playlists = this.props.playlists,
+                    playlistName = this.props.match.params.playlist,
+                    playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
+
+                if (playlistName == 'liked')
+                    playlist = {
+                        name: "Liked",
+                        description: "Waddup",
+                        tracks: this.props.liked
+                    }
+
+                component.setState({playlist})
+        }
     }
 
     componentDidMount() {
         this.getSongs()
 
         let platform = this.props.match.path.split('/')[1]
+        $('#tracks tr').contextmenu((e) => {
+            var num = Math.floor((Math.random()*10)+1);
+            var img = $('<div>new menu</div>');
+            $("#img_container").html(img).offset({ top: e.pageY, left: e.pageX});
+        })
 
         // switch (platform) {
         //   case 'youtube': return <YoutubeView />
@@ -116,26 +140,33 @@ class PlaylistPage extends React.Component {
       // Change page
     }
 
+    savePlaylist() {
+      // TODO: save change to local storage or database
+        let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [],
+            playlist = {
+                name: this.playlistName.inputRef.value,
+                description: this.description.inputRef.value,
+                tracks: []
+            }
+        // TODO: make sure playlist doesn't already exist
+        // TODO: make sure playlistname is included else throw error
+
+        console.log(playlist);
+        this.props.addPlaylist(playlist)
+        playlists.push(playlist)
+
+        // this.playlistName.inputRef.value = ' '
+        // this.description.inputRef.value = ' '
+
+        // localStorage.setItem('playlists', JSON.stringify(playlists))
+    }
+
     renderView() {
 
     }
 
     render() {
-        // let playlist = this.state.playlist
-        console.log(this.state);
-
-        let playlists = this.props.playlists,
-            playlistName = this.props.match.params.playlist,
-            playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
-
-            playlist = this.state.playlist
-
-        if (playlistName == 'liked')
-            playlist = {
-                name: "Liked",
-                description: "Waddup",
-                tracks: this.props.liked
-            }
+        let playlist = this.state.playlist
 
         return (
             <div id="libraryContainer">
@@ -149,8 +180,9 @@ class PlaylistPage extends React.Component {
                 <button className="ui inverted active button" onClick={this.playAll}>Play All songs</button>
                 <button className="ui inverted active button" onClick={() => { this.props.removePlaylist(playlist) }}>Delete Playlist</button>
                 <button className="ui inverted active button" onClick={this.addToUpNext}>Add to Queue</button>
+                <button className="ui inverted active button" onClick={this.savePlaylist}>Save Playlist</button>
               </div>
-              <table id="library" className="ui table striped compact">
+              <table id="library" className="ui table striped very compact selectable">
                   <thead>
                       <tr>
                           <th></th>
@@ -162,7 +194,7 @@ class PlaylistPage extends React.Component {
                       </tr>
                   </thead>
 
-                  <tbody>
+                  <tbody id="tracks">
                   {_.map(playlist.tracks, (song, index) => {
                       return (
                           <Track

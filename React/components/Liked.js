@@ -49,7 +49,7 @@ class Liked extends React.Component {
     }
 
     render() {
-        return <div className="item" onClick={this.toggleLike}><i className={this.state.liked ? "heart pink icon" : "heart empty icon"}></i></div>
+        return <span className="item" onClick={this.toggleLike}><i className={this.state.liked ? "heart pink icon" : "heart empty icon"}></i></span>
     }
 }
 

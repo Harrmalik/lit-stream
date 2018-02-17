@@ -79,7 +79,7 @@ class Result extends React.Component {
           break;
 
       case 'playlist':
-          location.hash = `#/playlist/${this.props.result.id}`
+          location.hash = `#/playlist/YT${this.props.result.id}`
           break;
     }
 
@@ -148,6 +148,7 @@ class Result extends React.Component {
               <div className="meta">
                   { this.props.result.type == 'video' ? <i className="plus icon" onClick={this.add}></i> : null }
                   { this.props.result.type == 'video' ? <i className="forward icon" onClick={this.upNext}></i> : null }
+                  <Liked track={this.props.result}/>
                   <div className="ui dropdown">
                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">

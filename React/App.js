@@ -3,7 +3,7 @@
 // Dependencies
 import React from 'react'
 import ReactDom from 'react-dom'
-import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom'
+import { HashRouter as Router, Route, Link, Redirect } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './Store.js'
 
@@ -49,6 +49,12 @@ const App = () => (
           </Router>
       </Provider>
 )
+
+// if (document.addEventListener) {
+//     document.addEventListener('contextmenu', (e) => {
+//         e.preventDefault();
+//     }, false);
+//  }
 
 ReactDom.render(<App />,
 document.getElementById('react-app'))

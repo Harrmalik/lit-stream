@@ -64,7 +64,7 @@ class Library extends React.Component {
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="tracks">
                     {_.map(this.state.library, (song, index) => {
                         return (
                             <Track
