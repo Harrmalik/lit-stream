@@ -8,12 +8,12 @@ provider:
   role: arn:aws:iam::942042945130:role/service-role/testslsrole
 
 functions:
-  getCover:
-    handler: handler.getCover
-    description: Gets album cover for the current song
+  findSong:
+    handler: handler.register
+    description: Handles route for registering users
     tags:
-      music-api: getCover
+      auth: register
     events:
       - http:
-          path: music-api/getCover
+          path: auth/register
           method: post

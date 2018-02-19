@@ -79,7 +79,6 @@ class SearchBox extends React.Component {
 
         $.ajax({
             url: `/api/${type}`,
-            data: { query, platform: 'soundcloud' },
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
@@ -105,8 +104,9 @@ class SearchBox extends React.Component {
         let tracks;
 
         $.ajax({
-            url: `/api/${type}`,
+            url: `https://ikilnnomr6.execute-api.us-east-1.amazonaws.com/dev/yt-api/findSongs`,
             data: { query, platform: 'youtube' },
+            headers: {"Access-Control-Allow-Origin": "*"},
             crossDomain : true,
             dataType: 'json',
             success: function(data) {

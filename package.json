@@ -3,21 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start npm --name lit-sream -- run dev",
-    "dev": "webpack -w & \n sass -w ./public/css & \n nodemon ./bin/www"
+    "start": "pm2 start npm --name lit-stream -- run dev",
+    "dev": "webpack -w & \n sass -w ./public/css"
   },
   "dependencies": {
     "babel-preset-stage-2": "^6.24.1",
-    "body-parser": "~1.15.2",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.8.1",
-    "debug": "~2.2.0",
-    "dynamodb": "^1.0.0",
-    "express": "~4.14.0",
-    "hbs": "~4.0.1",
+    "http": "0.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.17.1",
-    "morgan": "~1.7.0",
     "node-sass-middleware": "0.9.8",
     "react": "^15.6.0",
     "react-dom": "^15.4.1",
@@ -28,9 +21,8 @@
     "redux": "^3.6.0",
     "request": "^2.79.0",
     "semantic-ui-react": "^0.75.1",
-    "serve-favicon": "~2.3.0",
     "webpack": "^1.13.3",
-    "youtube-api": "^2.0.6"
+    "youtube-api": "^2.0.9"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",

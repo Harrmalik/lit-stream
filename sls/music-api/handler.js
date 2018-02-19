@@ -1,16 +1,30 @@
 'use strict';
 
-module.exports.hello = (event, context, callback) => {
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v1.0! Your function executed successfully!',
-      input: event,
-    }),
-  };
+const request = require('request');
+const slsGetAlbumUrl = 'https://bgmv70svsg.execute-api.us-east-1.amazonaws.com/prod/album-covers-dev-getAlbum';
 
-  callback(null, response);
+module.exports.getCover = (event, context, callback) => {
+    let params = event.queryStringParameters
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+    request.get(`${slsGetAlbumUrl}?track=${params.track}&artist=${params.artist}`, (error, response, body) => {
+        let nowPlaying = {}
+        if (body) {
+            body = JSON.parse(body);
+            console.log(body);
+            if (body.image) {
+                nowPlaying.image = body.image;
+                nowPlaying.album = body.album;
+            }
+
+            callback(null, {
+              statusCode: 200,
+              body: JSON.stringify(nowPlaying),
+            });
+        } else {
+            callback(null, {
+              statusCode: 200,
+              body: JSON.stringify(nowPlaying),
+            });
+        }
+    });
 };
