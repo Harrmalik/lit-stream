@@ -50,11 +50,11 @@ const App = () => (
       </Provider>
 )
 
-// if (document.addEventListener) {
-//     document.addEventListener('contextmenu', (e) => {
-//         e.preventDefault();
-//     }, false);
-//  }
+if (document.addEventListener) {
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    }, false);
+ }
 
 ReactDom.render(<App />,
 document.getElementById('react-app'))

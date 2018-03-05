@@ -13,7 +13,7 @@ module.exports = {
         publicPath: "/"
     },
     module: {
-        loaders: [
+        rules: [
             {
                 "test": /\.jsx?$/,
                 "include": /\/React/,
@@ -24,8 +24,7 @@ module.exports = {
                         "es2015",
                         "react",
                         'stage-2'
-                    ],
-                    "plugins": ["transform-es2015-destructuring", "transform-object-rest-spread"]
+                    ]
                 }
             }
         ]

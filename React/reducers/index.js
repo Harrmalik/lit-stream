@@ -58,10 +58,13 @@ function queue (state = [], action) {
 }
 
 function history (state = [], action) {
+    let prevIndex
     theHistory = [...state]
     switch (action.type) {
         case 'NEXT_TRACK':
-            theHistory.push(theQueue[0])
+            prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+
+            theHistory.push(theQueue[prevIndex])
             return theHistory
 
         case 'PREV_TRACK':
