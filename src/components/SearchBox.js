@@ -152,6 +152,7 @@ class SearchBox extends React.Component {
 }
 
 class SearchEngine extends React.Component {
+    //TODO: Convert ot semantic react
     constructor(props) {
       super(props)
 
@@ -159,9 +160,9 @@ class SearchEngine extends React.Component {
     }
 
     componentDidMount() {
-        $('.selection.dropdown')
-          .dropdown()
-        ;
+        // $('.selection.dropdown')
+        //   .dropdown()
+        // ;
     }
 
     changeSearchEngine(e) {

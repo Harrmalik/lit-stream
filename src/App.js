@@ -50,7 +50,4 @@ const App = () => (
   </Provider>
 )
 
-// <Route path="/" component={SidePane}/>
-//
-// <Route exact path="/" component={HomePage}/>
 export default App;

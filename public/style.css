@@ -110,7 +110,7 @@ iframe {
   margin-bottom: 30%; }
 
 .media-player {
-  display: none; }
+  display: block; }
 
 .track:hover .remove.icon {
   display: inline-block; }

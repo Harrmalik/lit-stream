@@ -76,7 +76,7 @@ class QueuePage extends React.Component {
     render() {
         let component = this
         return (
-            <div id="queuePage" className="page" style={{display: 'none'}}>
+            <div id="queuePage" className="page">
                 <div className="ui menu fluid two item">
                   <a className={this.state == 'upnext' ? "active item" : "item"} onClick={()=>{this.setState({view:'upnext'})}}>
                     Up Next
@@ -155,6 +155,7 @@ class Track extends React.Component {
 
     render() {
         let track = this.props.track
+        console.log(track);
         return (
             <div className="event track" id={this.props.track.id}>
               <div className="label">
@@ -166,11 +167,6 @@ class Track extends React.Component {
                 </div>
                 <div className="summary">
                   <i className="remove icon" onClick={this.removeTrack}></i>
-                  {this.props.parent.props.currentTrack.id == this.props.track.id ?
-                      <i className="volume up icon"></i>
-                  : null }
-                  <span className={this.props.parent.props.currentTrack.id == this.props.track.id ?
-                  'ui blue header' : 'ui'} onClick={this.startTrack}>{this.props.track.track}</span>
                   <Liked track={track}/>
                 </div>
               </div>
