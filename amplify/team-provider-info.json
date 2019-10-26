@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "lit-stream-dev-20191026021247-authRole",
+            "UnauthRoleArn": "arn:aws:iam::353985006402:role/lit-stream-dev-20191026021247-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::353985006402:role/lit-stream-dev-20191026021247-authRole",
+            "Region": "us-east-1",
+            "DeploymentBucketName": "lit-stream-dev-20191026021247-deployment",
+            "UnauthRoleName": "lit-stream-dev-20191026021247-unauthRole",
+            "StackName": "lit-stream-dev-20191026021247",
+            "StackId": "arn:aws:cloudformation:us-east-1:353985006402:stack/lit-stream-dev-20191026021247/035b5710-f7c0-11e9-bfe5-0e17762a99e0"
+        }
+    }
+}

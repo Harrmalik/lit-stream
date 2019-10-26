@@ -1,0 +1,19 @@
+service: music-api
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-east-1
+  role: arn:aws:iam::942042945130:role/service-role/testslsrole
+
+functions:
+  getCover:
+    handler: handler.getCover
+    description: Gets album cover for the current song
+    tags:
+      music-api: getCover
+    events:
+      - http:
+          path: music-api/getCover
+          method: post

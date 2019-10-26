@@ -1,0 +1,126 @@
+body {
+  height: 100%;
+  overflow: hidden;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; }
+
+#react-app {
+  height: 100%; }
+
+a {
+  color: #00B7FF; }
+
+.fullHeight {
+  height: 100%; }
+
+#SidePane {
+  width: 15%;
+  background-color: white;
+  height: 100%;
+  padding: 1em;
+  position: absolute;
+  top: 0;
+  border-right: 1px solid lightgrey; }
+  #SidePane .menu {
+    width: 100%; }
+  #SidePane a {
+    color: black;
+    font-size: 1.2em; }
+
+#playlistButton .menu {
+  width: 400px !important; }
+
+#Search {
+  width: 85%;
+  margin-left: 15%;
+  height: 90%; }
+
+#Results {
+  height: 100%;
+  overflow: scroll;
+  margin: 0;
+  padding-bottom: 3em; }
+  #Results .description:hover {
+    cursor: pointer; }
+  #Results .meta i {
+    cursor: pointer; }
+
+#libraryContainer {
+  position: absolute;
+  overflow: scroll;
+  height: 90%;
+  top: 0;
+  right: 0;
+  margin-left: 15%;
+  background-color: white;
+  width: 85%; }
+  #libraryContainer #libraryHUD {
+    position: absolute;
+    bottom: 0; }
+
+#library tr td:nth-child(2) {
+  cursor: pointer !important; }
+
+.page {
+  position: absolute;
+  overflow: auto;
+  padding: 1em;
+  top: 0;
+  right: 0;
+  height: 90%;
+  margin-left: 15%;
+  background-color: white;
+  width: 85%; }
+
+#queuePage {
+  position: absolute;
+  padding: 1em;
+  top: 0;
+  right: 0;
+  border-left: 1px solid lightgrey;
+  height: 90%;
+  background-color: white;
+  width: 30%; }
+
+#queue {
+  height: 90%;
+  overflow: scroll; }
+
+#Viewer {
+  text-align: center; }
+
+#HUD {
+  position: absolute;
+  bottom: 0;
+  height: 10%;
+  width: 100%;
+  margin: 0; }
+
+#HUD #hudcontainer {
+  width: 600px;
+  align-content: center;
+  text-align: center;
+  margin: auto; }
+
+iframe {
+  width: 100%;
+  height: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  margin-bottom: 30%; }
+
+.media-player {
+  display: none; }
+
+.track:hover .remove.icon {
+  display: inline-block; }
+
+.remove.icon {
+  display: none; }
+
+#playlistHeader {
+  background: linear-gradient(141deg, #2cb5e8 0%, #146DBA 85%);
+  margin: 0 0 -1em;
+  height: 150px; }
+
+/*# sourceMappingURL=style.css.map */
