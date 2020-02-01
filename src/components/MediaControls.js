@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
@@ -56,7 +54,7 @@ class MediaControls extends React.Component {
         let queue = _.shuffle(this.props.queue);
 
         _.remove(queue, (t) => {
-          return t.id == component.props.nowPlaying.id;
+          return t.id === component.props.nowPlaying.id;
         })
 
         this.props.setQueue([this.props.nowPlaying, ..._.shuffle(queue)])

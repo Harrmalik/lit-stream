@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
@@ -66,9 +64,9 @@ class PlaylistPage extends React.Component {
             default:
                 let playlists = this.props.playlists,
                     playlistName = this.props.match.params.playlist,
-                    playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)]
+                    playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') === playlistName)]
 
-                if (playlistName == 'liked')
+                if (playlistName === 'liked')
                     playlist = {
                         name: "Liked",
                         description: "Waddup",
@@ -82,9 +80,9 @@ class PlaylistPage extends React.Component {
     componentDidMount() {
         this.getSongs()
 
-        let platform = this.props.match.path.split('/')[1]
+        // let platform = this.props.match.path.split('/')[1]
         $('#tracks tr').contextmenu((e) => {
-            var num = Math.floor((Math.random()*10)+1);
+            // var num = Math.floor((Math.random()*10)+1);
             var img = $('<div>new menu</div>');
             $("#img_container").html(img).offset({ top: e.pageY, left: e.pageX});
         })
@@ -113,7 +111,7 @@ class PlaylistPage extends React.Component {
     playAll() {
         let playlistName = this.props.match.params.playlist
 
-        if (playlistName == 'liked') {
+        if (playlistName === 'liked') {
             let playlist
 
             playlist = {
@@ -174,7 +172,7 @@ class PlaylistPage extends React.Component {
             <div id="libraryContainer">
               <div id="playlistHeader" className="ui segment">
                 <h2 className="ui inverted header">
-                  { playlist.tracks.length > 0 ? <img className="ui image" src={playlist.tracks[0].thumbnail}/> : null }
+                  { playlist.tracks.length > 0 ? <img className="ui image" src={playlist.tracks[0].thumbnail} alt={playlist.name}/> : null }
                   {playlist.name}
                   <div className="sub header">{playlist.description}</div>
                 </h2>

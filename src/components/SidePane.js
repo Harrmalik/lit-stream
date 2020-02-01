@@ -1,10 +1,8 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { cc, setQueue, nowPlaying, removeTrack, addPlaylist } from '../actions'
+import { setQueue, nowPlaying, removeTrack, addPlaylist } from '../actions'
 import $ from 'jquery';
 import _ from 'lodash';
 import {Link} from 'react-router-dom'
@@ -64,8 +62,7 @@ class SidePane extends React.Component {
     }
 
     render() {
-      let currentPage = this.props.match.params.page,
-          playlists = this.props.playlists
+      let playlists = this.props.playlists
 
         return (
             <section id="SidePane" className="droppable">
@@ -85,7 +82,7 @@ class SidePane extends React.Component {
                     <Link to="/playlist/liked">liked</Link>
                   </div>
                   <div className="ui divider"></div>
-                  <div id="playlistButton" className="item"><a href="">Playlists</a> <AddPlaylistModal addPlaylist={this.props.addPlaylist}/></div>
+                  <div id="playlistButton" className="item"><a href="/#">Playlists</a> <AddPlaylistModal addPlaylist={this.props.addPlaylist}/></div>
                     { _.map(playlists, playlist => {
                       return (
                         <div  key={playlist.name} className="item ui">

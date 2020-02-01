@@ -34,7 +34,7 @@ function queue (state = [], action) {
     theQueue = [...state]
     let index = 0
     if (action.track) {
-        index = theQueue.findIndex(track => track.id == action.track.id)
+        index = theQueue.findIndex(track => track.id === action.track.id)
     }
 
     switch (action.type) {
@@ -82,11 +82,11 @@ function nowPlaying (state = null, action) {
         case 'NEXT_TRACK':
             if (theQueue.length > 0) {
                 if (action.track.repeat) {
-                    newIndex = theQueue.findIndex(track => track.id == action.track.id)
+                    newIndex = theQueue.findIndex(track => track.id === action.track.id)
                 } else if (action.track.nextIndex) {
                     newIndex = action.track.nextIndex
                 } else {
-                    prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                    prevIndex = theQueue.findIndex(track => track.id === action.track.id)
                     newIndex = prevIndex < theQueue.length - 1 ? prevIndex + 1 : prevIndex
                 }
                 document.title = theQueue[newIndex].title
@@ -98,7 +98,7 @@ function nowPlaying (state = null, action) {
 
         case 'PREV_TRACK':
             if (theQueue.length > 0) {
-                prevIndex = theQueue.findIndex(track => track.id == action.track.id)
+                prevIndex = theQueue.findIndex(track => track.id === action.track.id)
                 newIndex = prevIndex > 0 ? prevIndex - 1 : prevIndex
                 document.title = theQueue[newIndex].title
                 return theQueue[newIndex]
@@ -147,7 +147,7 @@ function liked (state = localStorage.getItem('liked') ? JSON.parse(localStorage.
           likedPlaylist.push(action.track)
           return likedPlaylist
       case 'REMOVE_LIKE':
-          index = likedPlaylist.findIndex(track => track.id == action.track.id)
+          index = likedPlaylist.findIndex(track => track.id === action.track.id)
           likedPlaylist.splice(index,1)
           return likedPlaylist
 
@@ -160,7 +160,7 @@ function playlists (state = localStorage.getItem('playlists') ? JSON.parse(local
   let thePlaylists = [...state],
       index = 0
   if (action.playlist) {
-      index = thePlaylists.findIndex(playlist => playlist.name == action.playlist.name)
+      index = thePlaylists.findIndex(playlist => playlist.name === action.playlist.name)
   }
   switch (action.type) {
       case 'ADD_PLAYLIST':

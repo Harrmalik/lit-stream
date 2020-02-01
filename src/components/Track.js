@@ -1,12 +1,10 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { nowPlaying, updateQueue } from '../actions'
-import $ from 'jquery';
-import _ from 'lodash';
+// import $ from 'jquery';
+// import _ from 'lodash';
 import moment from 'moment'
 
 // Components
@@ -35,6 +33,7 @@ class Track extends React.Component {
       switch (view) {
         case 'library':
           // return <LibraryView track={this.props.track} startTrack={this.props.startTrack}/>
+          break;
         default:
           return <QueueView track={this.props.track} startTrack={this.props.startTrack}/>
       }
@@ -88,17 +87,17 @@ const QueueView = props => {
           data-isSeeking={this.props.track.isSeeking}
           data-playing={this.props.track.playing}
           data-played={this.props.track.played}>
-          <a className="ui tiny image">
-              <img src={this.props.track.thumbnail}></img>
-          </a>
+          <span className="ui tiny image">
+              <img src={this.props.track.thumbnail} alt={this.props.track.title}></img>
+          </span>
         <div className="content">
           <div className="description">
               <i className="remove icon" onClick={this.removeTrack}></i>
-              {this.props.parent.props.currentTrack.id == this.props.track.id ?
+              {this.props.parent.props.currentTrack.id === this.props.track.id ?
                   <i className="volume up icon"></i>
-              : <a className="ui blue circular label">{this.props.position + 1}</a>}
-              <a className={this.props.parent.props.currentTrack.id == this.props.track.id ?
-              'ui blue header' : 'ui header'} onClick={this.startTrack}>{this.props.track.title}</a>
+              : <span className="ui blue circular label">{this.props.position + 1}</span>}
+              <span className={this.props.parent.props.currentTrack.id === this.props.track.id ?
+              'ui blue header' : 'ui header'} onClick={this.startTrack}>{this.props.track.title}</span>
           </div>
           <div className="meta">
               <i className="empty heart icon"></i>
@@ -110,117 +109,118 @@ const QueueView = props => {
   )
 }
 
-class Result extends React.Component {
-  constructor(props) {
-    super(props)
+// class Result extends React.Component {
+//   constructor(props) {
+//     super(props)
+//
+//     this.add = this.add.bind(this)
+//     this.upNext = this.add.bind(this)
+//     this.renderPlatform = this.renderPlatform.bind(this)
+//   }
+//
+//   componentDidMount() {
+//     //$('.ui.dropdown').dropdown()
+//   }
+//
+//   add() {
+//       this.props.callback(this.props.result, false)
+//   }
+//
+//   upNext() {
+//       this.props.callback(this.props.result, true)
+//   }
+//
+//   renderPlatform() {
+//       let icon;
+//
+//       switch (this.props.result.platform) {
+//           case 'youtube':
+//               icon = 'red youtube'
+//               break;
+//           case 'soundcloud':
+//               icon = 'orange soundcloud'
+//               break;
+//           default:
+//
+//       }
+//       return (
+//            <i className={`ui big ${icon} icon`}></i>
+//       )
+//   }
+//
+//   render() {
+//       let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [];
+//
+//       return (
+//           <div className="item">
+//               <span className="ui tiny image">
+//                   <img src={this.props.result.thumbnail} alt={this.props.result.title}></img>
+//               </span>
+//             <div className="content">
+//               <div className="description">
+//                   <h3 onClick={this.add}>{this.props.result.title}</h3>
+//               </div>
+//               <div className="meta">
+//                   <i className="plus icon" onClick={this.add}></i>
+//                   <i className="forward icon" onClick={this.upNext}></i>
+//                   <div className="ui dropdown">
+//                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
+//                     <div className="menu">
+//                       <div className="item"><i className="heart pink icon"></i></div>
+//                       <div className="item">
+//                         Download
+//                       </div>
+//                       <div className="item">
+//                         More like this
+//                       </div>
+//                       <div className="divider"></div>
+//                       <div className="item">
+//                         <i className="dropdown icon"></i>
+//                         Add to Playlist
+//                         <div className="menu" >
+//                           { _.map(playlists, (playlist, index) => {
+//                             return <PlaylistItem key={playlist.name} playlists={playlists} playlist={playlist} index={index} track={this.props.result}/>
+//                           })}
+//                         </div>
+//                       </div>
+//                       <div className="item">New Playlists</div>
+//                     </div>
+//                   </div>
+//                   {this.renderPlatform()}
+//               </div>
+//             </div>
+//           </div>
+//       )
+//   }
+// }
 
-    this.add = this.add.bind(this)
-    this.upNext = this.add.bind(this)
-    this.renderPlatform = this.renderPlatform.bind(this)
-  }
-
-  componentDidMount() {
-    //$('.ui.dropdown').dropdown()
-  }
-
-  add() {
-      this.props.callback(this.props.result, false)
-  }
-
-  upNext() {
-      this.props.callback(this.props.result, true)
-  }
-
-  renderPlatform() {
-      let icon,platform
-
-      switch (this.props.result.platform) {
-          case 'youtube':
-              icon = 'red youtube'
-              break;
-          case 'soundcloud':
-              icon = 'orange soundcloud'
-              break;
-
-      }
-      return (
-           <i className={`ui big ${icon} icon`}></i>
-      )
-  }
-
-  render() {
-      let playlists = localStorage.getItem('playlists') ? JSON.parse(localStorage.getItem('playlists')) : [],
-        component = this
-      return (
-          <div className="item">
-              <a className="ui tiny image">
-                  <img src={this.props.result.thumbnail}></img>
-              </a>
-            <div className="content">
-              <div className="description">
-                  <h3 onClick={this.add}>{this.props.result.title}</h3>
-              </div>
-              <div className="meta">
-                  <i className="plus icon" onClick={this.add}></i>
-                  <i className="forward icon" onClick={this.upNext}></i>
-                  <div className="ui dropdown">
-                    <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
-                    <div className="menu">
-                      <div className="item"><i className="heart pink icon"></i></div>
-                      <div className="item">
-                        Download
-                      </div>
-                      <div className="item">
-                        More like this
-                      </div>
-                      <div className="divider"></div>
-                      <div className="item">
-                        <i className="dropdown icon"></i>
-                        Add to Playlist
-                        <div className="menu" >
-                          { _.map(playlists, (playlist, index) => {
-                            return <PlaylistItem key={playlist.name} playlists={playlists} playlist={playlist} index={index} track={this.props.result}/>
-                          })}
-                        </div>
-                      </div>
-                      <div className="item">New Playlists</div>
-                    </div>
-                  </div>
-                  {this.renderPlatform()}
-              </div>
-            </div>
-          </div>
-      )
-  }
-}
-
-class PlaylistItem extends React.Component {
-  constructor(props) {
-    super()
-
-    this.addTrackToPlaylist = this.addTrackToPlaylist.bind(this)
-  }
-
-  addTrackToPlaylist() {
-    let playlist = this.props.playlist,
-        playlists = this.props.playlists
-
-    playlist.tracks.push({
-      ...this.props.track,
-      isSeeking: false,
-      played: 0,
-      playing: true
-    })
-    playlists[this.props.index] = playlist
-    localStorage.setItem('playlists', JSON.stringify(playlists))
-  }
-
-  render() {
-    return (
-      <div className="item" onClick={this.addTrackToPlaylist}>{this.props.playlist.name}</div>
-    )
-  }
-}
+// class PlaylistItem extends React.Component {
+//   constructor(props) {
+//     super()
+//
+//     this.addTrackToPlaylist = this.addTrackToPlaylist.bind(this)
+//   }
+//
+//   addTrackToPlaylist() {
+//     let playlist = this.props.playlist,
+//         playlists = this.props.playlists
+//
+//     playlist.tracks.push({
+//       ...this.props.track,
+//       isSeeking: false,
+//       played: 0,
+//       playing: true
+//     })
+//     playlists[this.props.index] = playlist
+//     localStorage.setItem('playlists', JSON.stringify(playlists))
+//   }
+//
+//   render() {
+//     return (
+//       <div className="item" onClick={this.addTrackToPlaylist}>{this.props.playlist.name}</div>
+//     )
+//   }
+// }
 
 const mapStateToProps = state => ({
   currentTrack: state.nowPlaying,

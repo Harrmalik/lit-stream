@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import _ from 'lodash'
@@ -12,7 +10,7 @@ class Liked extends React.Component {
     constructor(props) {
         super(props)
 
-        let track = _.find(props.liked, (t) => { return t.id == props.track.id })
+        let track = _.find(props.liked, (t) => { return t.id === props.track.id })
 
         this.state = {
             liked: track ? true : false,
@@ -28,7 +26,7 @@ class Liked extends React.Component {
             liked = this.props.liked
 
         if (this.state.liked) {
-            let index = _.findIndex(liked, (t) => { return t.id == track.id })
+            // let index = _.findIndex(liked, (t) => { return t.id === track.id })
             this.props.removeLike(track)
         } else {
           track = {

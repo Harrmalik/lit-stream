@@ -1,11 +1,8 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import $ from 'jquery';
-import _ from 'lodash';
 import { nowPlaying, setControls } from '../actions'
 // var ct = new ColorThief();
 
@@ -80,9 +77,9 @@ class MediaViewPage extends React.Component {
         return (
             <div id="Viewer" className="page">
                 <div id="div1" className="ui container">
-                    <img id="image" src=""></img>
-                    <h1 className='v'>hey</h1>
-                    <h2 className='0'></h2>
+                    <img id="image" src="" alt=""></img>
+                    <h1 className='v'> </h1>
+                    <h2 className='0'> </h2>
                 </div>
             </div>
         )
@@ -94,7 +91,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    setControls: bindActionCreators(setControls, dispatch)
+    setControls: bindActionCreators(setControls, dispatch),
+    nowPlaying: bindActionCreators(nowPlaying, dispatch)
 })
 
 export default connect(

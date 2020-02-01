@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 
@@ -12,30 +10,30 @@ class HomePage extends React.Component{
                   <div className="column">
                     <div className="ui fluid card">
                       <div className="image">
-                        <img src="/images/avatar/large/daniel.jpg"></img>
+                        <img src="/images/avatar/large/daniel.jpg" alt="demo"></img>
                       </div>
                       <div className="content">
-                        <a className="header">EDM</a>
+                        <span className="header">EDM</span>
                       </div>
                     </div>
                   </div>
                   <div className="column">
                     <div className="ui fluid card">
                       <div className="image">
-                        <img src="/images/avatar/large/helen.jpg"></img>
+                        <img src="/images/avatar/large/helen.jpg" alt="demo"></img>
                       </div>
                       <div className="content">
-                        <a className="header">Trap</a>
+                        <span className="header">Trap</span>
                       </div>
                     </div>
                   </div>
                   <div className="column">
                     <div className="ui fluid card">
                       <div className="image">
-                        <img src="/images/avatar/large/elliot.jpg"></img>
+                        <img src="/images/avatar/large/elliot.jpg" alt="demo"></img>
                       </div>
                       <div className="content">
-                        <a className="header">Indie</a>
+                        <span className="header">Indie</span>
                       </div>
                     </div>
                   </div>

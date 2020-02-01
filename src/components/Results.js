@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import $ from 'jquery';
@@ -103,6 +101,7 @@ class Result extends React.Component {
       case 'playlist':
           // location.hash = `#/playlist/YT${this.props.result.id}`
           break;
+      default:
     }
 
   }
@@ -110,7 +109,7 @@ class Result extends React.Component {
   like(track) {
     let playlists = this.props.playlists,
         playlistName = 'liked',
-        playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') == playlistName)],
+        playlist = playlists[playlists.findIndex(playlist => playlist.name.toLowerCase().replace(/\s/g, '') === playlistName)],
         title = track.title.replace(/([f][t]\.|[F][t]\.)/g, '').split('-')
 
     playlist.tracks.push({
@@ -138,7 +137,7 @@ class Result extends React.Component {
   }
 
   renderPlatform() {
-      let icon,platform
+      let icon
 
       switch (this.props.result.platform) {
           case 'youtube':
@@ -147,6 +146,7 @@ class Result extends React.Component {
           case 'soundcloud':
               icon = 'orange soundcloud'
               break;
+          default:
 
       }
       return (
@@ -155,27 +155,26 @@ class Result extends React.Component {
   }
 
   render() {
-      let component = this,
-          playlists = this.props.playlists
+      let playlists = this.props.playlists
 
       return (
           <div className="item">
-              <a className="ui tiny image">
-                  <img src={this.props.result.thumbnail}></img>
-              </a>
+              <span className="ui tiny image">
+                  <img src={this.props.result.thumbnail} alt={this.props.result.title}></img>
+              </span>
             <div className="content">
               <div className="description">
                   <h3 onClick={this.add}>{this.props.result.title}</h3>
               </div>
               <div className="meta">
-                  { this.props.result.type == 'video' ? <i className="plus icon" onClick={this.add}></i> : null }
-                  { this.props.result.type == 'video' ? <i className="forward icon" onClick={this.upNext}></i> : null }
+                  { this.props.result.type === 'video' ? <i className="plus icon" onClick={this.add}></i> : null }
+                  { this.props.result.type === 'video' ? <i className="forward icon" onClick={this.upNext}></i> : null }
                   <Liked track={this.props.result}/>
                   <div className="ui dropdown">
                     <i className="ellipsis horizontal icon" onClick={(e) => { $(e.target).parent().dropdown('show')}}></i>
                     <div className="menu">
                       <Liked track={this.props.result}/>
-                      <a className="item" href={`http://www.flvto.biz/downloads/mp3/yt_${this.props.result.id}/`} target='_blank'>
+                      <a className="item" href={`http://www.flvto.biz/downloads/mp3/yt_${this.props.result.id}/`} target='_blank' rel="noopener noreferrer">
                         Download
                       </a>
                       <div className="item">

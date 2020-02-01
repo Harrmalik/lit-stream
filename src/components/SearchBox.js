@@ -1,10 +1,8 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import $ from 'jquery';
 import _ from 'lodash'
-import {Link, Redirect, BrowserRouter as Router} from 'react-router-dom'
+import {Redirect, BrowserRouter as Router} from 'react-router-dom'
 import { connect } from 'react-redux'
 
 var formStyle = {
@@ -40,7 +38,7 @@ class SearchBox extends React.Component {
         if ($(this.SearchBox).val().length > 1) {
             this.searchQuery();
         } else {
-            if ($('iframe') && this.props.nowPlaying && this.props.nowPlaying.platform == 'youtube') {
+            if ($('iframe') && this.props.nowPlaying && this.props.nowPlaying.platform === 'youtube') {
                 this.searchQuery('getRelated')
             }
         }
@@ -50,7 +48,7 @@ class SearchBox extends React.Component {
         let component = this
         let query = $(this.SearchBox).val()
         let type;
-        if (e == 'getRelated') {
+        if (e === 'getRelated') {
             type = e
             query = this.props.nowPlaying.id
         } else {
@@ -65,6 +63,7 @@ class SearchBox extends React.Component {
             case 'youtube':
                 component.youtubeSearch(query, type)
                 break
+            default:
         }
 
         return (
@@ -90,7 +89,7 @@ class SearchBox extends React.Component {
                         url: result.permalink_url,
                         title: result.title,
                         thumbnail: result.artwork_url,
-                        type: result.kind == 'track' ? 'video' : 'playlist',
+                        type: result.kind === 'track' ? 'video' : 'playlist',
                         platform: 'soundcloud'
                     }
                 })

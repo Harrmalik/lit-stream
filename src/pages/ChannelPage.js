@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import { bindActionCreators } from 'redux'
@@ -88,7 +86,7 @@ class ChannelPage extends React.Component {
                         <div className="column" key={playlist.id}>
                           <div className="ui fluid link card">
                             <div className="image">
-                              <img src={playlist.snippet.thumbnails.standard.url}/>
+                              <img src={playlist.snippet.thumbnails.standard.url} alt="replace with snippet info"/>
                             </div>
                             <div className="content">
                               <a className="header" href={`#/youtube/${playlist.id}`}>{playlist.snippet.title}</a>

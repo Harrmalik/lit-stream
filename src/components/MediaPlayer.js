@@ -1,5 +1,3 @@
-'use strict'
-
 // Dependencies
 import React from 'react'
 import $ from 'jquery';
@@ -29,7 +27,7 @@ class MediaPlayer extends React.Component {
 
     componentWillReceiveProps(nextProps) {
         let nowPlaying = this.props.nowPlaying
-        if (nextProps.queue.length == 1 && nextProps.nowPlaying == null)
+        if (nextProps.queue.length === 1 && nextProps.nowPlaying == null)
             this.props.startPlayer(nextProps.queue[0])
 
         if (this.props.controls == null && this.player) {
@@ -62,7 +60,7 @@ class MediaPlayer extends React.Component {
         this.props.updateProgess(progress)
       }
 
-      if ((this.props.nowPlaying.duration - progress.playedSeconds).toFixed(0) == 12) {
+      if ((this.props.nowPlaying.duration - progress.playedSeconds).toFixed(0) === 12) {
         // this.setState({ crossfade: true })
       }
     }
@@ -76,8 +74,6 @@ class MediaPlayer extends React.Component {
         let nowPlaying = this.props.nowPlaying
 
         if (nowPlaying) {
-            const played = this.props.nowPlaying.played
-            let component = this
             return (
               <div className="media-player">
                 <ReactPlayer
