@@ -30,7 +30,7 @@ const App = () => (
         <div className="main">
           <Route path="/" component={SidePane}/>
 
-          <Route exact path="/" component={HomePage}/>
+          <Route exact path="/" component={SearchPage}/>
           <Route path="/search" component={SearchPage}/>
           <Route path="/player" component={MediaViewPage}/>
           <Route path="/playlist/:playlist" component={PlaylistPage}/>
