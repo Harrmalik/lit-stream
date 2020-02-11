@@ -15,7 +15,7 @@ module.exports.search = async event => {
     let data = {};
 
     await fetch(`
-      https://www.googleapis.com/youtube/v3/search?part=snippet&q=circles&maxResults=20&key=${process.env.APIKEY}
+      https://www.googleapis.com/youtube/v3/search?part=snippet&q=${params.query}&maxResults=20&key=${process.env.APIKEY}
     `)
     .then((response) => {
       return response.json();
