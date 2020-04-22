@@ -43,7 +43,7 @@ class Track extends React.Component {
         let track = this.props.track,
             props = this.props
 
-        if (this.props.view.match(/library|playlist/)) {
+        if (this.props.view && this.props.view.match(/library|playlist/)) {
           return (
             <tr key={props.track.url}>
                 <td>
@@ -77,27 +77,27 @@ class Track extends React.Component {
 
 const QueueView = props => {
   return (
-      <div className="item track" id={this.props.track.id}
-          data-title={this.props.track.title}
-          data-thumbnail={this.props.track.thumbnail}
-          data-genere={this.props.track.genere}
-          data-url={this.props.track.url}
-          data-type={this.props.track.type}
-          data-platform={this.props.track.platform}
-          data-isSeeking={this.props.track.isSeeking}
-          data-playing={this.props.track.playing}
-          data-played={this.props.track.played}>
+      <div className="item track" id={props.track.id}
+          data-title={props.track.title}
+          data-thumbnail={props.track.thumbnail}
+          data-genere={props.track.genere}
+          data-url={props.track.url}
+          data-type={props.track.type}
+          data-platform={props.track.platform}
+          data-isSeeking={props.track.isSeeking}
+          data-playing={props.track.playing}
+          data-played={props.track.played}>
           <span className="ui tiny image">
-              <img src={this.props.track.thumbnail} alt={this.props.track.title}></img>
+              <img src={props.track.thumbnail} alt={props.track.title}></img>
           </span>
         <div className="content">
           <div className="description">
               <i className="remove icon" onClick={this.removeTrack}></i>
-              {this.props.parent.props.currentTrack.id === this.props.track.id ?
+              {props.parent.props.currentTrack.id === props.track.id ?
                   <i className="volume up icon"></i>
-              : <span className="ui blue circular label">{this.props.position + 1}</span>}
-              <span className={this.props.parent.props.currentTrack.id === this.props.track.id ?
-              'ui blue header' : 'ui header'} onClick={this.startTrack}>{this.props.track.title}</span>
+              : <span className="ui blue circular label">{props.position + 1}</span>}
+              <span className={props.parent.props.currentTrack.id === props.track.id ?
+              'ui blue header' : 'ui header'} onClick={this.startTrack}>{props.track.title}</span>
           </div>
           <div className="meta">
               <i className="empty heart icon"></i>

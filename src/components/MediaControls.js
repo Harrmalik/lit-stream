@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import $ from 'jquery';
 import _ from 'lodash';
-import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking, setQueue } from '../actions'
+import { nextTrack, prevTrack, shuffle, repeat, playTrack, stopTrack, updateProgess, isSeeking, setQueue, showQueue } from '../actions'
 
 class MediaControls extends React.Component {
     constructor(props) {
@@ -19,6 +19,7 @@ class MediaControls extends React.Component {
         this.onSeekChange = this.onSeekChange.bind(this)
         this.onSeekMouseUp = this.onSeekMouseUp.bind(this)
         this.onSeekMouseDown = this.onSeekMouseDown.bind(this)
+        this.showQueue = this.showQueue.bind(this)
     }
 
     prevTrack() {
@@ -77,6 +78,10 @@ class MediaControls extends React.Component {
         this.props.isSeeking()
     }
 
+    showQueue() {
+      this.props.showQueue()
+    }
+
     render() {
         let controls = this.props.controls,
             options = this.props.options,
@@ -96,7 +101,7 @@ class MediaControls extends React.Component {
                             }
                             <i className="step forward icon" onClick={this.nextTrack}></i>
                             <i className={options.repeat ? 'step repeat icon blue' : 'step repeat icon'} onClick={this.repeat}></i>
-                            <i className="list icon" onClick={ () => { $('#queuePage').transition('slide left') } }></i>
+                            <i className="list icon" onClick={this.showQueue}></i>
                         </div>
 
                         <marquee>{this.props.nowPlaying.title}</marquee>
@@ -141,7 +146,8 @@ const mapDispatchToProps = dispatch => ({
     stopTrack: bindActionCreators(stopTrack, dispatch),
     updateProgess: bindActionCreators(updateProgess, dispatch),
     isSeeking: bindActionCreators(isSeeking, dispatch),
-    setQueue: bindActionCreators(setQueue, dispatch)
+    setQueue: bindActionCreators(setQueue, dispatch),
+    showQueue: bindActionCreators(showQueue, dispatch)
 })
 
 export default connect(

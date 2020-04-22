@@ -11,6 +11,7 @@ import { cc, setQueue, nowPlaying, removeTrack } from '../actions'
 // Components
 import HistoryPage from './HistoryPage'
 import Liked from '../components/Liked'
+// import Track from '../components/Track'
 
 class QueuePage extends React.Component {
     constructor(props) {
@@ -25,6 +26,22 @@ class QueuePage extends React.Component {
 
     componentDidMount() {
         let component = this
+
+        this.props.nowPlaying({
+          artist: "Apashe",
+          channelTitle: "CloudKid",
+          duration: 199,
+          id: "O4oSKm47vks",
+          isSeeking: false,
+          platform: "youtube",
+          played: 0,
+          playing: true,
+          thumbnail: "https://i.ytimg.com/vi/O4oSKm47vks/default.jpg",
+          title: "Apashe - Rain (feat. KROY)",
+          track: " Rain (feat. KROY)",
+          type: "video",
+          url: "https://www.youtube.com/watch?v=O4oSKm47vks"
+        })
 
         // $('#queue').sortable({
         //   update: function( event, ui ) {
@@ -75,6 +92,8 @@ class QueuePage extends React.Component {
 
     render() {
         let component = this
+        
+        if (this.props.options.showQueue)
         return (
             <div id="queuePage" className="page">
                 <div className="ui menu fluid two item">
@@ -111,6 +130,8 @@ class QueuePage extends React.Component {
                                 </div> }
             </div>
         )
+
+        return null
     }
 }
 
@@ -166,6 +187,7 @@ class Track extends React.Component {
                   {this.props.track.artist}
                 </div>
                 <div className="summary">
+                  {this.props.track.title}
                   <i className="remove icon" onClick={this.removeTrack}></i>
                   <Liked track={track}/>
                 </div>
@@ -180,7 +202,8 @@ class Track extends React.Component {
 const mapStateToProps = state => ({
   queue: state.queue,
   currentTrack: state.nowPlaying,
-  history: state.history
+  history: state.history,
+  options: state.options
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -4,12 +4,27 @@ import $ from 'jquery';
 import _ from 'lodash'
 import {Redirect, BrowserRouter as Router} from 'react-router-dom'
 import { connect } from 'react-redux'
+import { Dropdown } from 'semantic-ui-react'
 
-var formStyle = {
+const formStyle = {
     width: "100%",
     padding: "0"
 }
 
+const searchEngines = [
+  {
+    key: 'soundcloud',
+    text: 'Soundcloud',
+    value: 'soundcloud',
+    image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
+  },
+  {
+    key: 'youtube',
+    text: 'Youtube',
+    value: 'youtube',
+    image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
+  },
+]
 class SearchBox extends React.Component {
     constructor(props) {
       super(props)
@@ -30,8 +45,9 @@ class SearchBox extends React.Component {
       this.SearchBox.focus()
     }
 
-    switchEngine(engine) {
-      this.setState({ engine })
+    switchEngine(e) {
+      console.log(e.target)
+      this.setState({ engine: e.target.textContent.toLowerCase() })
     }
 
     liveSearch() {
@@ -56,6 +72,7 @@ class SearchBox extends React.Component {
         }
 
         component.setState({query})
+        component.props.isLoading(true);
         switch (component.state.engine) {
             case 'soundcloud':
                 component.soundcloudSearch(query, type)
@@ -68,7 +85,7 @@ class SearchBox extends React.Component {
 
         return (
             <Router>
-            <Redirect push to="/search"/>
+              <Redirect push to="/search"/>
             </Router>
         )
     }
@@ -78,7 +95,7 @@ class SearchBox extends React.Component {
         let tracks;
 
         $.ajax({
-            url: `/api/${type}`,
+            url: `/search/${query}/soundcloud`,
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
@@ -95,6 +112,7 @@ class SearchBox extends React.Component {
                 })
                 component.setState({tracks});
                 component.props.callback(tracks);
+                component.props.isLoading(false);
             }
         });
     }
@@ -104,13 +122,15 @@ class SearchBox extends React.Component {
         let tracks;
 
         $.ajax({
-            url: `https://ikilnnomr6.execute-api.us-east-1.amazonaws.com/dev/yt-api/findSongs`,
+            url: `/search/${query}/youtube`,
             data: { query, platform: 'youtube' },
             headers: {"Access-Control-Allow-Origin": "*"},
             crossDomain : true,
             dataType: 'json',
             success: function(data) {
-                tracks = _.map(data, function(result) {
+              console.log(data);
+              console.log(data.items);
+                tracks = _.map(data.items, function(result) {
                     return {
                         id: result.id[`${result.id.kind.split('#')[1]}Id`],
                         url: `https://www.youtube.com/watch?v=${result.id.videoId}`,
@@ -122,8 +142,10 @@ class SearchBox extends React.Component {
                         platform: 'youtube',
                     }
                 })
+                console.log(tracks);
                 component.setState({tracks});
                 component.props.callback(tracks);
+                component.props.isLoading(false);
             }
         });
     }
@@ -138,46 +160,19 @@ class SearchBox extends React.Component {
                         <input id="searchBox"
                         ref={(input) => { this.SearchBox = input; }}
                         type="text" placeholder="Search for a song..."
-                        onChange={this.liveSearch}></input>
+                        disabled={this.props.loading}
+                        onBlur={this.liveSearch}></input>
                         <i className="search icon"></i>
                         { this.props.showEngines ?
-                            <SearchEngine engine={this.state.engine} switchEngine={this.switchEngine} />
+                          <Dropdown
+                            placeholder='Select Engine'
+                            selection
+                            value={this.state.engine}
+                            onChange={this.switchEngine}
+                            options={searchEngines}
+                          />
                         : null}
                     </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-class SearchEngine extends React.Component {
-    //TODO: Convert ot semantic react
-    constructor(props) {
-      super(props)
-
-      this.changeSearchEngine = this.changeSearchEngine.bind(this)
-    }
-
-    componentDidMount() {
-        // $('.selection.dropdown')
-        //   .dropdown()
-        // ;
-    }
-
-    changeSearchEngine(e) {
-        this.props.switchEngine(e.target.id)
-    }
-
-    render() {
-        return (
-            <div className="ui selection dropdown">
-                <input type="hidden" name={this.props.engine}></input>
-                <i className="dropdown icon"></i>
-                <div className="default text">{this.props.engine}</div>
-
-                <div className="menu">
-                    <div id="soundcloud" className="item" data-value="1" onClick={this.changeSearchEngine}>Soundcloud</div>
-                    <div id="youtube" className="item" data-value="0" onClick={this.changeSearchEngine}>Youtube</div>
                 </div>
             </div>
         )

@@ -15,3 +15,4 @@ functions:
       - http:
           path: youtube/search
           method: get
+          cors: true

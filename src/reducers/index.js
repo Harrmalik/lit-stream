@@ -9,7 +9,8 @@ let defaultOptions = {
     shuffle: false,
     showVideo: true,
     autoplay: true,
-    repeat: false
+    repeat: false,
+    showQueue: false
 }
 let theQueue = [],
     theHistory = []
@@ -24,6 +25,9 @@ function options (state = defaultOptions, action) {
 
         case 'AUTOPLAY':
             return { ...state, autoplay: !state.autoplay }
+
+        case 'SHOW_QUEUE':
+            return { ...state, showQueue: !state.showQueue }
 
         default:
             return state

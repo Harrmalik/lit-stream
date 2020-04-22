@@ -31,26 +31,7 @@ class Results extends React.Component {
       let data = this.props.data,
         component = this
 
-        data = [{
-          id: '4i982Kz0SAI',
-          url: `https://www.youtube.com/watch?v=4i982Kz0SAI`,
-          channelTitle: 'Lana Del Rey',
-          title: 'Lana Del Rey - Doin Time',
-          artist: 'Lana Del Rey',
-          thumbnail: '',
-          type: 'video',
-          platform: 'youtube',
-        },
-        {
-          id: '6w6QWpSjmjk',
-          url: `https://www.youtube.com/watch?v=6w6QWpSjmjk`,
-          channelTitle: 'Lana Del Rey',
-          title: 'Doin Time',
-          artist: 'Lana Del Rey',
-          thumbnail: '',
-          type: 'video',
-          platform: 'youtube',
-        }]
+        data = this.props.data
 
       return (
           <div className="ui divided items" id="Results">

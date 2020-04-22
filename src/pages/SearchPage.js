@@ -8,24 +8,32 @@ class SearchPage extends React.Component {
       super(props)
 
       this.state = {
-        data: []
+        data: [],
+        loading: false
       }
 
-      this.updateResults = this.updateResults.bind(this)
+      this.updateResults = this.updateResults.bind(this);
+      this.updateLoading = this.updateLoading.bind(this);
     }
 
     updateResults(data) {
         this.setState({ data })
     }
 
+    updateLoading(isLoading) {
+      this.setState({
+        loading: isLoading
+      })
+    }
+
     render() {
         return (
             <div className="page">
                 <SearchBox
-                    callback={this.updateResults} showEngines="true"></SearchBox>
+                    callback={this.updateResults} showEngines="true" isLoading={this.updateLoading} loading={this.state.loading}></SearchBox>
 
                 <Results
-                    data={this.state.data ? this.state.data : null}></Results>
+                    data={this.state.data} loading={this.state.loading}></Results>
             </div>
         )
     }

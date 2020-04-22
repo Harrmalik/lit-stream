@@ -107,3 +107,7 @@ export const repeat = () => ({
 export const autoPlay = () => ({
     type: 'AUTO_PLAY'
 })
+
+export const showQueue = () => ({
+    type: 'SHOW_QUEUE'
+})

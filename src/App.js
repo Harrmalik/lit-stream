@@ -15,7 +15,7 @@ import MediaViewPage from './pages/MediaViewPage'
 import PlaylistPage from './pages/PlaylistPage'
 import ChannelPage from './pages/ChannelPage'
 // import HistoryPage from './pages/HistoryPage'
-// import QueuePage from './pages/QueuePage'
+import QueuePage from './pages/QueuePage'
 import SettingsPage from './pages/SettingsPage'
 import LibraryPage from './pages/LibraryPage'
 
@@ -41,6 +41,7 @@ const App = () => (
           <Route path="/settings" component={SettingsPage}/>
 
           <MediaControls></MediaControls>
+          <QueuePage></QueuePage>
         </div>
     </Router>
   </Provider>
