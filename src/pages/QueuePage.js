@@ -28,19 +28,18 @@ class QueuePage extends React.Component {
         let component = this
 
         this.props.nowPlaying({
-          artist: "Apashe",
-          channelTitle: "CloudKid",
-          duration: 199,
-          id: "O4oSKm47vks",
+          artist: "EVAN GIIA",
+          channelTitle: "UNCVRD",
+          id: "KUN54il828Q",
           isSeeking: false,
           platform: "youtube",
           played: 0,
           playing: true,
-          thumbnail: "https://i.ytimg.com/vi/O4oSKm47vks/default.jpg",
-          title: "Apashe - Rain (feat. KROY)",
-          track: " Rain (feat. KROY)",
+          thumbnail: "https://i.ytimg.com/vi/KUN54il828Q/default.jpg",
+          title: "EVAN GIIA - Absolute Zero (prod. MEMBA)",
+          track: " Absolute Zero (prod. MEMBA)",
           type: "video",
-          url: "https://www.youtube.com/watch?v=O4oSKm47vks"
+          url: "https://www.youtube.com/watch?v=KUN54il828Q"
         })
 
         // $('#queue').sortable({
@@ -92,7 +91,7 @@ class QueuePage extends React.Component {
 
     render() {
         let component = this
-        
+
         if (this.props.options.showQueue)
         return (
             <div id="queuePage" className="page">
@@ -187,7 +186,7 @@ class Track extends React.Component {
                   {this.props.track.artist}
                 </div>
                 <div className="summary">
-                  {this.props.track.title}
+                  {this.props.track.track}
                   <i className="remove icon" onClick={this.removeTrack}></i>
                   <Liked track={track}/>
                 </div>

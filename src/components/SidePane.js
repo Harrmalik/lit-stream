@@ -68,19 +68,24 @@ class SidePane extends React.Component {
             <section id="SidePane" className="droppable">
                 <Link to="/search"><SearchBox></SearchBox></Link>
                 <div className="ui text vertical menu">
-                    <div className="item ui">
-                      <Link to="/">Home</Link>
-                    </div>
+                  {/* 
+                  <div className="item ui">
+                    <Link to="/">Home</Link>
+                  </div>
+                  */}
                   <div className="item ui">
                     <Link to="/player">Player</Link>
                   </div>
                   <div className="ui divider"></div>
+                  {/* 
                   <div className="item ui">
                     <Link to="/library">Library</Link>
                   </div>
+                  */}
                   <div className="item ui">
                     <Link to="/playlist/liked">liked</Link>
                   </div>
+                  {/* 
                   <div className="ui divider"></div>
                   <div id="playlistButton" className="item"><a href="/#">Playlists</a> <AddPlaylistModal addPlaylist={this.props.addPlaylist}/></div>
                     { _.map(playlists, playlist => {
@@ -90,6 +95,7 @@ class SidePane extends React.Component {
                         </div>
                       )
                     }) }
+                  */}
                 </div>
                 <MediaPlayer></MediaPlayer>
             </section>

@@ -41,6 +41,7 @@ class MediaViewPage extends React.Component {
                 //url: `https://axzodu785h.execute-api.us-east-1.amazonaws.com/dev?track=${nowPlaying.title.split('-')[1]}&artist=${nowPlaying.title.split('-')[0]}`
                 url: `/findAlbum/${nowPlaying.title.split('-')[0]}/${nowPlaying.title.split('-')[1]}`
             }).done((album) => {
+                console.log(album);
                 this.getColors(album)
             });
         }
@@ -48,15 +49,18 @@ class MediaViewPage extends React.Component {
 
     getColors(album) {
 
-        let track = this.props.nowPlaying
+        let track = this.props.nowPlaying;
+        console.log(track);
         var img = document.getElementById('image')
-        // console.log(img);
+        console.log(img);
         img.setAttribute('crossOrigin', '*');
         var src = album ? `${album.image}?${new Date().getTime()}` : DefaultImage;
         console.log(src);
         img.setAttribute('src', src);
         $('.v').html(track.title.split('-')[1]);
         $('.0').html(`${track.title.split('-')[0]} - ${album ? album.album : ''}`);
+
+        console.log()
 
         // console.log(track, img);
         // img.addEventListener('load', function() {

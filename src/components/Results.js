@@ -80,7 +80,7 @@ class Result extends React.Component {
           break;
 
       case 'playlist':
-          // location.hash = `#/playlist/YT${this.props.result.id}`
+          // document.location.hash = `#/playlist/YT${this.props.result.id}`
           break;
       default:
     }
@@ -207,7 +207,7 @@ class PlaylistItem extends React.Component {
     })
     playlists[this.props.index] = playlist
     localStorage.setItem('playlists', JSON.stringify(playlists))
-  }
+  }4
 
   render() {
     return (

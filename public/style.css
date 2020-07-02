@@ -36,7 +36,7 @@ a {
 
 #Results {
   height: 100%;
-  overflow: scroll;
+  overflow: auto;
   margin: 0;
   padding-bottom: 3em; }
   #Results .description:hover {
@@ -46,7 +46,7 @@ a {
 
 #libraryContainer {
   position: absolute;
-  overflow: scroll;
+  overflow: auto;
   height: 90%;
   top: 0;
   right: 0;
@@ -62,7 +62,7 @@ a {
 
 .page {
   position: absolute;
-  overflow: auto;
+  overflow: hidden;
   padding: 1em;
   top: 0;
   right: 0;
@@ -83,7 +83,7 @@ a {
 
 #queue {
   height: 90%;
-  overflow: scroll; }
+  overflow: auto; }
 
 #Viewer {
   text-align: center; }

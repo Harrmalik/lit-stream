@@ -4,7 +4,6 @@ import $ from 'jquery';
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { setControls, nextTrack, nowPlaying, updateProgess, setDuration } from '../actions'
-// import YouTube from '../../node_modules/react-youtube/dist/YouTube'
 
 import ReactPlayer from 'react-player'
 
@@ -77,7 +76,9 @@ class MediaPlayer extends React.Component {
             return (
               <div className="media-player">
                 <ReactPlayer
-                    soundcloudConfig={soundcloudConfig}
+                    config={{
+                      soundcloud: soundcloudConfig
+                    }}
                     url={this.props.nowPlaying.url}
                     ref={player =>  this.player = player}
                     playing={nowPlaying.playing}
@@ -142,10 +143,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(MediaPlayer)
-
-// <YouTube
-//   videoId={nowPlaying.id}
-//   id={nowPlaying.id}
-//   opts={this.state.opts}
-//   onReady={this.playTrack}
-//   onEnd={this.getNextTrack}/>

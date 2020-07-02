@@ -25,6 +25,7 @@ const searchEngines = [
     image: { avatar: true, src: '/images/avatar/small/jenny.jpg' },
   },
 ]
+
 class SearchBox extends React.Component {
     constructor(props) {
       super(props)
@@ -46,7 +47,6 @@ class SearchBox extends React.Component {
     }
 
     switchEngine(e) {
-      console.log(e.target)
       this.setState({ engine: e.target.textContent.toLowerCase() })
     }
 
@@ -72,7 +72,7 @@ class SearchBox extends React.Component {
         }
 
         component.setState({query})
-        component.props.isLoading(true);
+        // component.props.isLoading(true);
         switch (component.state.engine) {
             case 'soundcloud':
                 component.soundcloudSearch(query, type)
@@ -112,7 +112,7 @@ class SearchBox extends React.Component {
                 })
                 component.setState({tracks});
                 component.props.callback(tracks);
-                component.props.isLoading(false);
+                // component.props.isLoading(false);
             }
         });
     }
@@ -144,8 +144,11 @@ class SearchBox extends React.Component {
                 })
                 console.log(tracks);
                 component.setState({tracks});
-                component.props.callback(tracks);
-                component.props.isLoading(false);
+                if (component.props.callback) {
+                    component.props.callback(tracks);
+                }
+                
+                // component.props.isLoading(false);
             }
         });
     }
@@ -160,9 +163,9 @@ class SearchBox extends React.Component {
                         <input id="searchBox"
                         ref={(input) => { this.SearchBox = input; }}
                         type="text" placeholder="Search for a song..."
-                        disabled={this.props.loading}
-                        onBlur={this.liveSearch}></input>
+                        disabled={this.props.loading}></input>
                         <i className="search icon"></i>
+                        <div className="ui button" onClick={this.liveSearch}>Search</div>
                         { this.props.showEngines ?
                           <Dropdown
                             placeholder='Select Engine'
@@ -181,6 +184,7 @@ class SearchBox extends React.Component {
 
 const mapStateToProps = state => ({
   nowPlaying: state.nowPlaying,
+  loading: state.loading
  })
 
 export default connect(
