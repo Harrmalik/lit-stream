@@ -7,7 +7,7 @@
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
     "react-player": "^1.13.0",
