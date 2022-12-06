@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "node-fetch": "^2.6.0",
-    "youtube-api": "^2.0.10"
+    "youtube-api": "^3.0.1"
   }
 }
